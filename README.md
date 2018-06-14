@@ -20,6 +20,7 @@ npm run build --report
 
 For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
 
+## 创建项目
 - 使用vue-cli工具创建alliance_fe done
 - 引入axios，封装一下，统一处理 done
   1. status done
@@ -27,3 +28,49 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
 - 封装CollapsePanel done
 - 调研搜索联想组件
 - 调研手机号、邮箱等的验证
+- 文件上传要跟后端协商接口，因为使用的是Element所以可能需要后端配合我们这边
+- 调研省市区三级选择组件 使用Element中的tree
+
+## 技术选型
+- 使用Vue创建的单页应用
+- 数据请求使用axios
+- UI使用Element UI
+
+## FQA
+### 组件中怎么发送请求
+首先要对axios有一点了解！  
+把axios暴露在了Vue实例的$http字段上，因此在组件中可以使用this.$http.xxx来发送请求，下面是一个get的例子
+```
+// 假设在created中获取数据
+created() {
+  this.$http.get(this.apiUrl.test).then(res => {
+    console.log(res.data);
+  });
+}
+```
+其中this.apiUrl我们接下来在配置接口地址中说明
+### 配置接口地址
+我们默认项目接口提供方是唯一的，也就是说不会调用多个域名地址提供的接口，如果后期有这种需求，需要进行修改。
+
+在configs/api.js中配置接口地址，只需要配置path部分，域名部分会通过当前url来判断环境。判断环境的策略后面会说。api.js具体内容如下：
+```
+{
+  test: "/test",
+  anotherTest: {
+    test: "/testxxx"
+  }
+}
+```
+因为apiUrl是个对象，因此理论上支持多层嵌套，可以把接口地址按照模块来划分到不同的命名空间下。开头的斜杠不要省略
+
+### 判断环境的策略
+根据当前浏览器中的url来判断环境，如果域名中有dev则是dev，有test则是test，有sim则是sim，否则就使用默认生产环境地址。
+
+localhost认为是dev环境
+
+## 1.0估时和分工
+总时间30人天，两个人开发，耗时15工作日。
+
+
+| 功能 | 开发 | 时间 |
+|-----|------|-----|
