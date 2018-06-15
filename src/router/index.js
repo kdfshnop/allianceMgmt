@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import CreateAgent from '@/components/Agent/CreateAgent'
+import CompanyManagement from '@/components/CompanyManagement'
 
 Vue.use(Router)
 
@@ -8,10 +9,6 @@ let router = new Router({
   routes: [
     {
       path: '/',
-      name: 'CreateAgent',
-      component: CreateAgent
-    },{
-      path: '/CreateAgent',
       name: 'CreateAgent',
       component: CreateAgent
     }

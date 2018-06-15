@@ -8,7 +8,7 @@
     
     <slot></slot>
   </el-card>
-</template>
+</template> 
 
 <script>
 export default {
