@@ -30,6 +30,7 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
 - 调研手机号、邮箱等的验证
 - 文件上传要跟后端协商接口，因为使用的是Element所以可能需要后端配合我们这边
 - 调研省市区三级选择组件 使用Element中的tree
+- 三种模式:create view edit
 
 ## 技术选型
 - 使用Vue创建的单页应用
