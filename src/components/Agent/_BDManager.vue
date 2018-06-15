@@ -47,7 +47,7 @@
     import CollapsePanel from '@/components/common/CollapsePanel';
     // 服务人员信息
     export default {
-        name: "corporateInfo",
+        name: "bdManager",
         components: {CollapsePanel},
         props: ['item', 'mode'],
         data() {
