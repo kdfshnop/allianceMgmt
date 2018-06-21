@@ -4,6 +4,7 @@
         <slot name="header">        
         </slot>
         <el-button class="btn-collapse" @click="toggle" type="text"><i :class="{'el-icon-arrow-up': !collapse, 'el-icon-arrow-down': collapse}"></i></el-button>
+        <el-button v-show="closable" class="btn-close" @click="close" type="text"><i class="el-icon-circle-close"></i></el-button>
     </template>
     
     <slot></slot>
@@ -13,7 +14,7 @@
 <script>
 export default {
   name: 'CollapsePanel',
-  props: ['expand'],
+  props: ['expand', 'closable'],
   data () {
     return {   
         collapse: !this.expand   
@@ -22,7 +23,10 @@ export default {
   methods: {    
       toggle () {
           this.collapse = !this.collapse;
-      }  
+      },
+      close() {
+          this.$emit('close');
+      } 
   }
 }
 </script>
@@ -41,5 +45,21 @@ export default {
     position: absolute;
     top: 6px;
     right: 16px;
+}
+
+.btn-close {
+    position: absolute;
+    top: -30px;
+    left: -30px;
+    color: red !important;
+    font-size: 30px;    
+}
+.btn-close:visited, .btn-close:hover, .btn-close:active {
+    color: red !important;
+}
+
+
+.el-card {
+    overflow: visible;
 }
 </style>

@@ -1,9 +1,11 @@
-import Vue from 'vue'
-import Router from 'vue-router'
-import CreateAgent from '@/components/Agent/CreateAgent'
-import CompanyManagement from '@/components/CompanyManagement'
+import Vue from 'vue';
+import Router from 'vue-router';
+import CreateAgent from '@/components/Agent/CreateAgent';
+import CompanyManagement from '@/components/CompanyManagement';
+import PlatformServiceFeeVerify from '@/components/Verify/PlatformServiceFeeVerify';
+import MaterialVerify from '@/components/Verify/MaterialVerify';
 
-Vue.use(Router)
+Vue.use(Router);
 
 let router = new Router({
   routes: [
@@ -11,6 +13,14 @@ let router = new Router({
       path: '/',
       name: 'CreateAgent',
       component: CreateAgent
+    },{
+      path: '/platformservicefeeverify',
+      name: 'PlatformServiceFeeVerify',
+      component: PlatformServiceFeeVerify
+    },{
+      path: "/materialverify",
+      name: "MaterialVerify",
+      component: MaterialVerify
     }
   ]
 });
@@ -20,7 +30,7 @@ router.beforeEach((to, from, next) => {
   // TODO: 这里需要根据当前环境来获取前缀
   let url = "https://yun2.test.wkzf/alliance/index.html#" + to.path;
   // TODO: 发送请求，判断是否可以访问，暂定方案如果不能访问直接登出
-  let canAccess = true;
+  let canAccess = true;  
   if(canAccess){
     next();    
   }else{

@@ -13,7 +13,8 @@ export default {
                 break;
             }
         }
-        axios.defaults.baseURL = apiUrl.baseUrl[env];
+        let baseUrl = apiUrl.baseUrl[env];;
+        axios.defaults.baseURL = baseUrl;
 
         Vue.http = Vue.prototype.$http = axios;
         axios.interceptors.response.use(function(res){
@@ -35,5 +36,12 @@ export default {
         });
 
         Vue.apiUrl = Vue.prototype.$apiUrl = apiUrl;
+        /**
+         * 虽然大部分的请求都是用axios来实现的，但是还是不能避免一些不用axios实现请求的地方，比如文件上传
+         * 同时为了能够保证只有一个地方来控制请求地址，所以添加了getFullUrl来返回当前环境下对应的后端地址
+         */         
+        Vue.apiUrl.getFullUrl = function(url){
+            return baseUrl + url;
+        };
     }
 };

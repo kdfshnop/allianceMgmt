@@ -12,29 +12,29 @@
     </el-steps>      
 
     <div v-show="active == 0">
-    <service-staff-info :item="serviceInfo"></service-staff-info>    
-    <partner-infoes :items="partners"></partner-infoes>
+    <service-staff-info :item="serviceInfo" :mode='mode'></service-staff-info>    
+    <partner-infoes :items="partners" :mode='mode'></partner-infoes>
     </div>
     <div v-show="active == 1">
-        <agent-basic-info :item="agentBaseInfo"></agent-basic-info>
-        <agent-area :item="agentArea"></agent-area>
+        <agent-basic-info :item="agentBaseInfo" :mode='mode'></agent-basic-info>
+        <agent-area :item="agentArea" :mode='mode'></agent-area>
     </div>
     <div v-show="active == 2">
-        <agent-company-info :item="agentCompanyInfo"></agent-company-info>
-        <corporate-info :item="corporateInfo"></corporate-info>
-        <contract-info :item="conctratInfo"></contract-info>
+        <agent-company-info :item="agentCompanyInfo" :mode='mode'></agent-company-info>
+        <corporate-info :item="corporateInfo" :mode='mode'></corporate-info>
+        <contract-info :item="conctratInfo" :mode='mode'></contract-info>
     </div>
     <div v-show="active == 3">
-        <service-manager :item="serviceManager"></service-manager>
-        <b-d-manager :item="bdManager"></b-d-manager>
+        <service-manager :item="serviceManager" :mode='mode'></service-manager>
+        <b-d-manager :item="bdManager" :mode='mode'></b-d-manager>
     </div>
     <div v-show="active == 4">
-        <agent-commission-ratio :item="agentCommissionRatio"></agent-commission-ratio>
-        <agent-commission-account :item="agentCommissionAccount"></agent-commission-account>        
+        <agent-commission-ratio :item="agentCommissionRatio" :mode='mode'></agent-commission-ratio>
+        <agent-commission-account :item="agentCommissionAccount" :mode='mode'></agent-commission-account>        
     </div>
     <div v-show="active == 5">
-        <platform-service-fee :item="platformServiceFee"></platform-service-fee>
-        <payment-info :item="paymentInfo"></payment-info>
+        <platform-service-fee :item="platformServiceFee" :mode='mode'></platform-service-fee>
+        <payment-info :item="paymentInfo" :mode='mode'></payment-info>
     </div>
     <div v-show="active == 6">
         
@@ -85,10 +85,17 @@ export default {
     return {      
       active: 0,// 控制步骤
       stepNumber: 7,// 总步数
+      mode: "edit",
       serviceInfo: {
-          bdName: "",
-          cxName: "",
-          name: ""
+          bdInfo: {
+              name: "nihao"
+          },
+          cxInfo: {
+              name: "wohao"
+          },
+          directorInfo: {
+              name: "dajiahao"
+          }
       },
       partners: [],
       agentBaseInfo: {
@@ -122,7 +129,8 @@ export default {
 
       },
       platformServiceFee: {
-
+          serviceFee: {},
+          dividingInfo: []
       },
       paymentInfo: {
 
@@ -149,9 +157,9 @@ export default {
       
   },
   created() {
-      this.$http.get(this.$apiUrl.test, function(res){
-          console.log(res.data);
-      });
+    //   this.$http.get(this.$apiUrl.test, function(res){
+    //       console.log(res.data);
+    //   });
   }
 }
 </script>

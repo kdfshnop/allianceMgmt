@@ -1,9 +1,12 @@
 <template>
     <CollapsePanel class="gap-2" :expand="expand">    
         <div align-left slot="header" class="clearfix">
-            <span>代理商基本信息</span>            
+            <span style="margin-right: 30px">代理商基本信息</span>    
+            <el-button v-show="mode === 'edit' && status !== 'editing'" @click="handleEdit" type="primary" size="mini">编辑</el-button>         
+            <el-button v-show="mode === 'edit' && status === 'editing'" @click="handleCancel" type="danger" size="mini">取消</el-button>         
+            <el-button v-show="mode === 'edit' && status === 'editing'" @click="handleComplete" type="success" size="mini">完成</el-button>                                    
         </div>
-        <el-form :model="item" label-width= "180px">
+        <el-form :model="item" label-width= "180px" v-show="mode === 'create' || mode === 'edit' && status === 'editing'">
             <el-row>
                 <el-col :span="12">
                     <el-form-item label="代理商类型">
@@ -45,6 +48,41 @@
                 </el-col>
             </el-row>                        
         </el-form>
+
+        <el-form :model="item" label-width= "180px" v-show="mode === 'view' || mode === 'edit' && status === ''">
+            <el-row>
+                <el-col :span="12">
+                    <el-form-item label="代理商类型">
+                        <el-select v-model="item.type" placeholder="请选择">
+                            <el-option
+                                v-for="item in agentTypes"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="合作开始时间">                        
+                         {{item.startDate}}
+                    </el-form-item>                                                         
+                </el-col>
+                <el-col :span="12">  
+                    <el-form-item label="上级代理商">              
+                        <el-select v-model="item.parent" placeholder="请选择">
+                            <el-option
+                                v-for="item in parentAgents"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>   
+                    <el-form-item label="合作结束时间">
+                        {{item.endDate}}
+                    </el-form-item>
+                </el-col>
+            </el-row>                        
+        </el-form>
     </CollapsePanel>
 </template>
 <script>
@@ -57,11 +95,21 @@ import CollapsePanel from '@/components/common/CollapsePanel';
  */
 export default {
     name: "agentBasicInfo",
-    props: ['item', 'mode'],
+    props: {
+            item: Object,
+            mode: {
+                type: String,
+                default: "view"
+            }
+        },
     components: {CollapsePanel},
     data() {
         return {
             expand: true,
+            status: "",
+            originalItem: {
+
+            },
             agentTypes: [{
                 label: "请选择",
                 value: "0"
@@ -89,6 +137,20 @@ export default {
                 value: "4"
             }]
         };
+    },
+    methods: {
+        handleEdit() {
+                this.status = 'editing';
+                this.originalItem = this.item;
+                this.item = JSON.parse(JSON.stringify(this.item || {}));          
+        },
+        handleComplete() {
+            this.status = '';                                
+        },
+        handleCancel() {
+            this.status = '';
+            this.item = this.originalItem;                
+        }
     }
 }
 </script>
