@@ -1,6 +1,6 @@
 <template>
     <el-container>
-        <el-main> 
+        <el-main>             
             <el-form ref="form" :model="form" label-width="180px">
                 <el-row >
                     <el-col :span="12">
