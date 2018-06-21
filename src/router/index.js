@@ -3,9 +3,6 @@ import Router from 'vue-router';
 import CreateAgent from '@/components/Agent/CreateAgent';
 import PlatformServiceFeeVerify from '@/components/Verify/PlatformServiceFeeVerify';
 import MaterialVerify from '@/components/Verify/MaterialVerify';
-import Vue from 'vue'
-import Router from 'vue-router'
-import CreateAgent from '@/components/Agent/CreateAgent'
 import CompanyManagement from '@/components/company/CompanyManagement'
 
 Vue.use(Router);
