@@ -1,8 +1,8 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import CreateAgent from '@/components/Agent/CreateAgent';
-import PlatformServiceFeeVerify from '@/components/Verify/PlatformServiceFeeVerify';
-import MaterialVerify from '@/components/Verify/MaterialVerify';
+import CreateAgent from '@/components/agent/CreateAgent';
+import PlatformServiceFeeVerify from '@/components/verify/PlatformServiceFeeVerify';
+import MaterialVerify from '@/components/verify/MaterialVerify';
 import CompanyManagement from '@/components/company/CompanyManagement'
 
 Vue.use(Router);

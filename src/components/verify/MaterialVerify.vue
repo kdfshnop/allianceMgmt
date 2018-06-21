@@ -56,15 +56,15 @@
  *  1. 接口调试
  *  2. 根据状态判断是否出现审核按钮
  */
-import ServiceStaffInfo from '@/components/Agent/_ServiceStaffInfo';
-import PartnerInfoes from '@/components/Agent/_PartnerInfoes';
-import AgentBasicInfo from '@/components/Agent/_AgentBasicInfo';
-import AgentArea from '@/components/Agent/_AgentArea';
-import AgentCompanyInfo from '@/components/Agent/_AgentCompanyInfo';
-import CorporateInfo from '@/components/Agent/_CorporateInfo';
-import ContractInfo from '@/components/Agent/_ContractInfo';
-import ServiceManager from '@/components/Agent/_ServiceManager';
-import BDManager from '@/components/Agent/_BDManager';
+import ServiceStaffInfo from '@/components/agent/_ServiceStaffInfo';
+import PartnerInfoes from '@/components/agent/_PartnerInfoes';
+import AgentBasicInfo from '@/components/agent/_AgentBasicInfo';
+import AgentArea from '@/components/agent/_AgentArea';
+import AgentCompanyInfo from '@/components/agent/_AgentCompanyInfo';
+import CorporateInfo from '@/components/agent/_CorporateInfo';
+import ContractInfo from '@/components/agent/_ContractInfo';
+import ServiceManager from '@/components/agent/_ServiceManager';
+import BDManager from '@/components/agent/_BDManager';
 import BreadCrumb from '@/components/common/BreadCrumb';
 export default {
     name: "materialVerify",

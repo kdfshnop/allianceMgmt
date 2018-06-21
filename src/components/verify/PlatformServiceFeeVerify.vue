@@ -45,10 +45,10 @@
   </el-container>
 </template>
 <script>
-import AgentCommissionRatio from '@/components/Agent/_AgentCommissionRatio';
-import AgentCommissionAccount from '@/components/Agent/_AgentCommissionAccount';
-import PlatformServiceFee from '@/components/Agent/_PlatformServiceFee';
-import PaymentInfo from '@/components/Agent/_PaymentInfo';
+import AgentCommissionRatio from '@/components/agent/_AgentCommissionRatio';
+import AgentCommissionAccount from '@/components/agent/_AgentCommissionAccount';
+import PlatformServiceFee from '@/components/agent/_PlatformServiceFee';
+import PaymentInfo from '@/components/agent/_PaymentInfo';
 import Dialogv from './Dialog';
 import Vue from 'vue';
 import BreadCrumb from '@/components/common/BreadCrumb';
