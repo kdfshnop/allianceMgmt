@@ -4,7 +4,7 @@
             <el-form ref="form" :model="form" label-width="180px">
                 <el-row >
                     <el-col :span="12">
-                        <el-form-item label="门店所属城市">
+                        <el-form-item label="门店所属城市" prop="city">
                             <el-select v-model="form.city" placeholder="二级选择区域" filterable @change='formInfo'>
                                 <el-option
                                     v-for="(item,index) in city"
@@ -14,86 +14,97 @@
                                 </el-option>
                             </el-select>
                         </el-form-item>
-                        <el-form-item label="创建时间">
-                            <el-date-picker
-                                v-model="form.timeStart"
-                                type="date"
-                                placeholder="选择日期"
-                                style="width:150px">
-                            </el-date-picker>
-                            <span>至</span>
-                            <el-date-picker
-                                v-model="form.timeEnd"
-                                type="date"
-                                placeholder="选择日期"
-                                style="width:150px">
-                            </el-date-picker>
-                        </el-form-item>
-                        <el-form-item label="业务">
+                        <el-row>
+                            <el-col :span="5">
+                                <el-form-item label="创建时间" prop="timeStart">
+                                    <el-date-picker
+                                        format="yyyy-MM-dd"
+                                        v-model="form.timeStart"
+                                        type="date"
+                                        placeholder="选择日期"
+                                        style="width:150px"
+                                        value-format="yyyy-MM-dd">
+                                    </el-date-picker>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="19">
+                                <el-form-item prop="timeEnd" label="至">
+                                    <el-date-picker
+                                        format="yyyy-MM-dd"
+                                        v-model="form.timeEnd"
+                                        type="date"
+                                        placeholder="选择日期"
+                                        style="width:150px"
+                                        value-format="yyyy-MM-dd">
+                                    </el-date-picker>
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
+                        <el-form-item label="业务" prop="business">
                             <el-select v-model="form.business" filterable>
                                 <el-option label="全部" value="全部"></el-option>
                                 <el-option label="城市代理" value="城市代理"></el-option>
                                 <el-option label="区域代理" value="区域代理"></el-option>
                             </el-select>
                         </el-form-item>
-                        <el-form-item label="门店地址">
-                            <el-input v-model="form.name"></el-input>
+                        <el-form-item label="门店地址" prop="storeAddress">
+                            <el-input v-model="form.storeAddress"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
-                        <el-form-item label="公司名称">
-                            <el-input v-model="form.name"></el-input>
+                        <el-form-item label="公司名称" prop="companyName">
+                            <el-input v-model="form.companyName"></el-input>
                         </el-form-item>
-                        <el-form-item label="到期查询">
-                            <el-input v-model="form.name"></el-input>
+                        <el-form-item label="到期查询" prop="timeOver">
+                            <el-input v-model="form.timeOver"></el-input>
                         </el-form-item>
-                        <el-form-item label="门店名称">
-                            <el-input v-model="form.name"></el-input>
+                        <el-form-item label="门店名称" prop="storeName">
+                            <el-input v-model="form.storeName"></el-input>
                         </el-form-item>
-                        <el-form-item label="代理商">
-                            <el-input v-model="form.name"></el-input>
+                        <el-form-item label="代理商" prop="agent">
+                            <el-input v-model="form.agent"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
             </el-form>
             <el-row :gutter="20">
                 <el-col :span="2" :offset="11">
-                    <el-button class="reset" @click="reset">重置</el-button>
+                    <el-button class="reset" @click="resetForm('form')">重置</el-button>
                 </el-col>
                 <el-col :span="2">
-                    <el-button type="primary" @click="search">搜索</el-button>
+                    <el-button type="primary" @click="search(form)">搜索</el-button>
                 </el-col>
             </el-row>
             <div class="search-result">共搜到共搜索到 956家公司，56家有代理商，900家无代理商</div>
-           <el-table :data="tableData" border style="width: 100%">
-                <el-table-column prop="date" label="序号" ></el-table-column>
-                <el-table-column prop="date" label="城市" ></el-table-column>
-                <el-table-column prop="date" label="公司全称" ></el-table-column>
-                <el-table-column prop="date" label="公司简称" ></el-table-column>
-                <el-table-column prop="date" label="代理商公司" ></el-table-column>
-                <el-table-column prop="date" label="有效期始" ></el-table-column>
-                <el-table-column prop="date" label="有效期止" ></el-table-column>
-                <el-table-column prop="date" label="bd" ></el-table-column>
-                <el-table-column prop="date" label="创建时间" ></el-table-column>
-                <el-table-column prop="date" label="创建人" ></el-table-column>
-                <el-table-column label="操作" width="300px">
+           <el-table :data="searInfoList" border style="width: 100%">
+                <el-table-column prop="date" label="序号" align="center" ></el-table-column>
+                <el-table-column prop="date" label="城市" align="center" ></el-table-column>
+                <el-table-column prop="date" label="公司全称" align="center" ></el-table-column>
+                <el-table-column prop="date" label="公司简称" align="center" ></el-table-column>
+                <el-table-column prop="date" label="代理商公司" align="center"></el-table-column>
+                <el-table-column prop="date" label="有效期始" align="center"></el-table-column>
+                <el-table-column prop="date" label="有效期止" align="center"></el-table-column>
+                <el-table-column prop="date" label="bd" align="center"></el-table-column>
+                <el-table-column prop="date" label="创建时间" align="center"></el-table-column>
+                <el-table-column prop="date" label="创建人" align="center"></el-table-column>
+                <el-table-column label="操作" width="300px" align="center">
                     <template slot-scope="scope">
                         <el-button size="mini" @click="handleEdit(scope.$index, scope.row)" type="text">编辑|</el-button>
                         <el-button size="mini" @click="handleDelete(scope.$index, scope.row)" type="text">分佣账号设置|</el-button>
                         <el-button size="mini"  type="text" @click="firstDialogVisible = true,handleEnd(scope.$index, scope.row)">终止合作</el-button>
                     </template>
                 </el-table-column>
-                <el-table-column prop="date" label="门店" ></el-table-column>
+                <el-table-column prop="date" label="门店" align="center"></el-table-column>
             </el-table>
             <div class="block">
                 <el-pagination
                     @size-change="handleSizeChange"
                     @current-change="handleCurrentChange"
-                    :current-page="currentPage4"
-                    :page-sizes="[100, 200, 300, 400]"
-                    :page-size="100"
+                    :current-page="pagination.currentPage"
+                    :page-sizes="[10, 2, 3, 400]"
+                    :page-size="pagination.pageSize"
                     layout="total, sizes, prev, pager, next, jumper"
-                    :total="400">
+                    :total="pagination.total">
                 </el-pagination>
             </div>
             <el-dialog title="终止公司合作" :visible.sync="firstDialogVisible" width="30%" >
@@ -105,42 +116,51 @@
                 </span>
             </el-dialog>
             <el-dialog title="终止公司合作" :visible.sync="secondDialogVisible" width="30%" >
-                <textarea name="" id="" rows="10" placeholder="请添加终止合作原因" style="width:100%;"></textarea>
+                <textarea name="" id="" rows="10" placeholder="请添加终止合作原因" v-model="noJoin" style="width:100%;"></textarea>
                 <span slot="footer" class="dialog-footer">
-                    <el-button @click="secondDialogVisible = false">取 消</el-button>
-                    <el-button type="primary" @click="secondDialogVisible = false" >确 定</el-button>
+                    <el-button @click="secondDialogVisible = false,continueJoin()">取 消</el-button>
+                    <el-button type="primary" @click="secondDialogVisible = false,endJoin()" >确 定</el-button>
                 </span>
             </el-dialog>
             <!--编辑公司组件-->
-            <editor-company ref="editor"></editor-company>
+            <editor-company ref="editor" :currentCompanyInfo="currentCompanyInfo"></editor-company>
+            <!--分佣账号组件-->
+            <commission ref="commission"></commission>
         </el-main>
     </el-container> 
 </template>
 
 <script>
-import editorCompany from '@/components/common/editorCompany';
+import editorCompany from '@/components/company/_EditorCompany';
+import commission from '@/components/company/_Commission';
+
 export default {
   name: 'CompanyManagement',
-  components:{editorCompany},
+  components:{editorCompany,commission},
   data () {
     return {
         firstDialogVisible: false,//第一个终止合作弹出框
         secondDialogVisible:false,//第二个终止合作弹出框
-        currentPage4:3,
-        edit:false,
+        noJoin:'',//终止合作原因
+        companyInfoIndex:'',//操作公司时该公司处于所有列表的位置
+        currentCompanyInfo:'',//当前编辑的公司信息
+        // 表单查询信息
         form: {
-            business:'全部',
-            city:'',
-            timeStart:'',
-            timeEnd:'',
-            name: '',
-            region: '',
-            date1: '',
-            date2: '',
-            delivery: false,
-            type: [],
-            resource: '',
-            desc: ''
+            agent:'',//代理商
+            business:'全部',//业务
+            city:'',//门店所属城市
+            companyName:'',//公司名称
+            timeStart:'',//创建开始时间
+            timeEnd:'',//创建结束时间
+            storeName: '',//门店名称
+            storeAddress:'',//门店地址
+            timeOver:''//到期查询
+        },
+        // 分页功能
+        pagination:{
+            currentPage:1,//默认当前页为1;
+            pageSize:1,//默认显示10条
+            total:400//一共有多少条数据
         },
         city:['北京','上海','广州','深圳'],
         tableData: [{
@@ -162,43 +182,71 @@ export default {
         }]
     }
   },
-  methods:{
+    methods:{
         //form表单信息改变   
-      formInfo(){
+        formInfo(){
 
-      },
+        },
+        resetForm(formName) {
+            this.$refs.form.resetFields();
+        },
         //重置表单信息   
-      reset(){
-        console.log(2222222222222)
-      },
+        reset(){
+            this.form= {
+                agent:'',//代理商
+                business:'全部',//业务
+                city:'',//门店所属城市
+                companyName:'',//公司名称
+                timeStart:'',//创建开始时间
+                timeEnd:'',//创建结束时间
+                storeName: '',//门店名称
+                storeAddress:'',//门店地址
+                timeOver:''//到期查询
+            }
+        },
         //根据表单信息搜索
-      search(val){
-          console.log(this.form);
-      },
+        search(val){
+            console.log(val,1111111)
+            console.log(this.form);
+        },
         //每页多少条
-      handleSizeChange(val) {
-        console.log(`每页 ${val} 条`);
-      },
+        handleSizeChange(val) {
+            this.pagination.pageSize=val;
+        },
         //当前页
-      handleCurrentChange(val) {
-        console.log(`当前页: ${val}`);
-      },
+        handleCurrentChange(val) {
+            this.pagination.currentPage=val;
+        },
         //编辑
-      handleEdit(index, row){
-          this.$refs.editor.open();
-      },
+        handleEdit(index, row){
+            //操作公司时，该公司所处所有信息列表的位置;
+            this.companyInfoIndex=(this.pagination.currentPage-1)*this.pagination.pageSize+index;
+            // 当前编辑的公司信息;
+            this.currentCompanyInfo=this.tableData[this.companyInfoIndex]; 
+            // 调用子组件方法，显示对话框  
+            this.$refs.editor.open();
+        },
         //分佣账号设置 
-      handleDelete(index, row){
-          console.log(index,row)
-      },
+        handleDelete(index, row){
+            this.$refs.commission.open();
+        },
         //终止合作
-      handleEnd(index,row){
-          console.log(index,row)
-      }
-  },
-  computed:{
-
-  }
+        handleEnd(index,row){
+        },
+        //确定终止合作
+        endJoin(){
+        },
+        //点击二次对话框取消按钮，继续合作
+        continueJoin(){
+            this.noJoin='';
+        }
+    },
+    computed:{
+        //分页显示多少条数据
+        searInfoList(){
+            return this.tableData.slice((this.pagination.currentPage-1)*this.pagination.pageSize,this.pagination.currentPage*this.pagination.pageSize);
+        }
+    }
 }
 </script>
 
