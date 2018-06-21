@@ -1,10 +1,6 @@
 <template>
-    <el-dialog
-        title="设置分佣账户"
-        :visible.sync="dialogVisible"
-        width="30%"
-        :before-close="handleClose">
-            <el-form :model="ruleForm"  ref="ruleForm" label-width="110px" class="demo-ruleForm">
+    <el-dialog title="设置分佣账户" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
+        <el-form :model="ruleForm" :rules="rules"  ref="ruleForm" label-width="110px" class="demo-ruleForm">
             <el-row>
                 <el-col :span="12">
                     <el-form-item label="开户银行类型" prop="bankType" class="tl">
@@ -31,9 +27,9 @@
             </el-row>
         </el-form>
             <span slot="footer" class="dialog-footer">
-                <el-button @click="submitForm('ruleForm')" type="primary">保存</el-button>
-                <el-button  @click="resetForm('ruleForm')">关闭</el-button>
-            </span> 
+            <el-button @click="submitForm('ruleForm')" type="primary">保存</el-button>
+            <el-button @click="resetForm('ruleForm')">关闭</el-button>
+        </span> 
     </el-dialog>
 </template>
 
@@ -42,25 +38,18 @@ export default {
     data(){
         return {
             dialogVisible:false,
-            ruleForm: {
-                account:'',
-                bankType:'',
-                name: '',
-                subBranch: ''
+            ruleForm:{
+                name: '',//账户名
+                subBranch: '',//开户支行
+                account:'',//银行账户
+                a:'',
+                bankType:'',//开户银行类型  
             },
             rules: {
-                bankType:[
-                    { required: true, message: '请输入开户银行类型', trigger: 'blur' }
-                ],
-                subBranch: [
-                    { required: true, message: '请输入开户支行', trigger: 'blur' }
-                ],
-                name: [
-                    { required: true, message: '请输入账户名', trigger: 'blur' },
-                ],
-                account:[
-                    { required: true, message: '请输入银行账号', trigger: 'blur' }
-                ]
+                bankType:[{ required: true, message: '请输入开户银行类型', trigger: 'blur' }],
+                subBranch: [{ required: true, message: '请输入开户支行', trigger: 'blur' }],
+                name: [{ required: true, message: '请输入账户名', trigger: 'blur' },],
+                account:[{ required: true, message: '请输入银行账号', trigger: 'blur' }]
             }
         }
     },
@@ -73,7 +62,7 @@ export default {
                     alert('提交成功');
                     this.$refs[formName].resetFields();
                 } else {
-                    alert('请填写完整信息')
+                    alert('请填写必填信息')
                     return false;
                 }
             });

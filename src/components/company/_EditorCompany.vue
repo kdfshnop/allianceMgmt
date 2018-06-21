@@ -1,5 +1,5 @@
 <template>
-    <el-dialog title="新增公司" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
+    <el-dialog :title="title" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="110px" class="demo-ruleForm">
             <el-row>
                 <el-col :span="12">
@@ -95,7 +95,7 @@
 <script>
 export default {
   name:'editorCompany',
-  props:['currentCompanyInfo'],
+  props:['currentCompanyInfo','title'],
   data(){
       return {
         dialogVisible:false,
@@ -145,7 +145,7 @@ export default {
           .catch(_ => {});
     },
     submitForm(formName) {
-        console.log(this.ruleForm)
+        console.log(this.ruleForm,111)
         this.$refs[formName].validate((valid) => {
             if (valid) {
                 this.dialogVisible=false;

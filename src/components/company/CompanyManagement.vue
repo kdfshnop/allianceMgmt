@@ -1,7 +1,9 @@
 <template>
     <el-container>
-        <el-main>             
-            <el-form ref="form" :model="form" label-width="180px">
+        <el-main>    
+            <bread-crumb :items="breadCrumb"></bread-crumb> 
+            <el-button type="primary" class="addCompany" @click="addCompany">+主要按钮</el-button>       
+            <el-form ref="form" :model="form" label-width="180px" class="gap-2">
                 <el-row >
                     <el-col :span="12">
                         <el-form-item label="门店所属城市" prop="city">
@@ -123,7 +125,7 @@
                 </span>
             </el-dialog>
             <!--编辑公司组件-->
-            <editor-company ref="editor" :currentCompanyInfo="currentCompanyInfo"></editor-company>
+            <editor-company ref="editor" :currentCompanyInfo="currentCompanyInfo" :title="title"></editor-company>
             <!--分佣账号组件-->
             <commission ref="commission"></commission>
         </el-main>
@@ -133,10 +135,11 @@
 <script>
 import editorCompany from '@/components/company/_EditorCompany';
 import commission from '@/components/company/_Commission';
+import BreadCrumb from '@/components/common/BreadCrumb';
 
 export default {
   name: 'CompanyManagement',
-  components:{editorCompany,commission},
+  components:{editorCompany,commission,BreadCrumb},
   data () {
     return {
         firstDialogVisible: false,//第一个终止合作弹出框
@@ -144,6 +147,7 @@ export default {
         noJoin:'',//终止合作原因
         companyInfoIndex:'',//操作公司时该公司处于所有列表的位置
         currentCompanyInfo:'',//当前编辑的公司信息
+        title:'',//判断是编辑公司还是添加公司
         // 表单查询信息
         form: {
             agent:'',//代理商
@@ -162,6 +166,7 @@ export default {
             pageSize:1,//默认显示10条
             total:400//一共有多少条数据
         },
+        breadCrumb: [{text:'加盟管理'},{text: "公司管理"}],
         city:['北京','上海','广州','深圳'],
         tableData: [{
           date: '2016-05-02',
@@ -217,12 +222,19 @@ export default {
         handleCurrentChange(val) {
             this.pagination.currentPage=val;
         },
+        // 添加公司
+        addCompany(){
+            // 调用子组件方法，显示对话框 
+            this.title='增加公司'; 
+            this.$refs.editor.open();
+        },
         //编辑
         handleEdit(index, row){
             //操作公司时，该公司所处所有信息列表的位置;
             this.companyInfoIndex=(this.pagination.currentPage-1)*this.pagination.pageSize+index;
             // 当前编辑的公司信息;
             this.currentCompanyInfo=this.tableData[this.companyInfoIndex]; 
+            this.title='编辑公司';
             // 调用子组件方法，显示对话框  
             this.$refs.editor.open();
         },
@@ -251,6 +263,10 @@ export default {
 </script>
 
 <style>
+    .addCompany{
+        float: right;
+        margin-bottom: 20px;
+    }
     .search-result{
         color:gray;
         margin-bottom: 20px;
