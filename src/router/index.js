@@ -1,9 +1,12 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import CreateAgent from '@/components/Agent/CreateAgent';
-import CompanyManagement from '@/components/CompanyManagement';
 import PlatformServiceFeeVerify from '@/components/Verify/PlatformServiceFeeVerify';
 import MaterialVerify from '@/components/Verify/MaterialVerify';
+import Vue from 'vue'
+import Router from 'vue-router'
+import CreateAgent from '@/components/Agent/CreateAgent'
+import CompanyManagement from '@/components/company/CompanyManagement'
 
 Vue.use(Router);
 
@@ -21,6 +24,11 @@ let router = new Router({
       path: "/materialverify",
       name: "MaterialVerify",
       component: MaterialVerify
+    },
+    {
+      path: '/CompanyManagement',
+      name: 'CompanyManagement',
+      component: CompanyManagement
     }
   ]
 });
