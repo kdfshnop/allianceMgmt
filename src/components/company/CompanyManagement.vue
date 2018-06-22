@@ -2,7 +2,7 @@
     <el-container>
         <el-main>    
             <bread-crumb :items="breadCrumb"></bread-crumb> 
-            <el-button type="primary" class="addCompany" @click="addCompany">+主要按钮</el-button>       
+            <el-button type="primary" class="addCompany" @click="addCompany">+添加公司</el-button>       
             <el-form ref="form" :model="form" label-width="180px" class="gap-2">
                 <el-row >
                     <el-col :span="12">
@@ -80,23 +80,23 @@
             <div class="search-result">共搜到共搜索到 956家公司，56家有代理商，900家无代理商</div>
            <el-table :data="searInfoList" border style="width: 100%">
                 <el-table-column prop="date" label="序号" align="center" ></el-table-column>
-                <el-table-column prop="date" label="城市" align="center" ></el-table-column>
-                <el-table-column prop="date" label="公司全称" align="center" ></el-table-column>
-                <el-table-column prop="date" label="公司简称" align="center" ></el-table-column>
-                <el-table-column prop="date" label="代理商公司" align="center"></el-table-column>
-                <el-table-column prop="date" label="有效期始" align="center"></el-table-column>
-                <el-table-column prop="date" label="有效期止" align="center"></el-table-column>
-                <el-table-column prop="date" label="bd" align="center"></el-table-column>
-                <el-table-column prop="date" label="创建时间" align="center"></el-table-column>
-                <el-table-column prop="date" label="创建人" align="center"></el-table-column>
-                <el-table-column label="操作" width="300px" align="center">
+                <el-table-column prop="name" label="城市" align="center" ></el-table-column>
+                <el-table-column prop="address" label="公司全称" align="center" ></el-table-column>
+                <el-table-column prop="address" label="公司简称" align="center" ></el-table-column>
+                <el-table-column prop="address" label="代理商公司" align="center"></el-table-column>
+                <el-table-column prop="name" label="有效期始" align="center"></el-table-column>
+                <el-table-column prop="name" label="有效期止" align="center"></el-table-column>
+                <el-table-column prop="name" label="bd" align="center"></el-table-column>
+                <el-table-column prop="name" label="创建时间" align="center"></el-table-column>
+                <el-table-column prop="name" label="创建人" align="center"></el-table-column>
+                <el-table-column label="name" width="300px" align="center">
                     <template slot-scope="scope">
                         <el-button size="mini" @click="handleEdit(scope.$index, scope.row)" type="text">编辑|</el-button>
                         <el-button size="mini" @click="handleDelete(scope.$index, scope.row)" type="text">分佣账号设置|</el-button>
                         <el-button size="mini"  type="text" @click="firstDialogVisible = true,handleEnd(scope.$index, scope.row)">终止合作</el-button>
                     </template>
                 </el-table-column>
-                <el-table-column prop="date" label="门店" align="center"></el-table-column>
+                <el-table-column prop="name" label="门店" align="center"></el-table-column>
             </el-table>
             <div class="block">
                 <el-pagination
@@ -125,7 +125,7 @@
                 </span>
             </el-dialog>
             <!--编辑公司组件-->
-            <editor-company ref="editor" :currentCompanyInfo="currentCompanyInfo" :title="title"></editor-company>
+            <editor-company v-if="isShow" ref="editor" :currentCompanyInfo="currentCompanyInfo" :title="title" @editSuccess='editSuccess' @addSuccess='addSuccess'></editor-company>
             <!--分佣账号组件-->
             <commission ref="commission"></commission>
         </el-main>
@@ -148,6 +148,7 @@ export default {
         companyInfoIndex:'',//操作公司时该公司处于所有列表的位置
         currentCompanyInfo:'',//当前编辑的公司信息
         title:'',//判断是编辑公司还是添加公司
+        isShow:false,
         // 表单查询信息
         form: {
             agent:'',//代理商
@@ -163,7 +164,7 @@ export default {
         // 分页功能
         pagination:{
             currentPage:1,//默认当前页为1;
-            pageSize:1,//默认显示10条
+            pageSize:10,//默认显示10条
             total:400//一共有多少条数据
         },
         breadCrumb: [{text:'加盟管理'},{text: "公司管理"}],
@@ -188,6 +189,21 @@ export default {
     }
   },
     methods:{
+        // 子组件添加公司成功之后，传递给父组件的值;
+        addSuccess(addInfo){
+            // 第一种再次发送请求，同时表单查询重置;
+
+            //第二种
+            this.tableData.unshift(addInfo);
+            this.pagination.currentPage=1;
+            this.pagination.pageSize=10;
+            this.pagination.total++;
+        },
+        // 子组件编辑成功之后，传递给父组件的值;
+        editSuccess(editInfo){
+            // 替换原有已经被编辑的数据;
+            this.tableData.splice(this.companyInfoIndex,1,editInfo);
+        },
         //form表单信息改变   
         formInfo(){
 
@@ -225,8 +241,11 @@ export default {
         // 添加公司
         addCompany(){
             // 调用子组件方法，显示对话框 
-            this.title='增加公司'; 
-            this.$refs.editor.open();
+            this.title='增加公司';
+            this.isShow=true;
+            setTimeout(()=>{
+                this.$refs.editor.open();
+            },200); 
         },
         //编辑
         handleEdit(index, row){
@@ -235,18 +254,22 @@ export default {
             // 当前编辑的公司信息;
             this.currentCompanyInfo=this.tableData[this.companyInfoIndex]; 
             this.title='编辑公司';
-            // 调用子组件方法，显示对话框  
-            this.$refs.editor.open();
+            this.isShow=true;//为了每天编辑组件都可以将父组件信息传递;
+            // 调用子组件方法，显示对话框,用setTimeout是为了可以加载添加公司组件;
+            setTimeout(()=>{
+                this.$refs.editor.open();
+            },200);  
         },
         //分佣账号设置 
         handleDelete(index, row){
             this.$refs.commission.open();
         },
-        //终止合作
+        //终止合作,第一次弹框
         handleEnd(index,row){
         },
-        //确定终止合作
+        //确定终止合作,第二次弹框
         endJoin(){
+            //将该公司信息删除;
         },
         //点击二次对话框取消按钮，继续合作
         continueJoin(){
