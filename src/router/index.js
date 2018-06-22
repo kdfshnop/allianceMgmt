@@ -3,7 +3,8 @@ import Router from 'vue-router';
 import CreateAgent from '@/components/agent/CreateAgent';
 import PlatformServiceFeeVerify from '@/components/verify/PlatformServiceFeeVerify';
 import MaterialVerify from '@/components/verify/MaterialVerify';
-import CompanyManagement from '@/components/company/CompanyManagement'
+import CompanyManagement from '@/components/company/CompanyManagement';
+import StoreManagement from '@/components/store/StoreManagement';
 
 Vue.use(Router);
 
@@ -26,6 +27,11 @@ let router = new Router({
       path: '/CompanyManagement',
       name: 'CompanyManagement',
       component: CompanyManagement
+    },
+    {
+      path: '/StoreManagement',
+      name: 'StoreManagement',
+      component: StoreManagement
     }
   ]
 });
