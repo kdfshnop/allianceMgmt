@@ -166,6 +166,8 @@
                 this.bdInfo = this.item.bdInfo;
                 this.cxInfo = this.item.cxInfo;
                 this.directorInfo = this.item.directorInfo;
+
+                this.$emit('update:item', this.item);
             },
             handleCancel() {
                 this.status = '';
@@ -184,6 +186,11 @@
                 if(bd && bd.length) {
                     this.bdInfo = bd[0];
                 }
+
+                if(this.mode == 'create') {
+                    this.item.bdInfo = this.bdInfo;
+                    this.$emit('update:item', this.item);
+                }
             },
             selectedCX() {
                 // TODO: 根据选中的id从CXs中反查出彩霞人员信息
@@ -194,6 +201,11 @@
                 if(cx && cx.length) {
                     this.cxInfo = cx[0];
                 }
+
+                if(this.mode == 'create'){
+                    this.item.cxInfo = this.cxInfo;
+                    this.$emit('update:item', this.item);
+                }
             },
             selectedDirector() {
                 // TODO: 根据选中的id从directors中反查出director信息
@@ -203,6 +215,11 @@
 
                 if(d && d.length) {
                     this.directorInfo = d[0];
+                }
+
+                if(this.mode == 'create') {
+                    this.item.directorInfo = this.directorInfo;
+                    this.$emit('update:item', this.item);
                 }
             }
         }

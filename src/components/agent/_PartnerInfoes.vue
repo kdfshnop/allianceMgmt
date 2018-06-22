@@ -1,7 +1,7 @@
 <template>
     <div>
         <partner-info :key="index" v-for="(item, index) in items" :mode="mode" :item="item" @close="handleRemove(index)"></partner-info>
-        <el-button v-show="mode === 'create' || mode === 'edit' && status === 'editing'" type="primary" class="full-row gap-2" @click="addPartner">+ 添加合伙人</el-button>
+        <el-button v-show="mode === 'create' || mode === 'edit'" type="primary" class="full-row gap-2" @click="addPartner">+ 添加合伙人</el-button>
     </div>
 </template>
 <script>

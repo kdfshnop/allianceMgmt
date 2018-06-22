@@ -11,7 +11,7 @@
                 <el-col :span="12">
                     <el-form-item label="支付情况">
                         <el-switch
-                            v-model="item.status"
+                            v-model="paymentStatus"
                             active-text="已支付"
                             inactive-text="未支付">
                         </el-switch>
@@ -19,7 +19,7 @@
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="支付方式">
-                        <el-select v-model="item.type" placeholder="请选择">
+                        <el-select v-model="type" placeholder="请选择">
                             <el-option
                                 v-for="item in types"
                                 :key="item.value"
@@ -33,28 +33,30 @@
             <el-row>
                 <el-col :span="12">
                     <el-form-item label="实际支付">
-                        <el-input v-model="item.actualPayment">
+                        <el-input v-model="actualPayment">
                             <template slot="append">元</template>
                         </el-input>
                     </el-form-item>                    
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="费用包含">
-                        <el-checkbox v-model="checked">平台服务费</el-checkbox>
-                        <el-checkbox v-model="checked2">保证金</el-checkbox>
+                        <el-checkbox-group v-model="containPayment">
+                        <el-checkbox label="1">平台服务费</el-checkbox>
+                        <el-checkbox label="2">保证金</el-checkbox>
+                        </el-checkbox-group>
                     </el-form-item>                    
                 </el-col>
             </el-row> 
             <el-row>
                 <el-col :span="12">
                     <el-form-item label="汇款单号">
-                        <el-input v-model="item.num">                            
+                        <el-input v-model="number">                            
                         </el-input>
                     </el-form-item>                    
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="汇款支行">
-                        <el-input v-model="item.subbankName">                            
+                        <el-input v-model="subbankName">                            
                         </el-input>
                     </el-form-item>                    
                 </el-col>
@@ -63,7 +65,7 @@
                 <upload v-if="mode === 'create' || mode === 'edit' && status === 'editing'" :fileList.sync="fileList"></upload>
             </el-form-item> 
             <el-form-item label="备注信息">
-                <el-input v-model="item.remark" type="textarea">                            
+                <el-input v-model="remark" type="textarea">                            
                 </el-input>
             </el-form-item> 
         </el-form>
@@ -72,7 +74,7 @@
             <el-row>
                 <el-col :span="12">
                     <el-form-item label="支付情况">
-                        {{item.status&&"已支付" || "未支付"}}                        
+                        {{paymentStatus&&"已支付" || "未支付"}}                        
                     </el-form-item>                    
                 </el-col>
                 <el-col :span="12">
@@ -84,25 +86,25 @@
             <el-row>
                 <el-col :span="12">
                     <el-form-item label="实际支付">
-                        {{item.actualPayment}}元                        
+                        {{actualPayment}}元                        
                     </el-form-item>                    
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="费用包含">
-                        {{checked&&'平台服务费'||''}} 
-                        {{checked2&&'保证金'||''}}
+                        {{containPayment.indexOf('1') > -1&&'平台服务费'||''}} 
+                        {{containPayment.indexOf('2') > -1&&'保证金'||''}}
                     </el-form-item>                    
                 </el-col>
             </el-row> 
             <el-row>
                 <el-col :span="12">
                     <el-form-item label="汇款单号">
-                        {{item.num}}                        
+                        {{number}}                        
                     </el-form-item>                    
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="汇款支行">
-                        {{item.subbankName}}                        
+                        {{subbankName}}                        
                     </el-form-item>                    
                 </el-col>
             </el-row> 
@@ -110,7 +112,7 @@
                 <file-list :fileList="fileList"></file-list>               
             </el-form-item> 
             <el-form-item label="备注信息">
-                {{item.remark}}                
+                {{remark}}                
             </el-form-item> 
         </el-form>
     </CollapsePanel>
@@ -123,6 +125,8 @@
     import CollapsePanel from '@/components/common/CollapsePanel';
     import Upload from '@/components/common/Upload';
     import FileList from '@/components/common/FileList';
+    import {generateComputed} from './_Utils';
+    import {mapMutations} from 'vuex';
     // 服务人员信息
     export default {
         name: "paymentInfo",
@@ -137,8 +141,6 @@
         data() {
             return {
                 expand: true,
-                checked: "",
-                checked2: "",
                 types: [{
                     label: "汇款",
                     value: "1"
@@ -150,32 +152,48 @@
                     value: "3"
                 },],
                 status: "",
-                originalItem: {
-
-                },
-                fileList:[]
+                innerItem: {},                
             };
         },
         methods: {
             handleEdit() {
-                this.status = 'editing';
-                this.originalItem = this.item;
-                this.item = JSON.parse(JSON.stringify(this.item || {}));          
+                this.status = 'editing';                
+                this.innerItem = JSON.parse(JSON.stringify(this.$store.state.PaymentInfo || {}));          
             },
             handleComplete() {
-                this.status = '';                                
+                this.status = '';   
+                this.updateItem(this.innerItem);                             
             },
             handleCancel() {
-                this.status = '';
-                this.item = this.originalItem;                
-            }
+                this.status = '';                              
+            },
+
+
+            ...mapMutations('PaymentInfo', ['updateItem', 
+                'updatePaymentStatus', 
+                'updateType', 
+                'updateActualPayment', 
+                'updateContainPayment', 
+                'updateNumber', 
+                'updateSubbankName', 
+                'updateFileList', 
+                'updateRemark']),
         },
         watch: {
             
         },
         computed: {
+            paymentStatus: generateComputed('paymentStatus', 'PaymentInfo', 'updatePaymentStatus'),
+            type: generateComputed('type', 'PaymentInfo', 'updateType'),
+            actualPayment: generateComputed('actualPayment', 'PaymentInfo', 'updateActualPayment'),
+            containPayment: generateComputed('containPayment', 'PaymentInfo', 'updateContainPayment'),
+            number: generateComputed('number', 'PaymentInfo', 'updateNumber'),
+            subbankName: generateComputed('subbankName', 'PaymentInfo', 'updateSubbankName'),
+            fileList: generateComputed('fileList', 'PaymentInfo', 'updateFileList'),
+            remark: generateComputed('remark', 'PaymentInfo', 'updateRemark'),
+
             paymentType: function(){
-                let tmp = this.types.filter((v)=>{return v.value == this.item.type});
+                let tmp = this.types.filter((v)=>{return v.value == this.type});
                 if(tmp && tmp.length){
                     return tmp[0].label;
                 }
@@ -186,5 +204,7 @@
     }
 </script>
 <style scoped>
-
+.el-select {
+    width: 100%;
+}
 </style>

@@ -9,7 +9,7 @@
         <el-form :model="item" label-width= "180px" v-show="mode === 'create' || mode === 'edit' && status === 'editing'">
             <el-form-item label="代理商是否已注册公司">
                 <el-switch
-                    v-model="item.signed"
+                    v-model="signed"
                     active-color="#13ce66"
                     inactive-color="#aaa">
                 </el-switch>
@@ -17,29 +17,29 @@
             <el-row>
                 <el-col :span="12">
                     <el-form-item label="公司名">
-                        <el-input v-model="item.name"></el-input>
+                        <el-input v-model="name"></el-input>
                     </el-form-item>                                                                         
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="公司简称">
-                        <el-input v-model="item.shortName"></el-input>
+                        <el-input v-model="shortName"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>   
             <el-row>
                 <el-col :span="12">
                     <el-form-item label="营业执照号">
-                        <el-input v-model="item.num"></el-input>
+                        <el-input v-model="number"></el-input>
                     </el-form-item>                                                                         
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="组织机构代码">
-                        <el-input v-model="item.code"></el-input>
+                        <el-input v-model="code"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>     
             <el-form-item label="公司具体地址">
-                <el-input v-model="item.address"></el-input>
+                <el-input v-model="address"></el-input>
             </el-form-item> 
             <el-form-item label="上传营业执照">                
                     <upload v-if="mode === 'create' || mode === 'edit' && status === 'editing'"></upload>
@@ -50,7 +50,7 @@
                 <el-col :span="12">
                     <el-form-item label="预计注册完成时间">
                         <el-date-picker
-                            v-model="item.finishDate"
+                            v-model="finishDate"
                             type="date"
                             placeholder="选择日期">
                         </el-date-picker>
@@ -60,29 +60,29 @@
             <el-row>
                 <el-col :span="12">
                     <el-form-item label="代理商负责跟踪人">
-                        <el-input v-model="item.tracerName"></el-input>
+                        <el-input v-model="tracerName"></el-input>
                     </el-form-item>                                                                         
                 </el-col>               
                 <el-col :span="12">
                     <el-form-item label="手机号">
-                        <el-input v-model="item.mobile"></el-input>
+                        <el-input v-model="mobile"></el-input>
                     </el-form-item>                                                                         
                 </el-col>
             </el-row>     
             <el-row>
                 <el-col :span="12">
                     <el-form-item label="邮箱号">
-                        <el-input v-model="item.email"></el-input>
+                        <el-input v-model="email"></el-input>
                     </el-form-item>                                                                         
                 </el-col>               
                 <el-col :span="12">
                     <el-form-item label="身份证号">
-                        <el-input v-model="item.idNum"></el-input>
+                        <el-input v-model="idCard"></el-input>
                     </el-form-item>                                                                         
                 </el-col>
             </el-row>  
             <el-form-item label="备注信息">
-                <el-input type="textarea" v-model="item.remark"></el-input>
+                <el-input type="textarea" v-model="remark"></el-input>
             </el-form-item> 
 
             <el-form-item label="上传身份证正面照">                
@@ -100,29 +100,29 @@
             <el-row>
                 <el-col :span="12">
                     <el-form-item label="公司名">
-                        {{item.name}}
+                        {{name}}
                     </el-form-item>                                                                         
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="公司简称">
-                        {{item.shortName}}
+                        {{shortName}}
                     </el-form-item>
                 </el-col>
             </el-row>   
             <el-row>
                 <el-col :span="12">
                     <el-form-item label="营业执照号">
-                        {{item.num}}
+                        {{number}}
                     </el-form-item>                                                                         
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="组织机构代码">
-                        {{item.code}}
+                        {{code}}
                     </el-form-item>
                 </el-col>
             </el-row>     
             <el-form-item label="公司具体地址">
-                {{item.address}}
+                {{address}}
             </el-form-item> 
             <el-form-item label="上传营业执照">                
                     <file-list></file-list>
@@ -132,36 +132,36 @@
             <el-row>
                 <el-col :span="12">
                     <el-form-item label="预计注册完成时间">
-                        {{item.finishDate}}
+                        {{finishDate}}
                     </el-form-item>                                                                         
                 </el-col>               
             </el-row>  
             <el-row>
                 <el-col :span="12">
                     <el-form-item label="代理商负责跟踪人">
-                        {{item.tracer}}
+                        {{tracerName}}
                     </el-form-item>                                                                         
                 </el-col>               
                 <el-col :span="12">
                     <el-form-item label="手机号">
-                        {{item.mobile}}
+                        {{mobile}}
                     </el-form-item>                                                                         
                 </el-col>
             </el-row>     
             <el-row>
                 <el-col :span="12">
                     <el-form-item label="邮箱号">
-                        {{item.email}}
+                        {{email}}
                     </el-form-item>                                                                         
                 </el-col>               
                 <el-col :span="12">
                     <el-form-item label="身份证号">
-                        {{item.idNum}}
+                        {{idCard}}
                     </el-form-item>                                                                         
                 </el-col>
             </el-row>  
             <el-form-item label="备注信息">
-                {{item.remark}}
+                {{remark}}
             </el-form-item> 
 
             <el-form-item label="上传身份证正面照">                
@@ -177,6 +177,8 @@
 import CollapsePanel from '@/components/common/CollapsePanel';
 import Upload from '@/components/common/Upload';
 import FileList from '@/components/common/FileList';
+import {generateComputed} from './_Utils';
+import {mapMutations} from 'vuex';
 /**
  * 代理商公司信息组件
  * TODO: 
@@ -197,24 +199,57 @@ export default {
         return {
             expand: true,
             status: "",
-            originalItem: {
+            innerItem: {
 
             },
         };
     },
+    computed: {
+        signed: generateComputed('signed', 'AgentCompanyInfo', 'updateSigned'),
+        name: generateComputed('name', 'AgentCompanyInfo', 'updateName'),
+        shortName: generateComputed('shortName', 'AgentCompanyInfo', 'updateShortName'),
+        number: generateComputed('number', 'AgentCompanyInfo', 'updateNumber'),
+        code: generateComputed('code', 'AgentCompanyInfo', 'updateCode'),
+        address: generateComputed('address', 'AgentCompanyInfo', 'updateAddress'),
+        numberFileList: generateComputed('numberFileList', 'AgentCompanyInfo', 'updateNumberFileList'),
+        finishDate: generateComputed('finishDate', 'AgentCompanyInfo', 'updateFinishDate'),
+        tracerName: generateComputed('tracerName', 'AgentCompanyInfo', 'updateTracerName'),
+        mobile: generateComputed('mobile', 'AgentCompanyInfo', 'updateMobile'),
+        email: generateComputed('email', 'AgentCompanyInfo', 'updateEmail'),
+        idCard: generateComputed('idCard', 'AgentCompanyInfo', 'updateIdCard'),
+        remark: generateComputed('remark', 'AgentCompanyInfo', 'updateRemark'),
+        idCardFrontFileList: generateComputed('idCardFrontFileList', 'AgentCompanyInfo', 'updateIdCardFrontFileList'),
+        idCardBackFileList: generateComputed('idCardBackFileList', 'AgentCompanyInfo', 'idCardBackFileList'),
+    },
     methods: {
         handleEdit() {
-                this.status = 'editing';
-                this.originalItem = this.item;
-                this.item = JSON.parse(JSON.stringify(this.item || {}));          
+                this.status = 'editing';                
+                this.innerItem = JSON.parse(JSON.stringify(this.$store.state.AgentCompanyInfo));          
             },
             handleComplete() {
-                this.status = '';                                
+                this.status = '';  
+                this.updateItem(this.innerItem);                              
             },
             handleCancel() {
-                this.status = '';
-                this.item = this.originalItem;                
-            }
+                this.status = '';                             
+            },
+
+            ...mapMutations('AgentCompanyInfo', ['updateItem',
+                'updateSigned',
+                'updateName',
+                'updateShortName',
+                'updateNumber',
+                'updateCode',
+                'updateAddress',
+                'updateNumberFileList',
+                'updateFinishDate',
+                'updateTracerName',
+                'updateMobile',
+                'updateEmail',
+                'updateIdCard',
+                'updateRemark',
+                'updateIdCardFrontFileList',
+                'updateIdCardBackFileList'])
     }
 }
 </script>

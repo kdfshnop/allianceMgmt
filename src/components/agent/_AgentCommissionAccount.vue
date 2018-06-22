@@ -6,23 +6,23 @@
             <el-button v-show="mode === 'edit' && status === 'editing'" @click="handleCancel" type="danger" size="mini">取消</el-button>         
             <el-button v-show="mode === 'edit' && status === 'editing'" @click="handleComplete" type="success" size="mini">完成</el-button>                                     
         </div>
-        <el-form :model="item" label-width= "180px" v-show="mode === 'create' || mode === 'edit' && status === 'editing'">
+        <el-form :model="innerItem" label-width= "180px" v-show="mode === 'create' || mode === 'edit' && status === 'editing'">
             <el-row>
                 <el-col :span="12">
                     <el-form-item label="银行名称">
-                        <el-input v-model="item.bankName"></el-input>
+                        <el-input v-model="bankName"></el-input>
                     </el-form-item>
                     <el-form-item label="账号名称">
-                        <el-input v-model="item.accountName"></el-input>
+                        <el-input v-model="accountName"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">                    
                     <el-form-item label="支行名称">
-                        <el-input v-model="item.subbankName"></el-input>
+                        <el-input v-model="subbankName"></el-input>
                     </el-form-item>
                     
                     <el-form-item label="收款账号">
-                        <el-input v-model="item.account"></el-input>
+                        <el-input v-model="receiptAccount"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>                                    
@@ -31,19 +31,19 @@
             <el-row>
                 <el-col :span="12">
                     <el-form-item label="银行名称">
-                        {{item.bankName}}
+                        {{bankName}}
                     </el-form-item>
                     <el-form-item label="账号名称">
-                        {{item.accountName}}
+                        {{accountName}}
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">                    
                     <el-form-item label="支行名称">
-                        {{item.subbankName}}
+                        {{subbankName}}
                     </el-form-item>
                     
                     <el-form-item label="收款账号">
-                        {{item.account}}
+                        {{receiptAccount}}
                     </el-form-item>
                 </el-col>
             </el-row>                                    
@@ -56,6 +56,8 @@
  * TODO:
  */
     import CollapsePanel from '@/components/common/CollapsePanel';
+    import {generateComputed} from './_Utils';
+    import {mapMutations} from 'vuex';
     // 服务人员信息
     export default {
         name: "corporateInfo",
@@ -71,24 +73,29 @@
             return {
                 expand: true,
                 status: "",
-                originalItem: {
-
-                }
+                innerItem: {}
             };
+        },
+        computed: {
+            "bankName": generateComputed("bankName", "AgentCommissionAccount", "updateBankName"),
+            "subbankName": generateComputed("subbankName", "AgentCommissionAccount", "updateSubbankName"),
+            "accountName": generateComputed("accountName", "AgentCommissionAccount", "updateAccountName"),
+            "receiptAccount": generateComputed("receiptAccount", "AgentCommissionAccount", "updateReceiptAccount"),
         },
         methods: {
             handleEdit() {
-                this.status = 'editing';
-                this.originalItem = this.item;
-                this.item = Object.assign({}, this.item);                
+                this.status = 'editing';                
+                this.innerItem = Object.assign({}, this.$store.state.AgentCommissionAccount);                
             },
             handleComplete() {
-                this.status = '';                                
+                this.status = '';    
+                this.updateItem(this.innerItem);                            
             },
             handleCancel() {
-                this.status = '';
-                this.item = this.originalItem;                
-            }
+                this.status = '';                              
+            },
+
+            ...mapMutations('AgentCommissionAccount', ['updateItem', 'updateBankName', 'updateSubbankName', 'updateReceiptAccount', 'updateAccountName'])
         },
         watch: {
             

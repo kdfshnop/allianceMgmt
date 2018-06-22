@@ -1,12 +1,18 @@
 <template>
-  <div id="app">        
+  <div id="app"> 
+    <p @click="increment">{{this.$store.state.count}}</p>       
     <router-view/>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'App'
+  name: 'App',
+  methods: {
+    increment() {
+      this.$store.commit("increment");
+    }
+  }
 }
 </script>
 

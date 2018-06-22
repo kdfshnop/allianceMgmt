@@ -6,22 +6,22 @@
             <el-button v-show="mode === 'edit' && status === 'editing'" @click="handleCancel" type="danger" size="mini">取消</el-button>         
             <el-button v-show="mode === 'edit' && status === 'editing'" @click="handleComplete" type="success" size="mini">完成</el-button>                            
         </div>
-        <el-form :model="item" label-width= "180px" v-show="mode === 'create' || mode === 'edit' && status === 'editing'">            
+        <el-form :model="innerItem" label-width= "180px" v-show="mode === 'create' || mode === 'edit' && status === 'editing'">            
             <el-form-item label="代理商提佣比率">
-                <el-input v-model="item.ratio">
+                <el-input v-model="ratio">
                     <template slot="append">%</template>
                 </el-input>
             </el-form-item>
             <el-form-item label="备注信息">
-                <el-input v-model="item.remark"></el-input>
+                <el-input v-model="remark"></el-input>
             </el-form-item>            
         </el-form>
-        <el-form :model="item" label-width= "180px" v-show="mode === 'view' || mode === 'edit' && status === ''">            
+        <el-form :model="innerItem" label-width= "180px" v-show="mode === 'view' || mode === 'edit' && status === ''">            
             <el-form-item label="代理商提佣比率">
-                {{item.ratio}}%                    
+                {{ratio}}%                    
             </el-form-item>
             <el-form-item label="备注信息">
-                {{item.remark}}
+                {{remark}}
             </el-form-item>            
         </el-form>
     </CollapsePanel>
@@ -32,6 +32,8 @@
  * TODO:
  */
     import CollapsePanel from '@/components/common/CollapsePanel';
+    import {generateComputed} from './_Utils';
+    import {mapMutations} from 'vuex';
     // 服务人员信息
     export default {
         name: "agentCommissionRatio",
@@ -47,24 +49,27 @@
             return {
                 expand: true,
                 status: "",
-                originalItem: {
-
-                }
+                innerItem: Object.assign({}, this.item),                
             };
+        },
+        computed: {
+            ratio: generateComputed("ratio", "AgentCommissionRatio", "updateRatio"),
+            remark: generateComputed("remark", "AgentCommissionRatio", "updateRemark")
         },
         methods: {
             handleEdit() {
-                this.status = 'editing';
-                this.originalItem = this.item;
-                this.item = Object.assign({}, this.item);                
+                this.status = 'editing';                
+                this.innerItem = Object.assign({}, this.$store.state.AgentCommissionRatio);                
             },
             handleComplete() {
-                this.status = '';                                
+                this.status = ''; 
+                this.updateItem(this.innerItem);
             },
             handleCancel() {
-                this.status = '';
-                this.item = this.originalItem;                
-            }
+                this.status = '';                             
+            },
+
+            ...mapMutations('AgentCommissionRatio', ['updateItem', 'updateRatio', 'updateRemark']),
         },
         watch: {
             

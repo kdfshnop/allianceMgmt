@@ -12,8 +12,8 @@
     </el-steps>      
 
     <div v-show="active == 0">
-    <service-staff-info :item="serviceInfo" :mode='mode'></service-staff-info>    
-    <partner-infoes :items="partners" :mode='mode'></partner-infoes>
+        <service-staff-info :item.sync="serviceInfo" :mode='mode'></service-staff-info>    
+        <partner-infoes :items.sync="partners" :mode='mode'></partner-infoes>
     </div>
     <div v-show="active == 1">
         <agent-basic-info :item="agentBaseInfo" :mode='mode'></agent-basic-info>
@@ -25,15 +25,16 @@
         <contract-info :item="conctratInfo" :mode='mode'></contract-info>
     </div>
     <div v-show="active == 3">
-        <service-manager :item="serviceManager" :mode='mode'></service-manager>
-        <b-d-manager :item="bdManager" :mode='mode'></b-d-manager>
+        <service-manager :item.sync="serviceManager" :mode='mode'></service-manager>
+        <b-d-manager :item.sync="bdManager" :serviceManager="serviceManager" :mode='mode'></b-d-manager>
     </div>
     <div v-show="active == 4">
-        <agent-commission-ratio :item="agentCommissionRatio" :mode='mode'></agent-commission-ratio>
+        <agent-commission-ratio :item.sync="agentCommissionRatio" :mode='mode'></agent-commission-ratio>
         <agent-commission-account :item="agentCommissionAccount" :mode='mode'></agent-commission-account>        
     </div>
     <div v-show="active == 5">
         <platform-service-fee :item="platformServiceFee" :mode='mode'></platform-service-fee>
+        <dividing-info :mode='mode'></dividing-info>
         <payment-info :item="paymentInfo" :mode='mode'></payment-info>
     </div>
     <div v-show="active == 6">
@@ -63,6 +64,7 @@ import BDManager from './_BDManager';
 import AgentCommissionRatio from './_AgentCommissionRatio';
 import AgentCommissionAccount from './_AgentCommissionAccount';
 import PlatformServiceFee from './_PlatformServiceFee';
+import DividingInfo from './_DividingInfo';
 import PaymentInfo from './_PaymentInfo';
 export default {
   name: 'CreateAgent',
@@ -79,22 +81,24 @@ export default {
       BDManager, 
       AgentCommissionRatio, 
       AgentCommissionAccount, 
-      PlatformServiceFee,PaymentInfo
+      PlatformServiceFee,
+      PaymentInfo,
+      DividingInfo
     },
   data () {
     return {      
-      active: 0,// 控制步骤
+      active: 2,// 控制步骤
       stepNumber: 7,// 总步数
-      mode: "edit",
+      mode: "create",
       serviceInfo: {
           bdInfo: {
-              name: "nihao"
+              
           },
           cxInfo: {
-              name: "wohao"
+              
           },
           directorInfo: {
-              name: "dajiahao"
+              
           }
       },
       partners: [],
