@@ -1,92 +1,35 @@
 <template>
     <el-dialog :title="title" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
-        <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="110px">
-            <el-row>
-                <el-col :span="12">
-                    <el-form-item label="公司名称" prop="companyName" class="tl">
-                        <el-input v-model="ruleForm.companyName" placeholder="50字以内"></el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                    <el-form-item label="公司简称" prop="abbreviation">
-                        <el-input v-model="ruleForm.abbreviation" placeholder="50字以内"></el-input>
-                    </el-form-item>
-                </el-col>
-            </el-row>
-            <el-row>
-                <el-col :span="12">
-                    <el-form-item label="所属城市" prop="city" class="tl">
-                        <el-input v-model="ruleForm.city" placeholder="请选择..."></el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                    <el-form-item label="保证金" prop="cash">
-                        <el-input v-model="ruleForm.cash"></el-input>
-                    </el-form-item>
-                </el-col>
-            </el-row>
-            <el-row>
-                <el-col :span="12">
-                    <el-form-item label="组织机构代码" prop="code" class="tl">
-                        <el-input v-model="ruleForm.code" placeholder="50字以内"></el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                    <el-form-item prop="radio">
-                        <el-radio-group v-model="ruleForm.radio">
-                            <el-radio label="二手房" value="二手房"></el-radio>
-                            <el-radio label="新房" value="新房"></el-radio>
-                        </el-radio-group>
-                    </el-form-item>
-                </el-col>
-            </el-row>
-            <el-form-item label="bd" prop="bd"  label-width="40px" class="tl">
-                <el-input v-model="ruleForm.bd" placeholder="请选择"></el-input>
+        <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="120px">
+            <el-form-item label="门店名称" prop="storeName" >
+                <el-input v-model="ruleForm.storeName"></el-input>
+            </el-form-item>
+            <el-form-item label="门店类型" prop="storeType">
+                <el-select v-model="ruleForm.storeType" filterable placeholder="请选择加盟或直营">
+                        <el-option label="代理商直营门店" value="代理商直营门店"></el-option>
+                        <el-option label="加盟门店" value="加盟门店"></el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item label="代理商公司名称" prop="companyName" >
+                <el-input v-model="ruleForm.companyName"></el-input>
+            </el-form-item>
+            <el-form-item label="门店地址" prop="storeAdress">
+                <el-input v-model="ruleForm.storeAdress"></el-input>
             </el-form-item>
             <el-row>
                 <el-col :span="12">
-                    <el-form-item label="合作时间" prop="joinTime" class="tl">
+                    <el-form-item label="区域" prop="joinTime">
                         <el-input v-model="ruleForm.joinTime" ></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
-                    <el-form-item label="法人代表" prop="legal">
+                    <el-form-item label="板块" prop="legal">
                         <el-input v-model="ruleForm.legal"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
-            <el-row>
-                <el-col :span="12">
-                    <el-form-item label="电话" class="tl" prop="tel">
-                        <el-input v-model="ruleForm.tel" ></el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                    <el-form-item label="地址" prop="address" >
-                        <el-input v-model="ruleForm.address"></el-input>
-                    </el-form-item>
-                </el-col>
-            </el-row>
-            <el-form-item label="代理商" class="tl" prop="agency">
-                <el-select v-model="ruleForm.agency" filterable>
-                        <el-option label="暂无代理商" value="暂无代理商"></el-option>
-                        <el-option label="城市代理" value="城市代理"></el-option>
-                        <el-option label="区域代理" value="区域代理"></el-option>
-                </el-select>
-            </el-form-item>
-            <el-form-item  class="tl upload">
-                <el-upload
-                class="upload-demo"
-                action="https://jsonplaceholder.typicode.com/posts/"
-                :on-preview="handlePreview"
-                :on-remove="handleRemove"
-                :before-remove="beforeRemove"
-                multiple
-                :limit="3"
-                :on-exceed="handleExceed">
-                    <el-button size="small" type="primary">上传附件</el-button>
-                    <div slot="tip" class="el-upload__tip">(上传附件的格式后缀名为txt,doc,docx,xls,xlsx,ppt,pptx,pdf,jpg,jpeg,png,gif,rar,zip)</div>
-                </el-upload>
+            <el-form-item label="经纬度" prop="abbreviation">
+                <el-input v-model="ruleForm.abbreviation" placeholder="50字以内"></el-input>
             </el-form-item>
         </el-form>
         <span slot="footer" class="dialog-footer">
@@ -98,8 +41,8 @@
 
 <script>
 export default {
-    name:'editorCompany',
-    props:['currentCompanyInfo','title'],
+    name:'editorStore',
+    props:['currentStoreInfo','title'],
     data(){
         return {
             dialogVisible:false,
@@ -115,6 +58,9 @@ export default {
                 radio:'',//新房二手房
                 joinTime:'',//合作时间
                 legal:'',//法人
+                storeAdress:'',//门店地址
+                storeName:'',//门店名称
+                storeType:'',//门店类型
                 tel:''//电话
             },
             // 必填设置
@@ -125,14 +71,18 @@ export default {
                 cash: [{ required: true, message: '请输入保证金', trigger: 'blur' }],
                 code: [{ required: true, message: '请输入组织机构代码', trigger: 'blur' }],
                 bd: [{ required: true, message: '请输入bd', trigger: 'blur' }],
-                joinTime: [{ required: true, message: '请输入合作时间', trigger: 'blur' }]
+                joinTime: [{ required: true, message: '请输入合作时间', trigger: 'blur' }],
+                plate:[{ required: true, message: '请输入板块', trigger: 'blur' }],
+                storeAdress:[{ required: true, message: '请输入门店地址', trigger: 'blur' }],
+                storeName:[{ required: true, message: '请输入门店名称', trigger: 'blur' }],
+                storeType:[{ required: true, message: '请输入门店类型', trigger: 'blur' }]
             }
         }
     },
     methods:{
         open() {
             if(this.title=='编辑公司'){
-                this.ruleForm=Object.assign({agency:'暂无代理商'},this.currentCompanyInfo);
+                this.ruleForm=Object.assign({},this.currentStoreInfo);
             }else{
                 this.ruleForm={
                     address:'',//地址
@@ -165,7 +115,7 @@ export default {
                 if (valid) {
                     this.dialogVisible=false;
                     alert('提交成功');
-                    if(this.title=='编辑公司'){
+                    if(this.title=='编辑门店'){
                         this.$emit('editSuccess',this.ruleForm);
                     }else{
                         this.$emit('addSuccess',this.ruleForm);
@@ -200,11 +150,6 @@ export default {
 </script>
 
 <style>
-    .tl .el-form-item__label{
-        text-align: left;
-    }
-    .upload .el-form-item__content{
-        margin-left: 0!important;
-    }
+
 </style>
 

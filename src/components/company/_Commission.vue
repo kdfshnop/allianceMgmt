@@ -91,7 +91,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
     .el-dialog__footer{
         text-align: left;
     }

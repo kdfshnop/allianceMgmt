@@ -1,8 +1,10 @@
 <template>
     <el-container>
         <el-main>    
-            <bread-crumb :items="breadCrumb"></bread-crumb> 
-            <el-button type="primary" class="addCompany" @click="addCompany">+添加公司</el-button>       
+            <bread-crumb :items="breadCrumb"></bread-crumb>
+            <div style="text-align:right;">
+                <el-button type="primary" @click="addCompany">+新增公司</el-button>
+            </div>     
             <el-form ref="form" :model="form" label-width="180px" class="gap-2">
                 <el-row >
                     <el-col :span="12">
@@ -74,10 +76,10 @@
                     <el-button class="reset" @click="resetForm('form')">重置</el-button>
                 </el-col>
                 <el-col :span="2">
-                    <el-button type="primary" @click="search(form)">搜索</el-button>
+                    <el-button type="primary" @click="search('form')">搜索</el-button>
                 </el-col>
             </el-row>
-            <div class="search-result">共搜到共搜索到 956家公司，56家有代理商，900家无代理商</div>
+            <div class="search-result">共搜索到 956家公司，56家有代理商，900家无代理商</div>
            <el-table :data="searInfoList" border style="width: 100%">
                 <el-table-column prop="date" label="序号" align="center" ></el-table-column>
                 <el-table-column prop="name" label="城市" align="center" ></el-table-column>
@@ -89,10 +91,10 @@
                 <el-table-column prop="name" label="bd" align="center"></el-table-column>
                 <el-table-column prop="name" label="创建时间" align="center"></el-table-column>
                 <el-table-column prop="name" label="创建人" align="center"></el-table-column>
-                <el-table-column label="name" width="300px" align="center">
+                <el-table-column prop="name" label="操作" width="300px" align="center">
                     <template slot-scope="scope">
-                        <el-button size="mini" @click="handleEdit(scope.$index, scope.row)" type="text">编辑|</el-button>
-                        <el-button size="mini" @click="handleDelete(scope.$index, scope.row)" type="text">分佣账号设置|</el-button>
+                        <el-button size="mini" @click="editorCompany(scope.$index, scope.row)" type="text">编辑|</el-button>
+                        <el-button size="mini" @click="bankAccount(scope.$index, scope.row)" type="text">分佣账号设置|</el-button>
                         <el-button size="mini"  type="text" @click="firstDialogVisible = true,handleEnd(scope.$index, scope.row)">终止合作</el-button>
                     </template>
                 </el-table-column>
@@ -248,7 +250,7 @@ export default {
             },200); 
         },
         //编辑
-        handleEdit(index, row){
+        editorCompany(index, row){
             //操作公司时，该公司所处所有信息列表的位置;
             this.companyInfoIndex=(this.pagination.currentPage-1)*this.pagination.pageSize+index;
             // 当前编辑的公司信息;
@@ -261,7 +263,7 @@ export default {
             },200);  
         },
         //分佣账号设置 
-        handleDelete(index, row){
+        bankAccount(index, row){
             this.$refs.commission.open();
         },
         //终止合作,第一次弹框
@@ -286,10 +288,6 @@ export default {
 </script>
 
 <style>
-    .addCompany{
-        float: right;
-        margin-bottom: 20px;
-    }
     .search-result{
         color:gray;
         margin-bottom: 20px;
@@ -301,6 +299,9 @@ export default {
     }
     .el-button{
         margin-left: 0 !important;
+    }
+    .el-dialog__footer{
+        text-align: right;
     }
 </style>
 
