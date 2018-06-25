@@ -3,7 +3,7 @@
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="110px">
             <el-row>
                 <el-col :span="12">
-                    <el-form-item label="公司名称" prop="companyName" class="tl">
+                    <el-form-item label="公司名称" prop="name" class="tl">
                         <el-input v-model="ruleForm.name" placeholder="50字以内"></el-input>
                     </el-form-item>
                 </el-col>
@@ -108,6 +108,7 @@ export default {
                 agency:'暂无代理商',//代理商
                 companyName:'',//公司名称
                 bd:'',//bd
+                name:'',//必填编辑中prop与v-model与rules选项须一致，才可达到必填编辑验证
                 abbreviation:'',//公司简称
                 city:'',//公司所属城市
                 cash:'',//保证金
@@ -119,7 +120,7 @@ export default {
             },
             // 必填设置
             rules: {
-                companyName: [{ required: true, message: '请输入公司名称', trigger: 'blur' }],
+                name: [{ required: true, message: '请输入公司名称', trigger: 'blur' }],
                 abbreviation: [{ required: true, message: '请输入公司简称', trigger: 'blur' }],
                 city: [{ required: true, message: '请输入城市', trigger: 'blur' }],
                 cash: [{ required: true, message: '请输入保证金', trigger: 'blur' }],

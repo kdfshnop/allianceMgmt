@@ -6,7 +6,8 @@ import MaterialVerify from '@/components/verify/MaterialVerify';
 import CompanyManagement from '@/components/company/CompanyManagement';
 import StoreManagement from '@/components/store/StoreManagement';
 import EndTeam from '@/components/endTeam/EndTeam';
-import FirstAudit from '@/components/joinAudit/FirstAudit';
+import MaterialAuditResult from '@/components/firstJoinAudit/materialAudit/MaterialAuditResult';
+import ServiceFeeAuditResult from '@/components/firstJoinAudit/serviceFeeAudit/ServiceFeeAuditResult';
 
 Vue.use(Router);
 
@@ -41,9 +42,14 @@ let router = new Router({
       component:EndTeam
     },
     {
-      path:'/FirstAudit',
-      name:'FirstAudit',
-      component:FirstAudit
+      path:'/MaterialAuditResult',
+      name:'MaterialAuditResult',
+      component:MaterialAuditResult
+    },
+    {
+      path:'/ServiceFeeAuditResult',
+      name:'ServiceFeeAuditResult',
+      component:ServiceFeeAuditResult
     }
   ]
 });
