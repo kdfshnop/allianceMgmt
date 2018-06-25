@@ -5,6 +5,8 @@ import PlatformServiceFeeVerify from '@/components/verify/PlatformServiceFeeVeri
 import MaterialVerify from '@/components/verify/MaterialVerify';
 import CompanyManagement from '@/components/company/CompanyManagement';
 import StoreManagement from '@/components/store/StoreManagement';
+import EndTeam from '@/components/endTeam/EndTeam';
+import FirstAudit from '@/components/joinAudit/FirstAudit';
 
 Vue.use(Router);
 
@@ -32,6 +34,16 @@ let router = new Router({
       path: '/StoreManagement',
       name: 'StoreManagement',
       component: StoreManagement
+    },
+    {
+      path:'/EndTeam',
+      name:'EndTeam',
+      component:EndTeam
+    },
+    {
+      path:'/FirstAudit',
+      name:'FirstAudit',
+      component:FirstAudit
     }
   ]
 });

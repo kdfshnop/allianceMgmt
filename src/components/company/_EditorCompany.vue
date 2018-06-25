@@ -4,7 +4,7 @@
             <el-row>
                 <el-col :span="12">
                     <el-form-item label="公司名称" prop="companyName" class="tl">
-                        <el-input v-model="ruleForm.companyName" placeholder="50字以内"></el-input>
+                        <el-input v-model="ruleForm.name" placeholder="50字以内"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">

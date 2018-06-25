@@ -74,7 +74,7 @@
                 </el-col>
             </el-row>
             <div class="search-result">共搜索到 956家门店，56个经纪人，900家无代理商</div>
-           <el-table :data="searInfoList" border style="width: 100%">
+            <el-table :data="searInfoList" border style="width: 100%">
                 <el-table-column prop="date" label="门店id" align="center" ></el-table-column>
                 <el-table-column prop="name" label="门店名称" align="center" ></el-table-column>
                 <el-table-column prop="address" label="门店类型" align="center" ></el-table-column>
@@ -105,6 +105,13 @@
                     :total="pagination.total">
                 </el-pagination>
             </div>
+            <!--二维码对话框-->
+                <el-dialog title="门店二维码" :visible.sync="qrCodeShow" width="30%" >
+                    <div style="text-align:center;">
+                        <img src="https://img.wkzf.com/62de69406bd64f7796203f2f1d6d86d6.CL" alt="">
+                    </div>
+                </el-dialog>
+            <!--终止合作对话框-->
             <el-dialog title="终止公司合作" :visible.sync="firstDialogVisible" width="30%" >
                 <p>1、对公司通知合作，旗下的门店也将一起会被停止合作</p>
                 <p>2、终止合作门店下的经纪人账号将会被冻结</p>
@@ -135,6 +142,7 @@ export default {
   components:{BreadCrumb,EditorStore},
   data () {
     return {
+        qrCodeShow:false,
         firstDialogVisible: false,//第一个终止合作弹出框
         secondDialogVisible:false,//第二个终止合作弹出框
         noJoin:'',//终止合作原因
@@ -253,7 +261,7 @@ export default {
         },
         //二维码
         qrCode(index, row){
-            this.$refs.commission.open();
+            this.qrCodeShow=true;
         },
         //终止合作,第一次弹框
         handleEnd(index,row){
