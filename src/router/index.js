@@ -8,6 +8,10 @@ import StoreManagement from '@/components/store/StoreManagement';
 import EndTeam from '@/components/endTeam/EndTeam';
 import MaterialAuditResult from '@/components/firstJoinAudit/materialAudit/MaterialAuditResult';
 import ServiceFeeAuditResult from '@/components/firstJoinAudit/serviceFeeAudit/ServiceFeeAuditResult';
+import ProfessionAuditResult from '@/components/professionAudit/ProfessionAuditResult';
+import ProfessionEndResult from '@/components/professionEnd/ProfessionEndResult';
+import ProfessionAuditVerify from '@/components/professionAudit/ProfessionAuditVerify';
+import ProfessionEndVerify from '@/components/professionEnd/ProfessionEndVerify';
 
 Vue.use(Router);
 
@@ -50,6 +54,26 @@ let router = new Router({
       path:'/ServiceFeeAuditResult',
       name:'ServiceFeeAuditResult',
       component:ServiceFeeAuditResult
+    },
+    {
+      path:'/ProfessionAuditResult',
+      name:'ProfessionAuditResult',
+      component:ProfessionAuditResult
+    },
+    {
+      path:'/ProfessionEndResult',
+      name:'ProfessionEndResult',
+      component:ProfessionEndResult
+    },
+    {
+      path:'/ProfessionAuditVerify',
+      name:'ProfessionAuditVerify',
+      component:ProfessionAuditVerify
+    },
+    {
+      path:'/ProfessionEndVerify',
+      name:'ProfessionEndVerify',
+      component:ProfessionEndVerify
     }
   ]
 });
