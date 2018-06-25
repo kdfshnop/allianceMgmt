@@ -1,6 +1,6 @@
 <template>
   <el-container>
-    <el-main>
+    <el-main>    
     <el-steps align-center class="step-container" :active="active" finish-status="success">
         <el-step title="合作资料"></el-step>
         <el-step title="代理区域"></el-step>
@@ -17,7 +17,7 @@
     </div>
     <div v-show="active == 1">
         <agent-basic-info :item="agentBaseInfo" :mode='mode'></agent-basic-info>
-        <agent-area :item="agentArea" :mode='mode'></agent-area>
+        <agent-area :mode='mode'></agent-area>
     </div>
     <div v-show="active == 2">
         <agent-company-info :item="agentCompanyInfo" :mode='mode'></agent-company-info>
@@ -44,7 +44,7 @@
         
     </div>
     <el-button-group class="gap-2" style="margin-left: auto; margin-right: auto; width: 200px; display: block;">
-        <el-button v-if="active>0" @click="prev">上一步</el-button> <el-button v-if="active<stepNumber" @click="next">下一步</el-button>
+        <el-button v-if="active>0" @click="prev" type="primary">上一步</el-button><el-button type="primary" v-if="active<stepNumber" @click="next">下一步</el-button>
     </el-button-group>    
     </el-main>
   </el-container>
@@ -66,6 +66,7 @@ import AgentCommissionAccount from './_AgentCommissionAccount';
 import PlatformServiceFee from './_PlatformServiceFee';
 import DividingInfo from './_DividingInfo';
 import PaymentInfo from './_PaymentInfo';
+import Region from '@/components/common/Region';
 export default {
   name: 'CreateAgent',
   components: {
@@ -83,13 +84,14 @@ export default {
       AgentCommissionAccount, 
       PlatformServiceFee,
       PaymentInfo,
-      DividingInfo
+      DividingInfo,
+      Region
     },
   data () {
     return {      
-      active: 2,// 控制步骤
+      active: 1,// 控制步骤
       stepNumber: 7,// 总步数
-      mode: "create",
+      mode: "edit",
       serviceInfo: {
           bdInfo: {
               
@@ -138,7 +140,8 @@ export default {
       },
       paymentInfo: {
 
-      }
+      },
+      selectedOptions: [1, 1, 1, 1]
     }
   },
   methods: {
@@ -170,5 +173,11 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.el-button-group {
+    text-align: center;    
+}
 
+.el-button-group .el-button {
+    float: none;
+}
 </style>

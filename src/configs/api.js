@@ -17,6 +17,12 @@ export default {
         reject: "",// 拒绝
         detail: "",// 详情
     },
+    region: {// 省市区板块
+        province: "/province/list",
+        city: "/city/list",
+        district: "/region/list",
+        town: "/town/list"
+    },
     test: "",
     upload: "",// 文件上传地址
 };

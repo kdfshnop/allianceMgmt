@@ -16,3 +16,19 @@ export function generateComputed(fieldName, nameInStore, updateFuncName) {
         }
     };   
 };
+
+export function getDateStr(date) {
+    if(date instanceof Date) {
+        return date.getFullYear() + '-' + padding(date.getMonth() + 1) + '-' + padding(date.getDate());
+    }
+
+    return '';
+}
+
+export function padding(n) {
+    if(n<10) {
+        return '0' + n;
+    }
+
+    return n.toString();
+}

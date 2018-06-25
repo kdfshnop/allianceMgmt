@@ -12,13 +12,13 @@
             </el-form-item>            
             <el-form-item label="合同有无盖公章">
                 <el-switch
-                    v-model="item.sealed"
+                    v-model="sealed"
                     active-color="#13ce66"
                     inactive-color="#aaa">
                 </el-switch>
             </el-form-item>
             <el-form-item label="特殊条款">
-                <el-input type="textarea" v-model="item.special">
+                <el-input type="textarea" v-model="special">
                 </el-input>
             </el-form-item>
 
@@ -33,15 +33,15 @@
                     <file-list></file-list>
             </el-form-item>            
             <el-form-item label="合同有无盖公章">
-                {{item.sealed&&"有"||"无"}}
+                {{sealed&&"有"||"无"}}
             </el-form-item>
             <el-form-item label="特殊条款">
-                {{item.special}}
+                {{special}}
             </el-form-item>
 
             <!-- 未注册时只显示这个 -->
             <el-form-item label="承诺书上传">                
-                    <file-list></file-list>
+                <file-list></file-list>
             </el-form-item>
         </el-form>
     </CollapsePanel>
@@ -53,6 +53,8 @@
     import CollapsePanel from '@/components/common/CollapsePanel';
     import Upload from '@/components/common/Upload';
     import FileList from '@/components/common/FileList';
+    import {generateComputed} from './_Utils';
+    import {mapMutations} from 'vuex';
     // 服务人员信息
     export default {
         name: "corporateInfo",
@@ -68,24 +70,31 @@
             return {
                 expand: true,
                 status: "",
-                originalItem: {
+                innerItem: {
 
                 },
             };
         },
         methods: {
             handleEdit() {
-                this.status = 'editing';
-                this.originalItem = this.item;
-                this.item = JSON.parse(JSON.stringify(this.item || {}));          
+                this.status = 'editing';                
+                this.innerItem = JSON.parse(JSON.stringify(this.innerItem || {}));          
             },
             handleComplete() {
-                this.status = '';                                
+                this.status = '';
+                this.$store.commit('updateItem', this.innerItem);                                
             },
             handleCancel() {
-                this.status = '';
-                this.item = this.originalItem;                
-            }
+                this.status = '';               
+            },
+
+            ...mapMutations("ContractInfo", ['updateItem', 'updateContractFileList', 'updateSealed', 'updateSpecial', 'updatePromiseFileList'])
+        },
+        computed: {
+            contractFileList: generateComputed("contractFileList", "ContractInfo", "updateContractFileList"),
+            sealed: generateComputed("sealed", "ContractInfo", "updateSealed"),
+            special: generateComputed("special", "ContractInfo", "updateSpecial"),
+            promiseFileList: generateComputed("promiseFileList", "ContractInfo", "updatePromiseFileList"),
         },
         watch: {
             

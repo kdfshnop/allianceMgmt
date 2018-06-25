@@ -8,7 +8,7 @@ export default {
         code: "",
         address: "",
         numberFileList: [],
-        finisheDate: '',
+        finishDate: '',
         tracerName: '',
         mobile: '',
         email: '',
@@ -39,8 +39,8 @@ export default {
         updateNumberFileList(state, numberFileList) {
             state.numberFileList = numberFileList;
         },
-        updateFinishDate(state, finisheDate) {
-            state.finisheDate = finisheDate;
+        updateFinishDate(state, finishDate) {
+            state.finishDate = finishDate;
         },
         updateTracerName(state, tracerName) {
             state.tracerName = tracerName;
@@ -70,7 +70,7 @@ export default {
             state.code = item.code;
             state.address = item.address;
             state.numberFileList = item.numberFileList;
-            state.finisheDate = item.finisheDate;
+            state.finishDate = item.finishDate;
             state.tracerName = item.tracerName;
             state.mobile = item.mobile;
             state.email = item.email;
