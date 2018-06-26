@@ -80,7 +80,7 @@
                 </el-col>
             </el-row>
             <div class="search-result">共搜索到 956家公司，56家有代理商，900家无代理商</div>
-           <el-table :data="searInfoList" border style="width: 100%">
+            <el-table :data="searInfoList" border style="width: 100%">
                 <el-table-column prop="date" label="序号" align="center" ></el-table-column>
                 <el-table-column prop="name" label="城市" align="center" ></el-table-column>
                 <el-table-column prop="address" label="公司全称" align="center" ></el-table-column>

@@ -12,6 +12,8 @@ import ProfessionAuditResult from '@/components/professionAudit/ProfessionAuditR
 import ProfessionEndResult from '@/components/professionEnd/ProfessionEndResult';
 import ProfessionAuditVerify from '@/components/professionAudit/ProfessionAuditVerify';
 import ProfessionEndVerify from '@/components/professionEnd/ProfessionEndVerify';
+import AgentEnd from '@/components/agentEnd/agentEnd';
+import Record from '@/components/record/Record';
 
 Vue.use(Router);
 
@@ -74,6 +76,16 @@ let router = new Router({
       path:'/ProfessionEndVerify',
       name:'ProfessionEndVerify',
       component:ProfessionEndVerify
+    },
+    {
+      path:'/AgentEnd',
+      name:'AgentEnd',
+      component:AgentEnd
+    },
+    {
+      path:'/Record',
+      name:'Record',
+      component:Record
     }
   ]
 });
