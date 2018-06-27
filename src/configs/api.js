@@ -13,8 +13,8 @@ export default {
     },
     materialVerify: {// 资料审核
         historyRecords: "",// 历史记录
-        approve: "",// 通过
-        reject: "",// 拒绝
+        approve: "/agency/auditing",// 通过 POST {agencyId}?remark
+        reject: "/agency/reject",// 拒绝 POST {agencyId}?remark
         detail: ""// 详情
     },
     test: "",
@@ -24,7 +24,7 @@ export default {
         province: "/province/list",// 省份接口
         city: "/city/list",// 城市接口
         district: "/region/list",// 区域接口
-        town: "/town/list"// 板块接口
+        town: "/plate/list"// 板块接口
     },
     agent: {
         create: "agency/single",// put 增
