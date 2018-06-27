@@ -18,14 +18,15 @@
             </el-form-item>
             <el-row>
                 <el-col :span="12">
-                    <el-form-item label="区域" prop="area">
+                    <!--<el-form-item label="区域" prop="area">
                         <el-input v-model="ruleForm.area" ></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="板块" prop="plate">
                         <el-input v-model="ruleForm.plate"></el-input>
-                    </el-form-item>
+                    </el-form-item>-->
+                    <region v-modal="array"></region>
                 </el-col>
             </el-row>
             <el-form-item label="经纬度" prop="abbreviation">
@@ -40,9 +41,12 @@
 </template>
 
 <script>
+import Region from '@/components/common/Region';
+
 export default {
     name:'editorStore',
     props:['currentStoreInfo','title'],
+    components:{Region},
     data(){
         return {
             dialogVisible:false,
@@ -55,6 +59,7 @@ export default {
                 storeName:'',//门店名称
                 storeType:'',//门店类型
             },
+            array:[],
             // 必填设置
             rules: {
                 companyName: [{ required: true, message: '请输入公司名称', trigger: 'blur' }],

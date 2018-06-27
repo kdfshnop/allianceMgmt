@@ -143,21 +143,7 @@ export default {
                 resourceKey:'',//上传的资源key
                 state:''//状态1.合作中，2.合作终止 
             },
-            ruleForm: {
-                address:'',//地址
-                agency:'暂无代理商',//代理商
-                companyName:'',//公司名称
-                bd:'',//bd
-                name:'',//必填编辑中prop与v-model与rules选项须一致，才可达到必填编辑验证
-                abbreviation:'',//公司简称
-                city:'',//公司所属城市
-                cash:'',//保证金
-                code:'',//组织机构代码
-                radio:[],//新房二手房
-                joinTime:'',//合作时间
-                legal:'',//法人
-                tel:''//电话
-            },
+            agency:['代理商1','代理商2'],
             // 必填设置
             rules: {
                 name: [{ required: true, message: '请输入公司名称', trigger: 'blur' }],
@@ -207,9 +193,9 @@ export default {
                     this.dialogVisible=false;
                     alert('提交成功');
                     if(this.title=='编辑公司'){
-                        this.$emit('editSuccess',this.ruleForm);
+                        this.$emit('editSuccess',this.form);
                     }else{
-                        this.$emit('addSuccess',this.ruleForm);
+                        this.$emit('addSuccess',this.form);
                     };
                     // 此处代码需要加在请求成功之后;
                     // this.$refs[formName].resetFields();
