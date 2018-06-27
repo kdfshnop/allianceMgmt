@@ -5,7 +5,7 @@ import PlatformServiceFeeVerify from '@/components/verify/PlatformServiceFeeVeri
 import MaterialVerify from '@/components/verify/MaterialVerify';
 import CompanyManagement from '@/components/company/CompanyManagement';
 import StoreManagement from '@/components/store/StoreManagement';
-import EndTeam from '@/components/endTeam/EndTeam';
+import TeamEnd from '@/components/teamEnd/TeamEnd';
 import MaterialAuditResult from '@/components/firstJoinAudit/materialAudit/MaterialAuditResult';
 import ServiceFeeAuditResult from '@/components/firstJoinAudit/serviceFeeAudit/ServiceFeeAuditResult';
 import ProfessionAuditResult from '@/components/professionAudit/ProfessionAuditResult';
@@ -43,9 +43,9 @@ let router = new Router({
       component: StoreManagement
     },
     {
-      path:'/EndTeam',
-      name:'EndTeam',
-      component:EndTeam
+      path:'/TeamEnd',
+      name:'TeamEnd',
+      component:TeamEnd
     },
     {
       path:'/MaterialAuditResult',

@@ -44,7 +44,7 @@
 import BreadCrumb from '@/components/common/BreadCrumb';
 
 export default {
-    name:'endTeam',
+    name:'TeamEnd',
     components:{BreadCrumb},
     data(){
         return {

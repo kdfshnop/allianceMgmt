@@ -3,12 +3,12 @@
         <el-main>    
             <bread-crumb :items="breadCrumb"></bread-crumb>
             <div style="text-align:right;">
-                <el-button type="primary" @click="addCompany">+新增公司</el-button>
+                <el-button type="primary" @click="addCompany">+增加公司</el-button>
             </div>     
             <el-form ref="form" :model="form" label-width="180px" class="gap-2">
                 <el-row >
                     <el-col :span="12">
-                        <el-form-item label="门店所属城市" prop="city">
+                        <el-form-item label="公司所属城市" prop="city">
                             <el-select v-model="form.city" placeholder="二级选择区域" filterable @change='formInfo'>
                                 <el-option
                                     v-for="(item,index) in city"
@@ -47,8 +47,8 @@
                         <el-form-item label="业务" prop="business">
                             <el-select v-model="form.business" filterable>
                                 <el-option label="全部" value="全部"></el-option>
-                                <el-option label="城市代理" value="城市代理"></el-option>
-                                <el-option label="区域代理" value="区域代理"></el-option>
+                                <el-option label="新房" value="新房"></el-option>
+                                <el-option label="二手房" value="二手房"></el-option>
                             </el-select>
                         </el-form-item>
                         <el-form-item label="门店地址" prop="storeAddress">
@@ -70,12 +70,12 @@
                                 </el-form-item>
                             </el-col>
                             <el-col :span="12" v-if="form.searchType==1">
-                                <el-form-item prop="searchDay">
-                                    <el-input v-model="form.searchDay" placeholder="请输入整数"></el-input>
+                                <el-form-item prop="searchDay" class="expire">
+                                    <el-input v-model="form.searchDay" placeholder="请输入整数" style="width:200px;"></el-input>
                                 </el-form-item>
                             </el-col>
                             <el-col :span="12" v-if="form.searchType==2">
-                                <el-form-item prop="searchDate">
+                                <el-form-item prop="searchDate" class="expire">
                                     <el-date-picker
                                         format="yyyy-MM-dd"
                                         v-model="form.timeStart"
@@ -107,7 +107,7 @@
             </el-row>
             <div class="search-result">共搜索到 956家公司，56家有代理商，900家无代理商</div>
             <el-table :data="searInfoList" border style="width: 100%">
-                <el-table-column prop="date" label="序号" align="center" ></el-table-column>
+                <el-table-column type="index" label="序号" align="center" width="100" ></el-table-column>
                 <el-table-column prop="name" label="城市" align="center" ></el-table-column>
                 <el-table-column prop="address" label="公司全称" align="center" ></el-table-column>
                 <el-table-column prop="address" label="公司简称" align="center" ></el-table-column>
@@ -166,59 +166,68 @@ import commission from '@/components/company/_Commission';
 import BreadCrumb from '@/components/common/BreadCrumb';
 
 export default {
-  name: 'CompanyManagement',
-  components:{editorCompany,commission,BreadCrumb},
-  data () {
-    return {
-        firstDialogVisible: false,//第一个终止合作弹出框
-        secondDialogVisible:false,//第二个终止合作弹出框
-        noJoin:'',//终止合作原因
-        companyInfoIndex:'',//操作公司时该公司处于所有列表的位置
-        currentCompanyInfo:'',//当前编辑的公司信息
-        title:'',//判断是编辑公司还是添加公司
-        isShow:false,
-        // 表单查询信息
-        form: {
-            agent:'',//代理商
-            business:'全部',//业务
-            city:'',//门店所属城市
-            companyName:'',//公司名称
-            timeStart:'',//创建开始时间
-            timeEnd:'',//创建结束时间
-            storeName: '',//门店名称
-            searchType:'请选择查询方式',
-            searchDay:'',
-            searchDate:'',
-            storeAddress:'',//门店地址
-            timeOver:''//到期查询
-        },
-        // 分页功能
-        pagination:{
-            currentPage:1,//默认当前页为1;
-            pageSize:10,//默认显示10条
-            total:400//一共有多少条数据
-        },
-        breadCrumb: [{text:'加盟管理'},{text: "公司管理"}],
-        city:['北京','上海','广州','深圳'],
-        tableData: [{
-          date: '2016-05-02',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }, {
-          date: '2016-05-04',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1517 弄'
-        }, {
-          date: '2016-05-01',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1519 弄'
-        }, {
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1516 弄'
-        }]
-    }
-  },
+    name: 'CompanyManagement',
+    components:{editorCompany,commission,BreadCrumb},
+    data () {
+        return {
+            firstDialogVisible: false,//第一个终止合作弹出框
+            secondDialogVisible:false,//第二个终止合作弹出框
+            noJoin:'',//终止合作原因
+            companyInfoIndex:'',//操作公司时该公司处于所有列表的位置
+            currentCompanyInfo:'',//当前编辑的公司信息
+            title:'',//判断是编辑公司还是添加公司
+            isShow:false,
+            // 表单查询信息
+            form: {
+                agent:'',//代理商
+                business:'全部',//业务
+                city:'',//门店所属城市
+                companyName:'',//公司名称
+                timeStart:'',//创建开始时间
+                timeEnd:'',//创建结束时间
+                storeName: '',//门店名称
+                searchType:'请选择查询方式',
+                searchDay:'',
+                searchDate:'',
+                storeAddress:'',//门店地址
+                timeOver:''//到期查询
+            },
+            // 分页功能
+            pagination:{
+                currentPage:1,//默认当前页为1;
+                pageSize:10,//默认显示10条
+                total:400//一共有多少条数据
+            },
+            breadCrumb: [{text:'加盟管理'},{text: "公司管理"}],
+            city:['北京','上海','广州','深圳'],
+            tableData: [{
+                date: '2016-05-02',
+                name: '王小虎',
+                address: '上海市普陀区金沙江路 1518 弄'
+                }, {
+                date: '2016-05-04',
+                name: '王小虎',
+                address: '上海市普陀区金沙江路 1517 弄'
+                }, {
+                date: '2016-05-01',
+                name: '王小虎',
+                address: '上海市普陀区金沙江路 1519 弄'
+                }, {
+                date: '2016-05-03',
+                name: '王小虎',
+                address: '上海市普陀区金沙江路 1516 弄'
+            }]
+        }
+    },
+    created(){
+        this.$http.get('/city/list')
+            .then(function(data){
+                console.log(data);
+            })
+            .catch(function(error){
+            console.log(error)
+            });
+    },
     methods:{
         // 子组件添加公司成功之后，传递给父组件的值;
         addSuccess(addInfo){
@@ -331,6 +340,9 @@ export default {
     }
     .el-dialog__footer{
         text-align: right;
+    }
+    .expire .el-form-item__content{
+        margin-left: 0 !important;
     }
 </style>
 

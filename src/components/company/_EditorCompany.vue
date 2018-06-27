@@ -1,74 +1,97 @@
 <template>
-    <el-dialog :title="title" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
-        <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="110px">
+    <el-dialog :title="title" :visible.sync="dialogVisible" width="50%" :before-close="handleClose">
+        <el-form :model="form" :rules="rules" ref="form" label-width="110px">
             <el-row>
                 <el-col :span="12">
                     <el-form-item label="公司名称" prop="name" class="tl">
-                        <el-input v-model="ruleForm.name" placeholder="50字以内"></el-input>
+                        <el-input v-model="form.name" placeholder="50字以内"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="公司简称" prop="abbreviation">
-                        <el-input v-model="ruleForm.abbreviation" placeholder="50字以内"></el-input>
+                        <el-input v-model="form.abbreviation" placeholder="50字以内"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
             <el-row>
                 <el-col :span="12">
-                    <el-form-item label="所属城市" prop="city" class="tl">
-                        <el-input v-model="ruleForm.city" placeholder="请选择..."></el-input>
+                    <el-form-item label="所属城市" prop="cityId" class="tl">
+                        <el-input v-model="form.cityId" placeholder="请选择..."></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
-                    <el-form-item label="保证金" prop="cash">
-                        <el-input v-model="ruleForm.cash"></el-input>
+                    <el-form-item label="保证金" prop="deposit">
+                        <el-input v-model="form.deposit"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
             <el-row>
                 <el-col :span="12">
-                    <el-form-item label="组织机构代码" prop="code" class="tl">
-                        <el-input v-model="ruleForm.code" placeholder="50字以内"></el-input>
+                    <el-form-item label="组织机构代码" prop="organizationCode" class="tl">
+                        <el-input v-model="form.organizationCode" placeholder="50字以内"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
-                    <el-form-item prop="radio">
-                        <el-radio-group v-model="ruleForm.radio">
-                            <el-radio label="二手房" value="二手房"></el-radio>
-                            <el-radio label="新房" value="新房"></el-radio>
-                        </el-radio-group>
+                    <el-form-item prop="businessType">
+                        <el-checkbox-group v-model="form.businessType">
+                            <el-checkbox label="1" >二手房</el-checkbox>
+                            <el-checkbox label="2" >新房</el-checkbox>
+                        </el-checkbox-group>
                     </el-form-item>
                 </el-col>
             </el-row>
-            <el-form-item label="bd" prop="bd"  label-width="40px" class="tl">
-                <el-input v-model="ruleForm.bd" placeholder="请选择"></el-input>
+            <el-form-item label="bd" prop="operator"  label-width="40px" class="tl">
+                <el-input v-model="form.operator" placeholder="请选择"></el-input>
             </el-form-item>
             <el-row>
                 <el-col :span="12">
-                    <el-form-item label="合作时间" prop="joinTime" class="tl">
-                        <el-input v-model="ruleForm.joinTime" ></el-input>
-                    </el-form-item>
+                    <el-row>
+                        <el-col :span="10">
+                            <el-form-item label="合作时间" prop="corporateStart" class="tl team-time">
+                                <el-date-picker
+                                    format="yyyy-MM-dd"
+                                    v-model="form.corporateStart"
+                                    type="date"
+                                    placeholder="选择日期"
+                                    style="width:150px"
+                                    value-format="yyyy-MM-dd">
+                                </el-date-picker>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="10">
+                            <el-form-item prop="corporateEnd" label="至" class="team-time">
+                                <el-date-picker
+                                    format="yyyy-MM-dd"
+                                    v-model="form.corporateEnd"
+                                    type="date"
+                                    placeholder="选择日期"
+                                    style="width:150px"
+                                    value-format="yyyy-MM-dd">
+                                </el-date-picker>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
                 </el-col>
                 <el-col :span="12">
-                    <el-form-item label="法人代表" prop="legal">
-                        <el-input v-model="ruleForm.legal"></el-input>
+                    <el-form-item label="法人代表" prop="corporate">
+                        <el-input v-model="form.corporate"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
             <el-row>
                 <el-col :span="12">
-                    <el-form-item label="电话" class="tl" prop="tel">
-                        <el-input v-model="ruleForm.tel" ></el-input>
+                    <el-form-item label="电话" class="tl" prop="corporatePhone">
+                        <el-input v-model="form.corporatePhone" ></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="地址" prop="address" >
-                        <el-input v-model="ruleForm.address"></el-input>
+                        <el-input v-model="form.address"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
-            <el-form-item label="代理商" class="tl" prop="agency">
-                <el-select v-model="ruleForm.agency" filterable>
+            <el-form-item label="代理商" class="tl" prop="agencyId">
+                <el-select v-model="form.agencyId" filterable>
                         <el-option label="暂无代理商" value="暂无代理商"></el-option>
                         <el-option label="城市代理" value="城市代理"></el-option>
                         <el-option label="区域代理" value="区域代理"></el-option>
@@ -90,8 +113,8 @@
             </el-form-item>
         </el-form>
         <span slot="footer" class="dialog-footer">
-            <el-button @click="submitForm('ruleForm')" type="primary">保存</el-button>
-            <el-button @click="resetForm('ruleForm')">关闭</el-button>
+            <el-button @click="submitForm('form')" type="primary">保存</el-button>
+            <el-button @click="resetForm('form')">关闭</el-button>
         </span>
     </el-dialog>
 </template>
@@ -103,6 +126,23 @@ export default {
     data(){
         return {
             dialogVisible:false,
+            form:{
+                abbreviation:'',//公司简称
+                address:'',//地址
+                agentcyId:'',//代理商Id
+                businessType:[],//房源类型,0为选择，1.新上，2.二手房，3.新房＋二手房
+                cityId:'',//所属城市
+                corporate:'',//法人代表
+                corporatePhone:'',//电话
+                corporateStart:'',//合作开始时间
+                corporateEnd:'',//合作结束时间
+                deposit:'',//保证金
+                name:'',//公司名称
+                organizationCode:'',//组织机构代码
+                operator:'',//操作人
+                resourceKey:'',//上传的资源key
+                state:''//状态1.合作中，2.合作终止 
+            },
             ruleForm: {
                 address:'',//地址
                 agency:'暂无代理商',//代理商
@@ -113,7 +153,7 @@ export default {
                 city:'',//公司所属城市
                 cash:'',//保证金
                 code:'',//组织机构代码
-                radio:'',//新房二手房
+                radio:[],//新房二手房
                 joinTime:'',//合作时间
                 legal:'',//法人
                 tel:''//电话
@@ -122,11 +162,11 @@ export default {
             rules: {
                 name: [{ required: true, message: '请输入公司名称', trigger: 'blur' }],
                 abbreviation: [{ required: true, message: '请输入公司简称', trigger: 'blur' }],
-                city: [{ required: true, message: '请输入城市', trigger: 'blur' }],
-                cash: [{ required: true, message: '请输入保证金', trigger: 'blur' }],
-                code: [{ required: true, message: '请输入组织机构代码', trigger: 'blur' }],
-                bd: [{ required: true, message: '请输入bd', trigger: 'blur' }],
-                joinTime: [{ required: true, message: '请输入合作时间', trigger: 'blur' }]
+                cityId: [{ required: true, message: '请输入城市', trigger: 'blur' }],
+                deposit: [{ required: true, message: '请输入保证金', trigger: 'blur' }],
+                organizationCode: [{ required: true, message: '请输入组织机构代码', trigger: 'blur' }],
+                corporateStart: [{ required: true, message: '请输入合作开始时间', trigger: 'blur' }],
+                corporateEnd: [{ required: true, message: '请输入合作结束时间', trigger: 'blur' }]
             }
         }
     },
@@ -161,7 +201,7 @@ export default {
             .catch(_ => {});
         },
         submitForm(formName) {
-            console.log(this.ruleForm,111)
+            console.log(this.form,formName,111)
             this.$refs[formName].validate((valid) => {
                 if (valid) {
                     this.dialogVisible=false;
@@ -206,6 +246,9 @@ export default {
     }
     .upload .el-form-item__content{
         margin-left: 0!important;
+    }
+    .team-time .el-form-item__error{
+        width:120px;
     }
 </style>
 
