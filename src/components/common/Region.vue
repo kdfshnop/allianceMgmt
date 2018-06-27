@@ -27,62 +27,64 @@ class FetcherFactory {
                 if(paramName) {
                     param[paramName] = paramValue;
                 }
-                // return vue.$http.get(this.url, {
-                //     params: param
-                // });
-                return new Promise(function(resolve, reject) {
-                    switch(paramName){
-                        case "provinceId":
-                            if(paramValue == 1) {
-                                resolve({
-                                    data: [{
-                                        cityId: 1,
-                                        cityName: "郑州"
-                                    },{
-                                        cityId: 2,
-                                        cityName: "商丘"
-                                    }]
-                                });
-                            } else {
-                                resolve({
-                                    data: [{
-                                        cityId: 3,
-                                        cityName: "石家庄"
-                                    },{
-                                        cityId: 4,
-                                        cityName: "张家口"
-                                    }]
-                                });
-                            }
-                        break;
-                        case "cityId":
-                            resolve({
-                                data: [{
-                                    regionId: 1,
-                                    regionName: "区域"
-                                }]
-                            });
-                        break;
-                        case "districtId":
-                            resolve({
-                                data: [{
-                                    townId: 1,
-                                    townName: "板块"
-                                }]
-                            });
-                        break;
-                        default: resolve({
-                            data: [{
-                                provinceId: 1,
-                                provinceName: "河南"
-                                },{
-                                    provinceId: 2,
-                                    provinceName: "河北"
-                                }]
-                            });
-                        break; 
-                    }                    
+                return vue.$http.get(url, {
+                    params: param
+                }).then((data)=>{
+                    return data.data;
                 });
+                // return new Promise(function(resolve, reject) {
+                //     switch(paramName){
+                //         case "provinceId":
+                //             if(paramValue == 1) {
+                //                 resolve({
+                //                     data: [{
+                //                         cityId: 1,
+                //                         cityName: "郑州"
+                //                     },{
+                //                         cityId: 2,
+                //                         cityName: "商丘"
+                //                     }]
+                //                 });
+                //             } else {
+                //                 resolve({
+                //                     data: [{
+                //                         cityId: 3,
+                //                         cityName: "石家庄"
+                //                     },{
+                //                         cityId: 4,
+                //                         cityName: "张家口"
+                //                     }]
+                //                 });
+                //             }
+                //         break;
+                //         case "cityId":
+                //             resolve({
+                //                 data: [{
+                //                     regionId: 1,
+                //                     regionName: "区域"
+                //                 }]
+                //             });
+                //         break;
+                //         case "districtId":
+                //             resolve({
+                //                 data: [{
+                //                     townId: 1,
+                //                     townName: "板块"
+                //                 }]
+                //             });
+                //         break;
+                //         default: resolve({
+                //             data: [{
+                //                 provinceId: 1,
+                //                 provinceName: "河南"
+                //                 },{
+                //                     provinceId: 2,
+                //                     provinceName: "河北"
+                //                 }]
+                //             });
+                //         break; 
+                //     }                    
+                // });
             },
             parse(data) {
                 if(data && data.length) {
@@ -138,7 +140,7 @@ export default {
             //  }, 
             province: FetcherFactory.create({
                 vue: this,
-                url: this.$apiUrl.region.province,
+                url: this.$apiUrl.common.province,
                 paramName: "",
                 mayHasChildren: this.endLevel != 1,
                 valueField: "provinceId",
@@ -146,7 +148,7 @@ export default {
             }),
             city: FetcherFactory.create({
                 vue: this,
-                url: this.$apiUrl.region.cityId,
+                url: this.$apiUrl.common.city,
                 paramName: "provinceId",
                 mayHasChildren: this.endLevel != 2,
                 valueField: "cityId",
@@ -154,7 +156,7 @@ export default {
             }),
             district: FetcherFactory.create({
                 vue: this,
-                url: this.$apiUrl.region.district,
+                url: this.$apiUrl.common.district,
                 paramName: "cityId",
                 mayHasChildren: this.endLevel != 3,
                 valueField: "regionId",
@@ -162,11 +164,11 @@ export default {
             }),
             town: FetcherFactory.create({
                 vue: this,
-                url: this.$apiUrl.region.town,
+                url: this.$apiUrl.common.town,
                 paramName: "districtId",
                 mayHasChildren: this.endLevel != 4,
-                valueField: "townId",
-                labelField: "townName"                
+                valueField: "id",
+                labelField: "NAME"                
             }),
             //  city: {
             //      url: this.$apiUrl.region.city,

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <partner-info :key="index" v-for="(item, index) in items" :mode="mode" :item="item" @close="handleRemove(index)"></partner-info>
+        <partner-info :key="index" v-for="(item, index) in items" :mode="mode" :item="item" @input="handleInput" @close="handleRemove(index)"></partner-info>
         <el-button v-show="mode === 'create' || mode === 'edit'" type="primary" class="full-row gap-2" @click="addPartner">+ 添加合伙人</el-button>
     </div>
 </template>
@@ -12,12 +12,14 @@
  *       2. mode实现创建、编辑和详情三个模式
  */
     import PartnerInfo from './_PartnerInfo';
+    import {generateComputed} from './_Utils';
+    import {mapMutations} from 'vuex';
     // 服务人员信息
     export default {
         name: "partnerInfoes",
         components: {PartnerInfo},
         props: {
-            items: Array,
+            // items: Array,
             mode: {
                 type: String,
                 default: "view"
@@ -25,15 +27,34 @@
         },
         data() {
             return {
-               
+               //items: this.$store.state.PartnerInfo.partnerInfo
             };
         },
         methods: {
             addPartner() {
-                this.items.push({expand: true, name: ""});
+                //this.items.push({name: "", mobile: "", email: "", score: "", idCard: "", bg: "", remark: ""});
+
+                this.addItem({_t: Date.now(), name: "", mobile: "", email: "", score: "", idCard: "", bg: "", remark: ""});
             },
             handleRemove(index) {
-                this.items.splice(index, 1);
+                //this.items.splice(index, 1);
+                this.removeItem(index);
+            },
+            handleInput(val) {
+                for(let i = 0; i < this.items.length; i++) {
+                    if(this.items[i]._t == val._t) {
+                        val.index = i;
+                        this.updateItem(val);
+                        break;
+                    }
+                }                
+            },
+
+            ...mapMutations('PartnerInfo', ['updateItems', 'updateItem', 'removeItem', 'addItem'])
+        },
+        computed: {
+            items: function(){
+                return this.$store.state.PartnerInfo.partnerInfo;
             }
         },
         watch: {

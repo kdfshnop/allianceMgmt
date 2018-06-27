@@ -12,6 +12,9 @@ import CorporateInfo from './modules/CorporateInfo';
 import ContractInfo from './modules/ContractInfo';
 import AgentBasicInfo from './modules/AgentBasicInfo';
 import AgentArea from './modules/AgentArea';
+import ServiceStaffInfo from './modules/ServiceStaffInfo';
+import PartnerInfo from './modules/PartnerInfo';
+
 
 
 Vue.use(Vuex);
@@ -29,6 +32,8 @@ export default new Vuex.Store({
         CorporateInfo,
         ContractInfo,
         AgentBasicInfo,
-        AgentArea
+        AgentArea,
+        ServiceStaffInfo,
+        PartnerInfo
     }
 });

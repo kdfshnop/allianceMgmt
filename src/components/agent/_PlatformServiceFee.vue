@@ -9,22 +9,21 @@
             </div>
             <el-form :model="item" label-width= "180px" v-show="mode === 'create' || mode === 'edit' && status === 'editing'">
                 <el-row>
-                    <el-col :span="12">
+                    <el-col :span="12" class="service-fee">
                         <el-form-item label="平台服务费">
+                            <!-- 此处两个el-input必须紧跟着，否则它们之间会有空格，导致两个不能在同一行内 -->
                             <el-input v-model="fee">
                                 <template slot="append">元</template>
-                            </el-input>
-                            <el-input v-model="month">
+                            </el-input><el-input v-model="month">
                                 <template slot="append">个月</template>
                             </el-input>
                         </el-form-item>                    
                     </el-col>
-                    <el-col :span="12">
+                    <el-col :span="12" class="service-fee">
                         <el-form-item label="保证金">
                             <el-input v-model="prefee">
                                 <template slot="append">元</template>
-                            </el-input>
-                            <el-input v-model="premonth">
+                            </el-input><el-input v-model="premonth">
                                 <template slot="append">个月</template>
                             </el-input>
                         </el-form-item>                    
@@ -118,12 +117,6 @@
             "count": generateComputed("count", "PlatformServiceFee", "updateCount")            
         },
         methods: {
-            // add() {
-            //     this.dividingInfo.push({
-            //         date: "",
-            //         fee: ""
-            //     });
-            // },
             handleEdit() {
                 this.status = 'editing';                
                 this.innerItem = Object.assign({}, this.$store.state.PlatformServiceFee);                
@@ -135,22 +128,7 @@
             },
             handleCancel() {
                 this.status = '';
-            },
-            // handleEdit2() {
-            //     this.status2 = 'editing';
-            //     // this.originalItem = this.item;
-            //     // this.item = Object.assign({}, this.item);                
-            // },
-            // handleComplete2() {
-            //     this.status2 = '';  
-            //     this.item.dividingInfo = this.dividingInfo;                              
-            // },
-            // handleCancel2() {
-            //     this.status2 = '';
-            //     // this.item = this.originalItem;                
-            //     this.dividingInfo = Object.assign({}, this.item.dividingInfo);
-            // },
-            
+            },            
 
             ...mapMutations('PlatformServiceFee', [
                 'updateItem', 
@@ -170,5 +148,9 @@
 <style scoped>
 .el-date-editor {
     width: 100%;
+}
+
+.service-fee .el-input-group {
+    width: 50%;
 }
 </style>
