@@ -17,15 +17,7 @@
                 <el-input v-model="ruleForm.storeAdress"></el-input>
             </el-form-item>
             <el-row>
-                <el-col :span="12">
-                    <!--<el-form-item label="区域" prop="area">
-                        <el-input v-model="ruleForm.area" ></el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                    <el-form-item label="板块" prop="plate">
-                        <el-input v-model="ruleForm.plate"></el-input>
-                    </el-form-item>-->
+                <el-col :span="8">
                     <region v-model="array"></region>
                 </el-col>
             </el-row>

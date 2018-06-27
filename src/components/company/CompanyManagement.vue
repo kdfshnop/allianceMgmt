@@ -8,22 +8,15 @@
             <el-form ref="form" :model="form" label-width="180px" class="gap-2">
                 <el-row >
                     <el-col :span="12">
-                        <el-form-item label="公司所属城市" prop="city">
-                            <el-select v-model="form.city" placeholder="二级选择区域" filterable @change='formInfo'>
-                                <el-option
-                                    v-for="(item,index) in city"
-                                    :key="index"
-                                    :label="item"
-                                    :value="item">
-                                </el-option>
-                            </el-select>
+                        <el-form-item label="公司所属城市" prop="cityList">
+                            <region v-model="form.cityList"></region>
                         </el-form-item>
                         <el-row>
                             <el-col :span="5">
-                                <el-form-item label="创建时间" prop="timeStart">
+                                <el-form-item label="创建时间" prop="corporateStart">
                                     <el-date-picker
                                         format="yyyy-MM-dd"
-                                        v-model="form.timeStart"
+                                        v-model="form.corporateStart"
                                         type="date"
                                         placeholder="选择日期"
                                         style="width:150px"
@@ -32,10 +25,10 @@
                                 </el-form-item>
                             </el-col>
                             <el-col :span="19">
-                                <el-form-item prop="timeEnd" label="至">
+                                <el-form-item prop="corporateEnd" label="至">
                                     <el-date-picker
                                         format="yyyy-MM-dd"
-                                        v-model="form.timeEnd"
+                                        v-model="form.corporateEnd"
                                         type="date"
                                         placeholder="选择日期"
                                         style="width:150px"
@@ -46,9 +39,9 @@
                         </el-row>
                         <el-form-item label="业务" prop="business">
                             <el-select v-model="form.business" filterable>
-                                <el-option label="全部" value="全部"></el-option>
-                                <el-option label="新房" value="新房"></el-option>
-                                <el-option label="二手房" value="二手房"></el-option>
+                                <el-option label="新房和二手房" value="3"></el-option>
+                                <el-option label="新房" value="1"></el-option>
+                                <el-option label="二手房" value="2"></el-option>
                             </el-select>
                         </el-form-item>
                         <el-form-item label="门店地址" prop="storeAddress">
@@ -56,8 +49,8 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
-                        <el-form-item label="公司名称" prop="companyName">
-                            <el-input v-model="form.companyName"></el-input>
+                        <el-form-item label="公司名称" prop="name">
+                            <el-input v-model="form.name"></el-input>
                         </el-form-item>
                         <el-row>
                             <el-col :span="12">
@@ -99,24 +92,24 @@
             </el-form>
             <el-row :gutter="20">
                 <el-col :span="2" :offset="11">
-                    <el-button class="reset" @click="resetForm('form')">重置</el-button>
+                    <el-button class="reset" @click="resetForm">重置</el-button>
                 </el-col>
                 <el-col :span="2">
-                    <el-button type="primary" @click="search('form')">搜索</el-button>
+                    <el-button type="primary" @click="search">搜索</el-button>
                 </el-col>
             </el-row>
             <div class="search-result">共搜索到 956家公司，56家有代理商，900家无代理商</div>
             <el-table :data="searInfoList" border style="width: 100%">
                 <el-table-column type="index" label="序号" align="center" width="100" ></el-table-column>
-                <el-table-column prop="name" label="城市" align="center" ></el-table-column>
-                <el-table-column prop="address" label="公司全称" align="center" ></el-table-column>
-                <el-table-column prop="address" label="公司简称" align="center" ></el-table-column>
-                <el-table-column prop="address" label="代理商公司" align="center"></el-table-column>
-                <el-table-column prop="name" label="有效期始" align="center"></el-table-column>
-                <el-table-column prop="name" label="有效期止" align="center"></el-table-column>
-                <el-table-column prop="name" label="bd" align="center"></el-table-column>
-                <el-table-column prop="name" label="创建时间" align="center"></el-table-column>
-                <el-table-column prop="name" label="创建人" align="center"></el-table-column>
+                <el-table-column prop="city" label="城市" align="center" ></el-table-column>
+                <el-table-column prop="name" label="公司全称" align="center" ></el-table-column>
+                <el-table-column prop="abbreviation" label="公司简称" align="center" ></el-table-column>
+                <el-table-column prop="operator" label="代理商公司" align="center"></el-table-column>
+                <el-table-column prop="corporateStart" label="有效期始" align="center"></el-table-column>
+                <el-table-column prop="corporateEnd" label="有效期止" align="center"></el-table-column>
+                <el-table-column prop="operator" label="bd" align="center"></el-table-column>
+                <el-table-column prop="setUpTime" label="创建时间" align="center"></el-table-column>
+                <el-table-column prop="corporate" label="创建人" align="center"></el-table-column>
                 <el-table-column prop="name" label="操作" width="300px" align="center">
                     <template slot-scope="scope">
                         <el-button size="mini" @click="editorCompany(scope.$index, scope.row)" type="text">编辑|</el-button>
@@ -124,9 +117,9 @@
                         <el-button size="mini"  type="text" @click="firstDialogVisible = true,handleEnd(scope.$index, scope.row)">终止合作</el-button>
                     </template>
                 </el-table-column>
-                <el-table-column prop="name" label="门店" align="center"></el-table-column>
+                <el-table-column prop="storeAccount" label="门店" align="center"></el-table-column>
             </el-table>
-            <div class="block">
+            <div class="pagination">
                 <el-pagination
                     @size-change="handleSizeChange"
                     @current-change="handleCurrentChange"
@@ -161,13 +154,14 @@
 </template>
 
 <script>
-import editorCompany from '@/components/company/_EditorCompany';
-import commission from '@/components/company/_Commission';
+import EditorCompany from '@/components/company/_EditorCompany';
+import Commission from '@/components/company/_Commission';
 import BreadCrumb from '@/components/common/BreadCrumb';
+import Region from '@/components/common/Region';
 
 export default {
     name: 'CompanyManagement',
-    components:{editorCompany,commission,BreadCrumb},
+    components:{EditorCompany,Commission,BreadCrumb,Region},
     data () {
         return {
             firstDialogVisible: false,//第一个终止合作弹出框
@@ -178,21 +172,27 @@ export default {
             title:'',//判断是编辑公司还是添加公司
             isShow:false,
             // 表单查询信息
-            form: {
+            form:{
+                abbreviation:'',//公司简称
+                address:'',//地址
+                agencyId:'暂无代理商',//代理商Id
+                businessType:0,//房源类型,0未选择，1.新上，2.二手房，3.新房＋二手房
+                cityId:'',//所属城市
+                city:'',//城市名
+                cityList:[],
+                corporate:'',//法人代表
+                corporatePhone:'',//电话
+                corporateStart:'',//合作开始时间
+                corporateEnd:'',//合作结束时间
+                deposit:'',//保证金
                 name:'',//公司名称
-
-                agent:'',//代理商
-                business:'全部',//业务
-                city:'',//门店所属城市
-                companyName:'',//公司名称
-                timeStart:'',//创建开始时间
-                timeEnd:'',//创建结束时间
-                storeName: '',//门店名称
-                searchType:'请选择查询方式',
-                searchDay:'',
-                searchDate:'',
-                storeAddress:'',//门店地址
-                timeOver:''//到期查询
+                organizationCode:'',//组织机构代码
+                operator:'',//操作人
+                resourceKey:'',//上传的资源key
+                searchDate:'',//到期日期
+                searchDay:'',//即将到期天数
+                state:'',//状态1.合作中，2.合作终止 
+                storeAddress:''//门店地址
             },
             // 分页功能
             pagination:{
@@ -201,24 +201,51 @@ export default {
                 total:400//一共有多少条数据
             },
             breadCrumb: [{text:'加盟管理'},{text: "公司管理"}],
-            city:['北京','上海','广州','深圳'],
             tableData: [{
-                date: '2016-05-02',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1518 弄'
+                city: '北京',
+                name: '上海好居科技有限公司',
+                address: '上海市长宁区 996 弄',
+                abbreviation:'悟空找房',
+                corporateStart:'2018-8-8',
+                corporateEnd:'2018-9-9',
+                operator:'cc',
+                corporate:'dd',
+                setUpTime:'2015-09-02',
+                storeAccount:10
                 }, {
-                date: '2016-05-04',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1517 弄'
+                    city: '上海',
+                    name: '上海有限公司好居科技有限公司',
+                    address: '上区 996 弄海市长宁',
+                    abbreviation:'悟空找房',
+                    corporateStart:'3000-8-8',
+                    corporateEnd:'2080-9-9',
+                    operator:'mm',
+                    corporate:'qq',
+                    setUpTime:'2015-09-02',
+                    storeAccount:100
                 }, {
-                date: '2016-05-01',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1519 弄'
+                    city: '上海',
+                    name: '上海有限公司好居科技有限公司',
+                    address: '上区 996 弄海市长宁',
+                    abbreviation:'悟空找房',
+                    corporateStart:'3000-8-8',
+                    corporateEnd:'2080-9-9',
+                    operator:'mm',
+                    corporate:'qq',
+                    setUpTime:'2015-09-02',
+                    storeAccount:100
                 }, {
-                date: '2016-05-03',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1516 弄'
-            }]
+                    city: '上海',
+                    name: '上海有限公司好居科技有限公司',
+                    address: '上区 996 弄海市长宁',
+                    abbreviation:'悟空找房',
+                    corporateStart:'3000-8-8',
+                    corporateEnd:'2080-9-9',
+                    operator:'mm',
+                    corporate:'qq',
+                    setUpTime:'2015-09-02',
+                    storeAccount:100
+                }]
         }
     },
     created(){
@@ -291,10 +318,11 @@ export default {
         },
         //编辑
         editorCompany(index, row){
+            console.log(row,'编辑信息')
             //操作公司时，该公司所处所有信息列表的位置;
             this.companyInfoIndex=(this.pagination.currentPage-1)*this.pagination.pageSize+index;
             // 当前编辑的公司信息;
-            this.currentCompanyInfo=this.tableData[this.companyInfoIndex]; 
+            this.currentCompanyInfo=row;
             this.title='编辑公司';
             this.isShow=true;//为了每天编辑组件都可以将父组件信息传递;
             // 调用子组件方法，显示对话框,用setTimeout是为了可以加载添加公司组件;
@@ -308,6 +336,7 @@ export default {
         },
         //终止合作,第一次弹框
         handleEnd(index,row){
+            this.noJoin='';
         },
         //确定终止合作,第二次弹框
         endJoin(){
@@ -333,7 +362,7 @@ export default {
         margin-bottom: 20px;
         margin-top: 50px;
     }
-    .block{
+    .pagination{
         margin-top: 100px;
         text-align: center;
     }

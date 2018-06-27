@@ -32,11 +32,12 @@
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
-                    <el-form-item prop="businessType">
-                        <el-checkbox-group v-model="form.businessType">
-                            <el-checkbox label="1" >二手房</el-checkbox>
-                            <el-checkbox label="2" >新房</el-checkbox>
-                        </el-checkbox-group>
+                    <el-form-item prop="businessType" label="业务" placeholder="请选择">
+                        <el-select v-model="form.business" filterable>
+                                <el-option label="新房和二手房" value="3"></el-option>
+                                <el-option label="新房" value="1"></el-option>
+                                <el-option label="二手房" value="2"></el-option>
+                            </el-select>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -160,6 +161,9 @@ export default {
             }
         }
     },
+    created(){
+        
+    },
     methods:{
         open() {
             if(this.title=='编辑公司'){
@@ -202,6 +206,13 @@ export default {
                     if(this.title=='编辑公司'){
                         this.$emit('editSuccess',this.form);
                     }else{
+                        this.$http.put('/company/single',this.form)
+                            .then(function(data){
+                                console.log(data);
+                            })
+                            .catch(function(error){
+                                console.log(error)
+                            });
                         this.$emit('addSuccess',this.form);
                     };
                     // 此处代码需要加在请求成功之后;

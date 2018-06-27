@@ -94,7 +94,7 @@
                 </el-table-column>
                 <el-table-column prop="name" label="门店" align="center"></el-table-column>
             </el-table>
-            <div class="block">
+            <div class="pagination">
                 <el-pagination
                     @size-change="handleSizeChange"
                     @current-change="handleCurrentChange"
@@ -284,13 +284,13 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
     .search-result{
         color:gray;
         margin-bottom: 20px;
         margin-top: 50px;
     }
-    .block{
+    .pagination{
         margin-top: 100px;
         text-align: center;
     }
