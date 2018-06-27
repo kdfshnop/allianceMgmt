@@ -59,9 +59,35 @@
                         <el-form-item label="公司名称" prop="companyName">
                             <el-input v-model="form.companyName"></el-input>
                         </el-form-item>
-                        <el-form-item label="到期查询" prop="timeOver">
-                            <el-input v-model="form.timeOver"></el-input>
-                        </el-form-item>
+                        <el-row>
+                            <el-col :span="12">
+                                <el-form-item label="到期查询" prop="searchType">
+                                    <el-select v-model="form.searchType" filterable>
+                                        <el-option label="请选择查询方式" value="0"></el-option>
+                                        <el-option label="按即将到期天数查询" value="1"></el-option>
+                                        <el-option label="按合作结束日期查询" value="2"></el-option>
+                                    </el-select>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="12" v-if="form.searchType==1">
+                                <el-form-item prop="searchDay">
+                                    <el-input v-model="form.searchDay" placeholder="请输入整数"></el-input>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="12" v-if="form.searchType==2">
+                                <el-form-item prop="searchDate">
+                                    <el-date-picker
+                                        format="yyyy-MM-dd"
+                                        v-model="form.timeStart"
+                                        type="date"
+                                        placeholder="选择日期"
+                                        style="width:200px"
+                                        value-format="yyyy-MM-dd">
+                                    </el-date-picker>
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
+                        
                         <el-form-item label="门店名称" prop="storeName">
                             <el-input v-model="form.storeName"></el-input>
                         </el-form-item>
@@ -160,6 +186,9 @@ export default {
             timeStart:'',//创建开始时间
             timeEnd:'',//创建结束时间
             storeName: '',//门店名称
+            searchType:'请选择查询方式',
+            searchDay:'',
+            searchDate:'',
             storeAddress:'',//门店地址
             timeOver:''//到期查询
         },
