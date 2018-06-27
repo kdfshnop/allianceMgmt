@@ -179,6 +179,8 @@ export default {
             isShow:false,
             // 表单查询信息
             form: {
+                name:'',//公司名称
+
                 agent:'',//代理商
                 business:'全部',//业务
                 city:'',//门店所属城市

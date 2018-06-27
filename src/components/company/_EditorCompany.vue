@@ -91,10 +91,14 @@
                 </el-col>
             </el-row>
             <el-form-item label="代理商" class="tl" prop="agencyId">
-                <el-select v-model="form.agencyId" filterable>
-                        <el-option label="暂无代理商" value="暂无代理商"></el-option>
-                        <el-option label="城市代理" value="城市代理"></el-option>
-                        <el-option label="区域代理" value="区域代理"></el-option>
+                <el-select v-model="form.agencyId" placeholder="请选择">
+                    <el-option label="暂无代理商" value="暂无代理商"></el-option>
+                    <el-option
+                        v-for="item in agency"
+                        :key="item"
+                        :label="item"
+                        :value="item">
+                    </el-option>
                 </el-select>
             </el-form-item>
             <el-form-item  class="tl upload">
@@ -129,7 +133,7 @@ export default {
             form:{
                 abbreviation:'',//公司简称
                 address:'',//地址
-                agentcyId:'',//代理商Id
+                agencyId:'暂无代理商',//代理商Id
                 businessType:[],//房源类型,0为选择，1.新上，2.二手房，3.新房＋二手房
                 cityId:'',//所属城市
                 corporate:'',//法人代表
@@ -143,7 +147,7 @@ export default {
                 resourceKey:'',//上传的资源key
                 state:''//状态1.合作中，2.合作终止 
             },
-            agency:['代理商1','代理商2'],
+            agency:['代理商1','代理商2'],//模拟代理商下拉框选项
             // 必填设置
             rules: {
                 name: [{ required: true, message: '请输入公司名称', trigger: 'blur' }],
@@ -159,21 +163,24 @@ export default {
     methods:{
         open() {
             if(this.title=='编辑公司'){
-                this.ruleForm=Object.assign({agency:'暂无代理商'},this.currentCompanyInfo);
+                this.form=Object.assign({},this.currentCompanyInfo);
             }else{
-                this.ruleForm={
-                    address:'',//地址
-                    agency:'暂无代理商',//代理商
-                    companyName:'',//公司名称
-                    bd:'',//bd
+                this.form={
                     abbreviation:'',//公司简称
-                    city:'',//公司所属城市
-                    cash:'',//保证金
-                    code:'',//组织机构代码
-                    radio:'',//新房二手房
-                    joinTime:'',//合作时间
-                    legal:'',//法人
-                    tel:''//电话
+                    address:'',//地址
+                    agencyId:'暂无代理商',//代理商Id
+                    businessType:[],//房源类型,0为选择，1.新上，2.二手房，3.新房＋二手房
+                    cityId:'',//所属城市
+                    corporate:'',//法人代表
+                    corporatePhone:'',//电话
+                    corporateStart:'',//合作开始时间
+                    corporateEnd:'',//合作结束时间
+                    deposit:'',//保证金
+                    name:'',//公司名称
+                    organizationCode:'',//组织机构代码
+                    operator:'',//操作人
+                    resourceKey:'',//上传的资源key
+                    state:''//状态1.合作中，2.合作终止 
                 }
             }
             this.dialogVisible = true;
@@ -181,7 +188,7 @@ export default {
         handleClose(done) {
             this.$confirm('确认关闭？')
             .then(_ => { 
-                this.$refs.ruleForm.resetFields(); 
+                this.$refs.form.resetFields(); 
                 done();
             })
             .catch(_ => {});

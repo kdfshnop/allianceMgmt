@@ -26,7 +26,7 @@
                     <el-form-item label="板块" prop="plate">
                         <el-input v-model="ruleForm.plate"></el-input>
                     </el-form-item>-->
-                    <region v-modal="array"></region>
+                    <region v-model="array"></region>
                 </el-col>
             </el-row>
             <el-form-item label="经纬度" prop="abbreviation">
