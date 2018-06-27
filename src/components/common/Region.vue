@@ -124,20 +124,7 @@ export default {
          if(this.startLevel > this.endLevel) {
              throw "endLevel不能小于startLeven";
          }
-         let fetchers = {
-            //  province: {
-            //      url: this.$apiUrl.region.province,
-            //      paramName: "",
-            //      parse: (data)=>{
-            //          return data && data.length && data.map((d)=>{
-            //             return {
-            //                 label: d.name,
-            //                 value: d.id,
-            //                 children: this.endLevel != 1 ? [] : null
-            //             };
-            //          }) || [];
-            //      }
-            //  }, 
+         let fetchers = {            
             province: FetcherFactory.create({
                 vue: this,
                 url: this.$apiUrl.common.province,
@@ -165,50 +152,12 @@ export default {
             town: FetcherFactory.create({
                 vue: this,
                 url: this.$apiUrl.common.town,
-                paramName: "districtId",
+                paramName: "regionId",
                 mayHasChildren: this.endLevel != 4,
                 valueField: "id",
                 labelField: "NAME"                
-            }),
-            //  city: {
-            //      url: this.$apiUrl.region.city,
-            //      paramName: "provinceId",
-            //      parse: (data)=> {
-            //          return data && data.length && data.map((d)=>{
-            //              return {
-            //                  label: d.cityName,
-            //                  value: d.cityId,
-            //                  children: this.endLevel !=2 ? [] : null
-            //              }
-            //          });
-            //      }
-            //  },
-            //  district: {
-            //      url: this.$apiUrl.region.district,
-            //      paramName: "cityId",
-            //      parse: (data)=>{
-            //          return data && data.length && data.map((d)=>{
-            //              return {
-            //                  label: d.reginName,
-            //                  value: d.regionid,
-            //                  children: this.endLevel != 3 ? []: null
-            //              }
-            //          });
-            //      }
-            //  }, 
-            //  town: {
-            //      url: this.$apiUrl.region.town,
-            //      paramName: "regionId",
-            //      parse: (data)=>{
-            //          return data && data.length && data.map((d)=>{
-            //              return {
-            //                  label: d.townName,
-            //                  value: d.townId                             
-            //              }
-            //          });
-            //      }
-            //  }
-            };
+            })            
+         };
          
          let tmp = ["", "province", "city", "district", "town"];
 
@@ -224,7 +173,8 @@ export default {
       return {
         dataFetchers: [],
         options: [],
-        selectedOptions: this.value,        
+        selectedOptions: this.value, 
+        innerValue: [],       
       };
      },
      mounted() {
@@ -276,7 +226,7 @@ export default {
              options = options || [];
              let fetcher = this.dataFetchers[s];
              if(fetcher) {
-                 fetcher.fetch(this.selectedOptions[s-1] || this.initId).then((data)=>{                                        
+                 fetcher.fetch(this.selectedOptions[s-1] || s==0 && this.initId).then((data)=>{                                        
                     options.splice(0,options.length,...fetcher.parse(data.data));
                     options = options.filter((d)=>{
                         return d.value == this.selectedOptions[s];
@@ -302,7 +252,17 @@ export default {
              }
              val.label = label;
              console.log('val: ', val);
+             this.innerValue = val;
              this.$emit('input', val);
+         }
+     },
+     watch: {
+         'value': function(val) {
+             if(val == this.innerValue) {
+                 return;
+             }
+             this.selectedOptions = val;
+             this.initOptionData(0, this.selectedOptions.length || 1, this.options);
          }
      }
 }
