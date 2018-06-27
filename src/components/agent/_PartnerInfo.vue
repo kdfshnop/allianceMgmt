@@ -6,31 +6,31 @@
             <el-button v-show="mode === 'edit' && status === 'editing'" @click="handleCancel" type="danger" size="mini">取消</el-button>         
             <el-button v-show="mode === 'edit' && status === 'editing'" @click="handleComplete" type="success" size="mini">完成</el-button>                
         </div>
-        <el-form :model="item" label-width= "180px" v-show="mode === 'create' || mode === 'edit' && status === 'editing'">
+        <el-form :model="innerItem" label-width= "180px" v-show="mode === 'create' || mode === 'edit' && status === 'editing'">
             <el-row>
                 <el-col :span="12">
                     <el-form-item label="姓名">
-                        <el-input v-model="item.name"></el-input>
+                        <el-input v-model="innerItem.name"></el-input>
                     </el-form-item>
                     <el-form-item label="邮箱">
-                        <el-input v-model="item.email"></el-input>
+                        <el-input v-model="innerItem.email"></el-input>
                     </el-form-item>
 
                     <el-form-item label="身份证号">
-                        <el-input v-model="item.idCard"></el-input>
+                        <el-input v-model="innerItem.idCard"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">                    
                     <el-form-item label="手机号">
-                        <el-input v-model="item.mobile"></el-input>
+                        <el-input v-model="innerItem.mobile"></el-input>
                     </el-form-item>
                     
                     <el-form-item label="芝麻信用">
-                        <el-input v-model="item.zmCredit"></el-input>
+                        <el-input v-model="innerItem.zmCredit"></el-input>
                     </el-form-item>
                     
                     <el-form-item label="合伙人背景">                        
-                        <el-select v-model="item.bg" placeholder="请选择">
+                        <el-select v-model="innerItem.bg" placeholder="请选择">
                             <el-option
                             v-for="bg in bgs"
                             :key="bg.value"
@@ -38,13 +38,13 @@
                             :value="bg.value">
                             </el-option>
                         </el-select>
-                        <el-input style="margin-top: 6px;" v-model="item.bgOther" v-show="item.bg=='5'"></el-input>
+                        <el-input style="margin-top: 6px;" v-model="innerItem.bgOther" v-show="item.bg=='5'"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
                         
             <el-form-item v-show="mode === 'create' || mode === 'edit' && status === 'editing'" label="备注信息">
-                <el-input type="textarea" :rows="2" v-model="item.remark"></el-input>
+                <el-input type="textarea" :rows="2" v-model="innerItem.remark"></el-input>
             </el-form-item>            
         </el-form>
 
@@ -52,23 +52,23 @@
             <el-row>
                 <el-col :span="12">
                     <el-form-item label="姓名">
-                        {{item.name}}
+                        {{innerItem.name}}
                     </el-form-item>
                     <el-form-item label="邮箱">
-                        {{item.email}}
+                        {{innerItem.email}}
                     </el-form-item>
 
                     <el-form-item label="身份证号">
-                        {{item.idCard}}
+                        {{innerItem.idCard}}
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">                    
                     <el-form-item label="手机号">
-                        {{item.mobile}}
+                        {{innerItem.mobile}}
                     </el-form-item>
                     
                     <el-form-item label="芝麻信用">
-                        {{item.zmCredit}}
+                        {{innerItem.zmCredit}}
                     </el-form-item>
                     
                     <el-form-item label="合伙人背景">
@@ -78,7 +78,7 @@
             </el-row>
                             
             <el-form-item label="备注信息">
-                {{item.remark}}
+                {{innerItem.remark}}
             </el-form-item>
             </el-form>
     </CollapsePanel>
@@ -101,6 +101,7 @@
         },
         data() {
             return {
+                innerItem: Object.assign({}, this.item),
                 expand: true,
                 status: "",
                 originalItem: {
@@ -130,16 +131,16 @@
         methods: {
             handleEdit() {
                 this.status = 'editing';
-                this.originalItem = this.item;
-                this.item = Object.assign({}, this.item);                
+                this.originalItem = this.innerItem;
+                this.innerItem = Object.assign({}, this.innerItem);                
             },
             handleComplete() {
-                this.status = '';    
-                this.item = Object.assign(this.originalItem, this.item);                            
+                this.status = '';  
+                this.$emit('input', this.innerItem);                  
             },
             handleCancel() {
                 this.status = '';
-                this.item = this.originalItem;                
+                this.innerItem = this.originalItem;                
             },
             handleClose() {
                 this.$emit('close');
@@ -147,21 +148,62 @@
         },
         computed: {
             bgText() {                
-                let bg = this.bgs.filter((b)=>{return b.value==this.item.bg});
+                let bg = this.bgs.filter((b)=>{return b.value==this.innerItem.bg});
                 if(bg && bg.length) {
                     bg = bg[0];
                     if(bg.value == '5'){// 其他
-                        return bg.label + '-' + this.item.bgOther||'';
+                        return bg.label + '-' + this.innerItem.bgOther||'';
                     }
 
                     return bg.label;
                 }
 
                 return '';
-            }
+            },
+            
         },
         watch: {
-            
+            "innerItem.name": function(val) {
+                if(this.mode == 'create') {
+                    this.$emit('input', this.innerItem);
+                }
+            },
+            "innerItem.mobile": function(val) {
+                if(this.mode == 'create') {
+                    this.$emit('input', this.innerItem);
+                }
+            },
+            "innerItem.email": function(val) {
+                if(this.mode == 'create') {
+                    this.$emit('input', this.innerItem);
+                }
+            },
+            "innerItem.score": function(val) {
+                if(this.mode == 'create') {
+                    this.$emit('input', this.innerItem);
+                }
+            },
+            "innerItem.idCard": function(val) {
+                if(this.mode == 'create') {
+                    this.$emit('input', this.innerItem);
+                }
+            },
+            "innerItem.bg": function(val) {
+                if(this.mode == 'create') {
+                    this.$emit('input', this.innerItem);
+                }
+            },
+            "innerItem.remark": function(val) {
+                if(this.mode == 'create') {
+                    this.$emit('input', this.innerItem);
+                }
+            },
+            "innerItem.bgOther": function(val) {
+                if(this.mode == 'create') {
+                    this.$emit('input', this.innerItem);
+                }
+            }
+
         }
     }
 </script>

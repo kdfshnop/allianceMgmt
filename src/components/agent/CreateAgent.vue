@@ -89,9 +89,9 @@ export default {
     },
   data () {
     return {      
-      active: 1,// 控制步骤
+      active: 5,// 控制步骤
       stepNumber: 7,// 总步数
-      mode: "edit",
+      mode: "create",
       serviceInfo: {
           bdInfo: {
               

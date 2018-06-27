@@ -16,6 +16,7 @@
                             remote                            
                             placeholder="请输入姓名"
                             :remote-method="getBDs"
+                            @change="handleBdchange"
                             :loading="bdsLoading">
                             <el-option
                                 v-for="item in bds"
@@ -32,6 +33,7 @@
                             remote                            
                             placeholder="请输入姓名"
                             :remote-method="getCXs"
+                            @change="handleCxchange"
                             :loading="cxsLoading">
                             <el-option
                                 v-for="item in cxs"
@@ -43,11 +45,13 @@
                     </el-form-item>
                     <el-form-item label="1对1落地指导">
                         <el-select
-                            v-model="selectedDirector"                            
+                            v-model="selectedDirector" 
+                            :value="bdInfo.id"                           
                             filterable
                             remote                            
                             placeholder="请输入姓名"
                             :remote-method="getDirectors"
+                            @change="handleDirectorchange"
                             :loading="directorsLoading">
                             <el-option
                                 v-for="item in directors"
@@ -59,11 +63,11 @@
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
-                    <el-form-item label="xxx部门 xxx职位">                        
+                    <el-form-item :label="bdInfo.department+' '+bdInfo.title">                        
                     </el-form-item>
-                    <el-form-item label="xxx部门 xxx职位">                        
+                    <el-form-item :label="cxInfo.department+' '+cxInfo.title">                        
                     </el-form-item>
-                    <el-form-item label="xxx部门 xxx职位">                        
+                    <el-form-item :label="directorInfo.department+' '+directorInfo.title">                        
                     </el-form-item>
                 </el-col>
             </el-row>   
@@ -80,11 +84,11 @@
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
-                    <el-form-item label="xxx部门 xxx职位">                        
+                    <el-form-item :label="bdInfo.department+' '+bdInfo.title">                        
                     </el-form-item>
-                    <el-form-item label="xxx部门 xxx职位">                        
+                    <el-form-item :label="cxInfo.department+' '+cxInfo.title">                        
                     </el-form-item>
-                    <el-form-item label="xxx部门 xxx职位">                        
+                    <el-form-item :label="directorInfo.department+' '+directorInfo.title">                        
                     </el-form-item>
                 </el-col>
             </el-row>         
@@ -94,6 +98,9 @@
 <script>
     // TODO: 根据mode不同分为创建、编辑和详情三种模式
     import CollapsePanel from '@/components/common/CollapsePanel';
+    import {generateComputed} from "./_Utils";
+    import {mapMutations} from "vuex";
+
     // 服务人员信息
     export default {
         name: "serviceStaffInfo",
@@ -106,10 +113,7 @@
             }
         },
         data() {
-            return {
-                bds: [],
-                cxs: [],
-                directors: [],
+            return {               
                 bdsLoading: false,
                 cxsLoading: false,
                 directorsLoading: false,
@@ -117,18 +121,26 @@
                 selectedCX: "",
                 selectedDirector: "",
                 status: '',
-                bdInfo: this.item.bdInfo,
-                cxInfo: this.item.cxInfo,
-                directorInfo: this.item.directorInfo
+                innerItem: {},
+                bds:[],
+                cxs:[],
+                directors:[]              
             };
         },
+        computed: {
+            "bdInfo": generateComputed("bdInfo", "ServiceStaffInfo", "updateBdInfo"),
+            "cxInfo": generateComputed("cxInfo", "ServiceStaffInfo", "updateCxInfo"),
+            "directorInfo": generateComputed("directorInfo", "ServiceStaffInfo", "updateDirectorInfo")
+        },
         methods: {
-            getBDs(keyword) {
-                // TODO: 调用接口查询包含关键字的bd列表
-                //bds = [];
+            getBDs(keyword) {                
+                // this.$http.get().then((data)=>{
+                //     // TODO: 处理一下
+                //     this.bds = data.data;
+                // });
                 let tmpArr = [];
                 for(let i = 1; i < 10; i++){
-                    tmpArr.push({name: keyword + "-" + i, id: i});
+                    tmpArr.push({name: keyword + "-" + i, id: i, department: '部门' + i, title: '职位' + i});
                 }    
                 this.bds = tmpArr;            
             },
@@ -136,7 +148,7 @@
                 // TODO: 调用接口查询包含关键字的彩霞人员列表
                 let tmpArr = [];
                 for(let i = 1; i < 10; i++){
-                    tmpArr.push({name: keyword + "-" + i, id: i});
+                    tmpArr.push({name: keyword + "-" + i, id: i, department: '部门' + i, title: '职位' + i});
                 }    
                 this.cxs = tmpArr;
 
@@ -145,83 +157,65 @@
                 // TODO： 调用接口查询包含关键字的1对1落地指导人员列表
                 let tmpArr = [];
                 for(let i = 1; i < 10; i++){
-                    tmpArr.push({name: keyword + "-" + i, id: i});
+                    tmpArr.push({name: keyword + "-" + i, id: i, department: '部门' + i, title: '职位' + i});
                 }    
                 this.directors = tmpArr;
             },
             handleEdit() {
                 this.status = 'editing';
-                this.bdInfo = Object.assign({}, this.bdInfo);
-                this.cxInfo = Object.assign({}, this.cxInfo);
-                this.directorInfo = Object.assign({}, this.directorInfo);
+                this.innerItem = JSON.parse(JSON.stringify(this.$store.state.ServiceStaffInfo||{}));
             },
             handleComplete() {
                 this.status = '';
-                Object.assign(this.item, {
-                    bdInfo: this.bdInfo,
-                    cxInfo: this.cxInfo,
-                    directorInfo: this.directorInfo
-                });
-
-                this.bdInfo = this.item.bdInfo;
-                this.cxInfo = this.item.cxInfo;
-                this.directorInfo = this.item.directorInfo;
-
-                this.$emit('update:item', this.item);
+                this.updateItem(this.innerItem);
             },
             handleCancel() {
                 this.status = '';
-                this.bdInfo = this.item.bdInfo;
-                this.cxInfo = this.item.cxInfo;
-                this.directorInfo = this.item.directorInfo;
-            }
+            },
+
+            handleBdchange(val) {
+                let t = this.bds.filter((b)=>b.id == val);
+                if(t && t.length) {
+                    this.bdInfo.name = t[0].name;
+                    this.bdInfo.department = t[0].department;
+                    this.bdInfo.title = t[0].title;
+                    this.bdInfo.id = t[0].id;
+
+                    if(this.mode=='create'){
+                        this.updateBdInfo(this.bdInfo);
+                    }
+                }
+            },
+            handleCxchange(val) {
+                let t = this.cxs.filter((b)=>b.id == val);
+                if(t && t.length) {
+                    this.cxInfo.name = t[0].name;
+                    this.cxInfo.department = t[0].department;
+                    this.cxInfo.title = t[0].title;
+                    this.cxInfo.id = t[0].id;
+
+                    if(this.mode=='create'){
+                        this.updateCxInfo(this.cxInfo);
+                    }
+                }
+            },
+            handleDirectorchange(val) {
+                let t = this.directors.filter((b)=>b.id == val);
+                if(t && t.length) {
+                    this.directorInfo.name = t[0].name;
+                    this.directorInfo.department = t[0].department;
+                    this.directorInfo.title = t[0].title;
+                    this.directorInfo.id = t[0].id;
+
+                    if(this.mode=='create'){
+                        this.updateDirectorInfo(this.directorInfo);
+                    }
+                }
+            },
+
+            ...mapMutations("ServiceStaffInfo", ['updateItem', 'updateBdInfo', 'updateCxInfo', 'updateDirectorInfo'])
         },
-        watch: {
-            selectedBD() {
-                // TODO: 根据选中的id从bds中反查出bd的信息
-                let bd = this.bds.filter((b) => {
-                    return b.id == this.selectedBD;
-                });
-
-                if(bd && bd.length) {
-                    this.bdInfo = bd[0];
-                }
-
-                if(this.mode == 'create') {
-                    this.item.bdInfo = this.bdInfo;
-                    this.$emit('update:item', this.item);
-                }
-            },
-            selectedCX() {
-                // TODO: 根据选中的id从CXs中反查出彩霞人员信息
-                let cx = this.bds.filter((c) => {
-                    return c.id == this.selectedCX;
-                });
-
-                if(cx && cx.length) {
-                    this.cxInfo = cx[0];
-                }
-
-                if(this.mode == 'create'){
-                    this.item.cxInfo = this.cxInfo;
-                    this.$emit('update:item', this.item);
-                }
-            },
-            selectedDirector() {
-                // TODO: 根据选中的id从directors中反查出director信息
-                let d = this.bds.filter((x) => {
-                    return x.id == this.selectedDirector;
-                });
-
-                if(d && d.length) {
-                    this.directorInfo = d[0];
-                }
-
-                if(this.mode == 'create') {
-                    this.item.directorInfo = this.directorInfo;
-                    this.$emit('update:item', this.item);
-                }
-            }
+        watch: {            
         }
 
     }
