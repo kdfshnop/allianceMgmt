@@ -123,11 +123,11 @@
                 <el-pagination
                     @size-change="handleSizeChange"
                     @current-change="handleCurrentChange"
-                    :current-page="pagination.currentPage"
-                    :page-sizes="[10, 2, 3, 400]"
-                    :page-size="pagination.pageSize"
+                    :current-page="form.currentPage"
+                    :page-sizes="[10, 20, 50, 100,500]"
+                    :page-size="form.pageSize"
                     layout="total, sizes, prev, pager, next, jumper"
-                    :total="pagination.total">
+                    :total="total">
                 </el-pagination>
             </div>
             <el-dialog title="终止公司合作" :visible.sync="firstDialogVisible" width="30%" >
@@ -173,12 +173,13 @@ export default {
             currentCompanyInfo:'',//当前编辑的公司信息
             title:'',//判断是编辑公司还是添加公司
             isShow:false,
+            total:400,
             // 表单查询信息
             form:{
-                cityList:[],
                 agency:'',//代理商
-                businessType:'',//房源类型,0未选择，1.新上，2.二手房，3.新房＋二手房
-                cityId:'',//所属城市
+                businessType:'',//房源类型,0未选择，1.新房，2.二手房，3.新房＋二手房
+                cityId:'',//所属城市Id
+                cityList:[],
                 corporateStart:'',//合作开始时间
                 corporateEnd:'',//合作结束时间
                 currentPage:1,//默认当前页为1
@@ -187,14 +188,9 @@ export default {
                 provinceId:'',//省份Id
                 searchDate:'',//到期日期
                 searchDay:'',//即将到期天数 
+                searchType:'',//到期查询方式
                 storeAddress:'',//门店地址
                 storeName:''//门店名称
-            },
-            // 分页功能
-            pagination:{
-                currentPage:1,//默认当前页为1;
-                pageSize:10,//默认显示10条
-                total:400//一共有多少条数据
             },
             breadCrumb: [{text:'加盟管理'},{text: "公司管理"}],//面包屑
             tableData: [{
@@ -245,13 +241,15 @@ export default {
         }
     },
     created(){
-        this.$http.get('/city/list')
-            .then(function(data){
-                console.log(data);
-            })
-            .catch(function(error){
-            console.log(error)
-            });
+        this.requestList();
+        // 获取summary信息
+        this.$http.get(this.$apiUrl.company.summary)
+        .then(function(data){
+            console.log(data,'summary成功');
+        })
+        .catch(function(err){
+            console.log(err,'summary失败');
+        })
     },
     methods:{
         // 子组件添加公司成功之后，传递给父组件的值;
@@ -260,9 +258,9 @@ export default {
 
             //第二种
             this.tableData.unshift(addInfo);
-            this.pagination.currentPage=1;
-            this.pagination.pageSize=10;
-            this.pagination.total++;
+            this.form.currentPage=1;
+            this.form.pageSize=10;
+            this.total++;
         },
         // 子组件编辑成功之后，传递给父组件的值;
         editSuccess(editInfo){
@@ -292,24 +290,19 @@ export default {
         },
         //根据表单信息搜索
         search(val){
-            // 判断是否选择了省市;
-            if(this.form.cityList.length){
-                this.form.provinceId=this.form.cityList[0];
-                this.form.cityId=this.form.cityList[1];
-            };
-            // businessType房源类型无值,则定为0;
-            if(this.form.businessType==""){
-                this.form.businessType=0;
-            }
-            this.$http.post()
+            this.requestList();
         },
         //每页多少条
         handleSizeChange(val) {
-            this.pagination.pageSize=val;
+            this.form.pageSize=val;
+            // 状态改变发送请求
+            this.requestList();
         },
         //当前页
         handleCurrentChange(val) {
-            this.pagination.currentPage=val;
+            this.form.currentPage=val;
+            //状态改变发送请求
+            this.requestList();
         },
         // 添加公司
         addCompany(){
@@ -324,7 +317,7 @@ export default {
         editorCompany(index, row){
             console.log(row,'编辑信息')
             //操作公司时，该公司所处所有信息列表的位置;
-            this.companyInfoIndex=(this.pagination.currentPage-1)*this.pagination.pageSize+index;
+            this.companyInfoIndex=(this.form.currentPage-1)*this.form.pageSize+index;
             // 当前编辑的公司信息;
             this.currentCompanyInfo=row;
             this.title='编辑公司';
@@ -349,12 +342,34 @@ export default {
         //点击二次对话框取消按钮，继续合作
         continueJoin(){
             this.noJoin='';
+        },
+        // 列表信息请求公共函数
+        requestList(){
+            // 判断是否选择了省市;
+            if(this.form.cityList.length){
+                this.form.provinceId=this.form.cityList[0];
+                this.form.cityId=this.form.cityList[1];
+            };
+            let realForm=Object.assign({},this.form);
+            delete realForm.cityList;//删除表单中的cityList选项，因为提交数据时不需要该参数
+            delete realForm.searchType;//同上
+            if(realForm.businessType==""){
+                realForm.businessType=0;
+            };
+            console.log(realForm,22)
+            this.$http.post(this.$apiUrl.company.list,realForm)
+                .then(function(data){
+                    console.log(data,'成功');
+                })
+                .catch(function(err){
+                    console.log(err,'失败');
+                })
         }
     },
     computed:{
         //分页显示多少条数据
         searInfoList(){
-            return this.tableData.slice((this.pagination.currentPage-1)*this.pagination.pageSize,this.pagination.currentPage*this.pagination.pageSize);
+            return this.tableData.slice((this.form.currentPage-1)*this.form.pageSize,this.form.currentPage*this.form.pageSize);
         }
     }
 }
