@@ -30,5 +30,17 @@ export default {
         create: "agency/single",// put 增
         detail: "agency/single", // ?agencyId=2&agencyState=0 get 查
         edit: "agency/single" // post 改
+    },
+    company:{//公司
+        add:"company/single",//添加公司 put
+        edit:"agency/company",//编辑公司 post
+        list:"company/list",//公司列表 post
+        summary:"company/summary"//公司汇总 get
+    },
+    store:{//门店
+        add:"sotre/single",//添加门店 put
+        edit:"agency/store",//编辑门店 post
+        list:"store/list",//门店列表 post
+        summary:"store/summary"//门店汇总 get
     }
 };

@@ -9,7 +9,7 @@
                 <el-row >
                     <el-col :span="12">
                         <el-form-item label="公司所属城市" prop="cityList">
-                            <region v-model="form.cityList"></region>
+                            <region v-model="form.cityList" :startLevel="startLevel" :endLevel="endLevel"></region>
                         </el-form-item>
                         <el-row>
                             <el-col :span="5">
@@ -37,8 +37,8 @@
                                 </el-form-item>
                             </el-col>
                         </el-row>
-                        <el-form-item label="业务" prop="business">
-                            <el-select v-model="form.business" filterable>
+                        <el-form-item label="业务" prop="businessType">
+                            <el-select v-model="form.businessType" filterable>
                                 <el-option label="新房和二手房" value="3"></el-option>
                                 <el-option label="新房" value="1"></el-option>
                                 <el-option label="二手房" value="2"></el-option>
@@ -84,8 +84,8 @@
                         <el-form-item label="门店名称" prop="storeName">
                             <el-input v-model="form.storeName"></el-input>
                         </el-form-item>
-                        <el-form-item label="代理商" prop="agent">
-                            <el-input v-model="form.agent"></el-input>
+                        <el-form-item label="代理商" prop="agency">
+                            <el-input v-model="form.agency"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -164,6 +164,8 @@ export default {
     components:{EditorCompany,Commission,BreadCrumb,Region},
     data () {
         return {
+            startLevel:1,//二级联动城市传参
+            endLevel:2,//二级联动城市传参
             firstDialogVisible: false,//第一个终止合作弹出框
             secondDialogVisible:false,//第二个终止合作弹出框
             noJoin:'',//终止合作原因
@@ -173,26 +175,20 @@ export default {
             isShow:false,
             // 表单查询信息
             form:{
-                abbreviation:'',//公司简称
-                address:'',//地址
-                agencyId:'暂无代理商',//代理商Id
-                businessType:0,//房源类型,0未选择，1.新上，2.二手房，3.新房＋二手房
-                cityId:'',//所属城市
-                city:'',//城市名
                 cityList:[],
-                corporate:'',//法人代表
-                corporatePhone:'',//电话
+                agency:'',//代理商
+                businessType:'',//房源类型,0未选择，1.新上，2.二手房，3.新房＋二手房
+                cityId:'',//所属城市
                 corporateStart:'',//合作开始时间
                 corporateEnd:'',//合作结束时间
-                deposit:'',//保证金
+                currentPage:1,//默认当前页为1
                 name:'',//公司名称
-                organizationCode:'',//组织机构代码
-                operator:'',//操作人
-                resourceKey:'',//上传的资源key
+                pageSize:10,//默认显示10条信息
+                provinceId:'',//省份Id
                 searchDate:'',//到期日期
-                searchDay:'',//即将到期天数
-                state:'',//状态1.合作中，2.合作终止 
-                storeAddress:''//门店地址
+                searchDay:'',//即将到期天数 
+                storeAddress:'',//门店地址
+                storeName:''//门店名称
             },
             // 分页功能
             pagination:{
@@ -200,7 +196,7 @@ export default {
                 pageSize:10,//默认显示10条
                 total:400//一共有多少条数据
             },
-            breadCrumb: [{text:'加盟管理'},{text: "公司管理"}],
+            breadCrumb: [{text:'加盟管理'},{text: "公司管理"}],//面包屑
             tableData: [{
                 city: '北京',
                 name: '上海好居科技有限公司',
@@ -296,8 +292,16 @@ export default {
         },
         //根据表单信息搜索
         search(val){
-            console.log(val,1111111)
-            console.log(this.form);
+            // 判断是否选择了省市;
+            if(this.form.cityList.length){
+                this.form.provinceId=this.form.cityList[0];
+                this.form.cityId=this.form.cityList[1];
+            };
+            // businessType房源类型无值,则定为0;
+            if(this.form.businessType==""){
+                this.form.businessType=0;
+            }
+            this.$http.post()
         },
         //每页多少条
         handleSizeChange(val) {
