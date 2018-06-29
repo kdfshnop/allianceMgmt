@@ -8,7 +8,8 @@ export default {
         score: "",
         idCardFrontFileList: [],
         idCardBackFileList: [],
-        scoreFileList: []
+        scoreFileList: [],
+        remark: ""
     },
     mutations: {
         updateName(state, name) {
@@ -35,6 +36,9 @@ export default {
         updateScoreFileList(state, val) {
             state.scoreFileList = val;
         },
+        updateRemark(state, val){
+            state.remark = val;
+        },
         updateItem(state, item) {                                    
             state.name = item.name;
             state.mobile = item.mobile;
@@ -44,6 +48,7 @@ export default {
             state.idCardFrontFileList = item.idCardFrontFileList;
             state.idCardBackFileList = item.idCardBackFileList;
             state.scoreFileList = item.scoreFileList;
+            state.remark = item.remark;
         }
     }
 };

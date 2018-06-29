@@ -1,21 +1,21 @@
 export default {
     namespaced: true,
     state: {
-        signed: false,
-        name: "",
-        shortName: "",
-        number: "",
-        code: "",
-        address: "",
-        numberFileList: [],
-        finishDate: '',
-        tracerName: '',
-        mobile: '',
-        email: '',
-        idCard: '',
-        remark: '',
-        idCardFrontFileList: [],
-        idCardBackFileList: []
+        signed: false,// 是否已经注册
+        name: "",// 公司名称
+        shortName: "",// 公司简称
+        number: "",// 营业执照号码
+        code: "", // 组织结构代码
+        address: "",// 公司地址
+        numberFileList: [],// 营业执照的图片
+        finishDate: '',// 预计注册完成时间
+        tracerName: '',// 代理商负责跟踪人
+        mobile: '',// 手机号
+        email: '',// 邮箱
+        idCard: '',// 身份证
+        remark: '',// 备注
+        idCardFrontFileList: [],// 身份证正面照
+        idCardBackFileList: []// 身份证背面照
     },
     mutations: {
         updateSigned(state, signed) {

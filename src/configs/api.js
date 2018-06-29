@@ -18,7 +18,7 @@ export default {
         detail: ""// 详情
     },
     test: "",
-    upload: "/resource",// 文件上传地址
+    upload: "http://localhost:3000/upload", //resource",// 文件上传地址
     common: {
         employee: "/wkzf/person",// 员工接口，诸如BD人员、彩霞人员和一对一指导人员
         province: "/province/list",// 省份接口
@@ -27,8 +27,9 @@ export default {
         town: "/plate/list"// 板块接口
     },
     agent: {
-        create: "agency/single",// put 增
-        detail: "agency/single", // ?agencyId=2&agencyState=0 get 查
-        edit: "agency/single" // post 改
+        create: "/agency/single",// put 增
+        detail: "/agency/single", // ?agencyId=2&agencyState=0 get 查
+        edit: "/agency/single", // post 改
+        list: "/agency/list", // 列表接口
     }
 };

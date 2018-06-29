@@ -68,7 +68,7 @@ export default {
             }
         },
         handleRemove(index) {
-            this.regions.splice(index, 1);
+            this.innerItem.regions.splice(index, 1);
         },
         handleEdit() {
             this.status = 'editing';                
@@ -78,8 +78,7 @@ export default {
             this.status = '';                                
         },
         handleCancel() {
-            this.status = '';
-            // this.innerItem =                            
+            this.status = '';                                     
         },
     }
 }

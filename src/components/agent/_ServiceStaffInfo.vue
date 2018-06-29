@@ -134,32 +134,20 @@
         },
         methods: {
             getBDs(keyword) {                
-                // this.$http.get().then((data)=>{
-                //     // TODO: 处理一下
-                //     this.bds = data.data;
-                // });
-                let tmpArr = [];
-                for(let i = 1; i < 10; i++){
-                    tmpArr.push({name: keyword + "-" + i, id: i, department: '部门' + i, title: '职位' + i});
-                }    
-                this.bds = tmpArr;            
+                this.$http.get(this.$apiUrl.common.employee).then((data)=>{                    
+                    this.bds = data.data.data;
+                });
+                           
             },
             getCXs(keyword) {
-                // TODO: 调用接口查询包含关键字的彩霞人员列表
-                let tmpArr = [];
-                for(let i = 1; i < 10; i++){
-                    tmpArr.push({name: keyword + "-" + i, id: i, department: '部门' + i, title: '职位' + i});
-                }    
-                this.cxs = tmpArr;
-
+                this.$http.get(this.$apiUrl.common.employee).then((data)=>{
+                    this.cxs = data.data.data;
+                });
             },
             getDirectors(keyword) {
-                // TODO： 调用接口查询包含关键字的1对1落地指导人员列表
-                let tmpArr = [];
-                for(let i = 1; i < 10; i++){
-                    tmpArr.push({name: keyword + "-" + i, id: i, department: '部门' + i, title: '职位' + i});
-                }    
-                this.directors = tmpArr;
+                this.$http.get(this.$apiUrl.common.employee).then((data)=>{
+                    this.directors = data.data.data;
+                });
             },
             handleEdit() {
                 this.status = 'editing';

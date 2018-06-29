@@ -18,7 +18,7 @@
                     </el-form-item>                    
                 </el-col>
                 <el-col :span="12">
-                    <el-form-item label="支付方式">
+                    <el-form-item label="支付方式" v-show="paymentStatus">
                         <el-select v-model="type" placeholder="请选择">
                             <el-option
                                 v-for="item in types"
@@ -27,10 +27,19 @@
                                 :value="item.value">
                             </el-option>
                         </el-select>
-                    </el-form-item>                    
+                    </el-form-item>  
+                    <el-form-item label="预计支付时间" v-show="!paymentStatus">
+                        <el-date-picker
+                                v-model="planPaymentDate"
+                                type="date"
+                                format="yyyy-MM-dd"
+                                placeholder="选择日期">
+                            </el-date-picker>
+                    </el-form-item>                   
                 </el-col>
-            </el-row>                                    
-            <el-row>
+            </el-row> 
+            <!-- <template >                                    -->
+            <el-row v-show="paymentStatus">
                 <el-col :span="12">
                     <el-form-item label="实际支付">
                         <el-input v-model="actualPayment">
@@ -47,7 +56,7 @@
                     </el-form-item>                    
                 </el-col>
             </el-row> 
-            <el-row>
+            <el-row v-show="paymentStatus">
                 <el-col :span="12">
                     <el-form-item label="汇款单号">
                         <el-input v-model="number">                            
@@ -61,9 +70,29 @@
                     </el-form-item>                    
                 </el-col>
             </el-row> 
-            <el-form-item label="上传汇款凭证">                
+            <el-form-item label="上传汇款凭证" v-show="paymentStatus">                
                 <upload v-if="mode === 'create' || mode === 'edit' && status === 'editing'" :fileList.sync="fileList"></upload>
             </el-form-item> 
+            <!-- </template> -->
+            <!-- <template > -->
+                <el-row v-if="!paymentStatus">
+                    <el-col :span="12">
+                        <el-form-item label="代理商对接人">
+                            <el-input v-model="brokerName" placeholder="请输入姓名">                            
+                            </el-input>
+                        </el-form-item>                    
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="代理商对接人手机号">
+                            <el-input v-model="brokerMobile" placeholder="请输入手机号">                            
+                            </el-input>
+                        </el-form-item>                    
+                    </el-col>
+                </el-row> 
+                <el-form-item label="承诺支付书" v-if="!paymentStatus">                
+                    <upload v-if="mode === 'create' || mode === 'edit' && status === 'editing'" :fileList.sync="promiseFileList"></upload>
+                </el-form-item>
+            <!-- </template> -->
             <el-form-item label="备注信息">
                 <el-input v-model="remark" type="textarea">                            
                 </el-input>
@@ -78,39 +107,61 @@
                     </el-form-item>                    
                 </el-col>
                 <el-col :span="12">
-                    <el-form-item label="支付方式">
+                    <el-form-item label="支付方式" v-show="paymentStatus">
                         {{paymentType}}                        
-                    </el-form-item>                    
+                    </el-form-item>    
+                    <el-form-item label="预计支付时间" v-show="!paymentStatus">
+                        {{planPaymentDate}}                        
+                    </el-form-item>                
                 </el-col>
-            </el-row>                                    
-            <el-row>
-                <el-col :span="12">
-                    <el-form-item label="实际支付">
-                        {{actualPayment}}元                        
-                    </el-form-item>                    
-                </el-col>
-                <el-col :span="12">
-                    <el-form-item label="费用包含">
-                        {{containPayment.indexOf('1') > -1&&'平台服务费'||''}} 
-                        {{containPayment.indexOf('2') > -1&&'保证金'||''}}
-                    </el-form-item>                    
-                </el-col>
-            </el-row> 
-            <el-row>
-                <el-col :span="12">
-                    <el-form-item label="汇款单号">
-                        {{number}}                        
-                    </el-form-item>                    
-                </el-col>
-                <el-col :span="12">
-                    <el-form-item label="汇款支行">
-                        {{subbankName}}                        
-                    </el-form-item>                    
-                </el-col>
-            </el-row> 
-            <el-form-item label="上传汇款凭证">                                    
-                <file-list :fileList="fileList"></file-list>               
-            </el-form-item> 
+            </el-row>  
+            <!-- <template >                                   -->
+                <el-row v-show="paymentStatus">
+                    <el-col :span="12">
+                        <el-form-item label="实际支付">
+                            {{actualPayment}}元                        
+                        </el-form-item>                    
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="费用包含">
+                            {{containPayment.indexOf('1') > -1&&'平台服务费'||''}} 
+                            {{containPayment.indexOf('2') > -1&&'保证金'||''}}
+                        </el-form-item>                    
+                    </el-col>
+                </el-row> 
+                <el-row v-show="paymentStatus">
+                    <el-col :span="12">
+                        <el-form-item label="汇款单号">
+                            {{number}}                        
+                        </el-form-item>                    
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="汇款支行">
+                            {{subbankName}}                        
+                        </el-form-item>                    
+                    </el-col>
+                </el-row> 
+                <el-form-item label="上传汇款凭证" v-show="paymentStatus">                                    
+                    <file-list :fileList="fileList"></file-list>               
+                </el-form-item> 
+            <!-- </template> -->
+            <!-- <template>                                   -->
+                <el-row v-show="!paymentStatus">
+                    <el-col :span="12">
+                        <el-form-item label="代理商对接人">
+                            {{brokerName}}                        
+                        </el-form-item>                    
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="代理商对接人手机号">
+                            {{brokerMobile}}                        
+                        </el-form-item>                    
+                    </el-col>
+                </el-row> 
+                <el-form-item label="承诺支付书" v-show="!paymentStatus">                                    
+                    <file-list :fileList="promiseFileList"></file-list>               
+                </el-form-item> 
+            <!-- </template> -->
             <el-form-item label="备注信息">
                 {{remark}}                
             </el-form-item> 
@@ -177,7 +228,12 @@
                 'updateNumber', 
                 'updateSubbankName', 
                 'updateFileList', 
-                'updateRemark']),
+                'updateRemark',
+                'updateStageNumber',
+                'updatePlanPaymentDate',
+                'updateBrokerName',
+                'updateBrokerMobile',
+                'updatePromiseFileList'])                
         },
         watch: {
             
@@ -191,6 +247,12 @@
             subbankName: generateComputed('subbankName', 'PaymentInfo', 'updateSubbankName'),
             fileList: generateComputed('fileList', 'PaymentInfo', 'updateFileList'),
             remark: generateComputed('remark', 'PaymentInfo', 'updateRemark'),
+            stageNumber: generateComputed('stageNumber', 'PaymentInfo', "updateStageNumber"),
+            planPaymentDate: generateComputed('planPaymentDate', 'PaymentInfo', "updatePlanPaymentDate"),
+            brokerName: generateComputed('brokerName', 'PaymentInfo', "updateBrokerName"),
+            brokerMobile: generateComputed('brokerMobile', 'PaymentInfo', "updateBrokerMobile"),
+            promiseFileList: generateComputed('promiseFileList', 'PaymentInfo', "updatePromiseFileList"),
+
 
             paymentType: function(){
                 let tmp = this.types.filter((v)=>{return v.value == this.type});
@@ -198,13 +260,13 @@
                     return tmp[0].label;
                 }
 
-                return this.item.type;
+                return this.type;
             }
         }
     }
 </script>
 <style scoped>
-.el-select {
+.el-select, .el-date-editor {
     width: 100%;
 }
 </style>

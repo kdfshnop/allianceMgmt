@@ -20,6 +20,9 @@ import PartnerInfo from './modules/PartnerInfo';
 Vue.use(Vuex);
 
 export default new Vuex.Store({
+    store: {
+        isChanged: false,// 用来控制编辑代理商页面中的提交审核按钮的enabled状态的
+    },
     modules: {
         ServiceManager,
         BDManager,

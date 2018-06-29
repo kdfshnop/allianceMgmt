@@ -4,17 +4,20 @@ export default {
         bdInfo: {
             name: "",
             department: "",
-            title: ""
+            title: "",
+            id: ''
         },
         cxInfo: {
             name: "",
             department: "",
-            title: ""
+            title: "",
+            id: ''
         },
         directorInfo: {
             name: "",
             department: "",
-            title: ""
+            title: "",
+            id: ''
         }
     },
     mutations: {

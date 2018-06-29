@@ -1,7 +1,7 @@
 <template>
     <el-upload
         class="upload-demo"
-        action="https://jsonplaceholder.typicode.com/posts/"
+        :action="url"
         :on-preview="handlePreview"
         :on-remove="handleRemove"
         :before-remove="beforeRemove"
@@ -28,7 +28,8 @@ export default {
     props: ['fileList', 'btnText', 'tipText', 'mode', 'status', 'multiple'],// mode暂时没用到,status会是editing和空
     data() {
         return {
-            url: Vue.apiUrl.getFullUrl(Vue.apiUrl.upload),
+            // url: Vue.apiUrl.getFullUrl(Vue.apiUrl.upload),
+            url: this.$apiUrl.upload,
             innerFileList: this.filterList && this.fileList.slice() || []
         };
     },

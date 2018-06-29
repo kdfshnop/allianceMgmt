@@ -34,7 +34,7 @@
             addPartner() {
                 //this.items.push({name: "", mobile: "", email: "", score: "", idCard: "", bg: "", remark: ""});
 
-                this.addItem({_t: Date.now(), name: "", mobile: "", email: "", score: "", idCard: "", bg: "", remark: ""});
+                this.addItem({_t: Date.now(), name: "", mobile: "", email: "", credit: "", idCode: "", background: "", remark: "", backgroundRemark: ""});
             },
             handleRemove(index) {
                 //this.items.splice(index, 1);

@@ -43,7 +43,7 @@
                         </el-form-item>                    
                     </el-col>
                     <el-col :span="12">
-                        <el-form-item label="分期次数">
+                        <el-form-item label="分期次数" v-show="paymentType == 2">
                             <el-input v-model="count">
                                 <template slot="append">期</template>
                             </el-input>
@@ -72,7 +72,7 @@
                         </el-form-item>                    
                     </el-col>
                     <el-col :span="12">
-                        <el-form-item label="分期次数">
+                        <el-form-item label="分期次数" v-show="paymentType == 2">
                             {{count}}期                            
                         </el-form-item>                    
                     </el-col>
@@ -100,8 +100,7 @@
                 default: "view"
             }
         },
-        data() {
-            console.log('serviceFee:', this.item.serviceFee);
+        data() {            
             return {
                 expand: true,                
                 status: "",

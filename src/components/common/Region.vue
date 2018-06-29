@@ -5,6 +5,8 @@
         v-model="selectedOptions"
         @active-item-change="handleItemChange"
         @change="handleChange"
+        filterable
+        clearable
         >
     </el-cascader>
    </div> 
@@ -14,10 +16,10 @@
  * 1.采用展开是异步加载的方式
  * 2.支持省/市/区/板块 level: 1/2/3/4，可以配置startLevel和endLevel，比如只想用区/板块，则需要指定startLevel: 3, endLevel:4,同时需要配置cityId
  * 3.根据startLevel和endLevel不同，需要的参数不同，如果是从省开始，则不需要传参，如果从市开始，则需要provinceId，如果是从区开始则需要cityId，如果从板块开始，需要districtId
- * 
+ * 4.支持同步和异步
 */
 class FetcherFactory {
-    static create({vue, url, paramName, valueField = "id", labelField = "name", mayHasChildren = true}) {
+    static create({vue, url, paramName, valueField = "id", labelField = "name", mayHasChildren = true, parse}) {
 
         return {
             fetch(paramValue) {
@@ -31,63 +33,13 @@ class FetcherFactory {
                     params: param
                 }).then((data)=>{
                     return data.data;
-                });
-                // return new Promise(function(resolve, reject) {
-                //     switch(paramName){
-                //         case "provinceId":
-                //             if(paramValue == 1) {
-                //                 resolve({
-                //                     data: [{
-                //                         cityId: 1,
-                //                         cityName: "郑州"
-                //                     },{
-                //                         cityId: 2,
-                //                         cityName: "商丘"
-                //                     }]
-                //                 });
-                //             } else {
-                //                 resolve({
-                //                     data: [{
-                //                         cityId: 3,
-                //                         cityName: "石家庄"
-                //                     },{
-                //                         cityId: 4,
-                //                         cityName: "张家口"
-                //                     }]
-                //                 });
-                //             }
-                //         break;
-                //         case "cityId":
-                //             resolve({
-                //                 data: [{
-                //                     regionId: 1,
-                //                     regionName: "区域"
-                //                 }]
-                //             });
-                //         break;
-                //         case "districtId":
-                //             resolve({
-                //                 data: [{
-                //                     townId: 1,
-                //                     townName: "板块"
-                //                 }]
-                //             });
-                //         break;
-                //         default: resolve({
-                //             data: [{
-                //                 provinceId: 1,
-                //                 provinceName: "河南"
-                //                 },{
-                //                     provinceId: 2,
-                //                     provinceName: "河北"
-                //                 }]
-                //             });
-                //         break; 
-                //     }                    
-                // });
+                });                
             },
             parse(data) {
-                if(data && data.length) {
+                if(data && data.length) {                    
+                    if(parse) {
+                        data = parse(data);
+                    }
                     return data.map((d)=>{
                         return {
                             value: d[valueField],
@@ -118,9 +70,15 @@ export default {
            type: String,
            default: ""
        },  
-       "value": Array          
+       "value": Array,
+       "data": Array, //同步全量数据          
+       "parsers": Array, //处理异步数据
      },
      created() {
+         if(this.data) {// 同步不发请求
+             return;
+         }
+
          if(this.startLevel > this.endLevel) {
              throw "endLevel不能小于startLeven";
          }
@@ -158,6 +116,7 @@ export default {
                 labelField: "NAME"                
             })            
          };
+         // 把外部的parsers传递给create
          
          let tmp = ["", "province", "city", "district", "town"];
 
@@ -172,7 +131,7 @@ export default {
      data() {
       return {
         dataFetchers: [],
-        options: [],
+        options: this.data || [],
         selectedOptions: this.value, 
         innerValue: [],       
       };
@@ -183,10 +142,11 @@ export default {
      methods: {
          clear() {
              this.selectedOptions = [];
-
          },
          handleItemChange(val) {
-             console.log('val:', val);
+            if(this.data) {// 同步不需要发请求
+                return;
+            }
             if(val && val.length) {
                 // 先判断是否已经有children了
                 let tmp = {children: this.options};                
@@ -262,6 +222,9 @@ export default {
                  return;
              }
              this.selectedOptions = val;
+             if(this.data){// 同步不需要发请求
+                return; 
+             }
              this.initOptionData(0, this.selectedOptions.length || 1, this.options);
          }
      }

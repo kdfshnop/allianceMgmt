@@ -86,75 +86,11 @@
                 innerItem: Object.assign({}, this.item)
             };
         },
-        computed: {
-            // name: {
-            //     get() {
-            //         if(this.mode == 'edit' && this.status == 'editing'){// 编辑中
-            //             return this.innerItem.name;
-            //         }
-            //         return this.$store.state.ServiceManager.name;
-            //     },
-            //     set(val) {
-            //         if(this.mode == 'edit' && this.status == 'editing') {
-            //             this.innerItem.name = val;
-            //         }else {
-            //             // this.$store.commit('ServiceManager/updateName', val);
-            //             this.updateName(val);
-            //         }
-            //     }
-            // },
-            // mobile: {
-            //     get() {
-            //         if(this.mode == 'edit' && this.status == 'editing'){// 编辑中
-            //             return this.innerItem.mobile;
-            //         }
-            //         return this.$store.state.ServiceManager.mobile;
-            //     },
-            //     set(val) {
-            //         if(this.mode == 'edit' && this.status == 'editing') {
-            //             this.innerItem.mobile = val;
-            //         }else {
-            //             // this.$store.commit('ServiceManager/updateMobile', val);
-            //             this.updateMobile(val);
-            //         }
-            //     }
-            // },
-            // wechat: {
-            //     get() {
-            //         if(this.mode == 'edit' && this.status == 'editing'){// 编辑中
-            //             return this.innerItem.wechat;
-            //         }
-            //         return this.$store.state.ServiceManager.wechat;
-            //     },
-            //     set(val) {
-            //         if(this.mode == 'edit' && this.status == 'editing') {
-            //             this.innerItem.wechat = val;
-            //         }else {
-            //             // this.$store.commit('ServiceManager/updateWechat', val);
-            //             this.updateWechat(val);
-            //         }
-            //     }
-            // },
-            // email: {
-            //     get() {
-            //         if(this.mode == 'edit' && this.status == 'editing'){// 编辑中
-            //             return this.innerItem.email;
-            //         }
-            //         return this.$store.state.ServiceManager.email;
-            //     },
-            //     set(val) {
-            //         if(this.mode == 'edit' && this.status == 'editing') {
-            //             this.innerItem.email = val;
-            //         }else {
-            //             // this.$store.commit('ServiceManager/updateEmail', val);
-            //             this.updateEmail(val);
-            //         }
-            //     }
-            // }
-            name: generateComputed("name", "BDManager", "updateName"),
-            mobile: generateComputed("mobile", "BDManager", "updateMobile"),
-            wechat: generateComputed("wechat", "BDManager", "updateWechat"),
-            email: generateComputed("email", "BDManager", "updateEmail"),
+        computed: {            
+            name: generateComputed("name", "ServiceManager", "updateName"),
+            mobile: generateComputed("mobile", "ServiceManager", "updateMobile"),
+            wechat: generateComputed("wechat", "ServiceManager", "updateWechat"),
+            email: generateComputed("email", "ServiceManager", "updateEmail"),
         },
         methods: {
             handleEdit() {

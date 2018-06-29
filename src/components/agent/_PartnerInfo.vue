@@ -17,7 +17,7 @@
                     </el-form-item>
 
                     <el-form-item label="身份证号">
-                        <el-input v-model="innerItem.idCard"></el-input>
+                        <el-input v-model="innerItem.idCode"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">                    
@@ -26,11 +26,11 @@
                     </el-form-item>
                     
                     <el-form-item label="芝麻信用">
-                        <el-input v-model="innerItem.zmCredit"></el-input>
+                        <el-input v-model="innerItem.credit"></el-input>
                     </el-form-item>
                     
                     <el-form-item label="合伙人背景">                        
-                        <el-select v-model="innerItem.bg" placeholder="请选择">
+                        <el-select v-model="innerItem.background" placeholder="请选择">
                             <el-option
                             v-for="bg in bgs"
                             :key="bg.value"
@@ -38,7 +38,7 @@
                             :value="bg.value">
                             </el-option>
                         </el-select>
-                        <el-input style="margin-top: 6px;" v-model="innerItem.bgOther" v-show="item.bg=='5'"></el-input>
+                        <el-input style="margin-top: 6px;" v-model="innerItem.backgroundRemark" v-show="item.bg=='5'"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -59,7 +59,7 @@
                     </el-form-item>
 
                     <el-form-item label="身份证号">
-                        {{innerItem.idCard}}
+                        {{innerItem.idCode}}
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">                    
@@ -68,7 +68,7 @@
                     </el-form-item>
                     
                     <el-form-item label="芝麻信用">
-                        {{innerItem.zmCredit}}
+                        {{innerItem.credit}}
                     </el-form-item>
                     
                     <el-form-item label="合伙人背景">
@@ -148,7 +148,7 @@
         },
         computed: {
             bgText() {                
-                let bg = this.bgs.filter((b)=>{return b.value==this.innerItem.bg});
+                let bg = this.bgs.filter((b)=>{return b.value==this.innerItem.background});
                 if(bg && bg.length) {
                     bg = bg[0];
                     if(bg.value == '5'){// 其他
@@ -178,17 +178,17 @@
                     this.$emit('input', this.innerItem);
                 }
             },
-            "innerItem.score": function(val) {
+            "innerItem.credit": function(val) {
                 if(this.mode == 'create') {
                     this.$emit('input', this.innerItem);
                 }
             },
-            "innerItem.idCard": function(val) {
+            "innerItem.idCode": function(val) {
                 if(this.mode == 'create') {
                     this.$emit('input', this.innerItem);
                 }
             },
-            "innerItem.bg": function(val) {
+            "innerItem.background": function(val) {
                 if(this.mode == 'create') {
                     this.$emit('input', this.innerItem);
                 }
@@ -198,7 +198,7 @@
                     this.$emit('input', this.innerItem);
                 }
             },
-            "innerItem.bgOther": function(val) {
+            "innerItem.backgroundRemark": function(val) {
                 if(this.mode == 'create') {
                     this.$emit('input', this.innerItem);
                 }
