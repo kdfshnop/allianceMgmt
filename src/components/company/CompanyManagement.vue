@@ -178,7 +178,7 @@ export default {
                 agency:'',//代理商
                 businessType:'',//房源类型,空为未选择，1.新房，2.二手房，3.新房＋二手房
                 cityId:'',//所属城市Id
-                cityList:[],
+                cityList:[],//城市二级联动所需
                 corporateStart:'',//合作开始时间
                 corporateEnd:'',//合作结束时间
                 currentPage:1,//默认当前页为1
@@ -331,9 +331,9 @@ export default {
                 this.form.cityId=this.form.cityList[1];
             };
             let realForm=Object.assign({},this.form);
-            console.log(realForm,1111111111111)
             delete realForm.cityList;//删除表单中的cityList选项，因为提交数据时不需要该参数
             delete realForm.searchType;//同上
+            console.log(realForm,1111111111111)
             this.$http.post(this.$apiUrl.company.list,realForm)
                 .then(function(data){
                     console.log(data,'成功');

@@ -8,24 +8,17 @@
             <el-form ref="form" :model="form" label-width="180px" class="gap-2">
                 <el-row >
                     <el-col :span="12">
-                        <el-form-item label="门店所属城市" prop="city">
-                            <el-select v-model="form.city" placeholder="二级选择区域" filterable>
-                                <el-option
-                                    v-for="(item,index) in city"
-                                    :key="index"
-                                    :label="item"
-                                    :value="item">
-                                </el-option>
-                            </el-select>
+                        <el-form-item label="门店所属城市" prop="cityList">
+                            <region v-model="form.cityList" :startLevel="startLevel" :endLevel="endLevel"></region>
                         </el-form-item>
-                        <el-form-item label="门店所属代理商" prop="agent">
-                            <el-input v-model="form.agent"></el-input>
+                        <el-form-item label="门店所属代理商" prop="agency">
+                            <el-input v-model="form.agency"></el-input>
                         </el-form-item>
                         <el-form-item label="门店类型" prop="storeType">
                             <el-select v-model="form.storeType" filterable>
-                                <el-option label="全部" value="全部"></el-option>
-                                <el-option label="直营" value="直营"></el-option>
-                                <el-option label="加盟" value="加盟"></el-option>
+                                <el-option label="全部" value="0"></el-option>
+                                <el-option label="直营" value="1"></el-option>
+                                <el-option label="加盟" value="2"></el-option>
                             </el-select>
                         </el-form-item>
                     </el-col>
@@ -35,10 +28,10 @@
                         </el-form-item>
                         <el-row>
                             <el-col :span="5">
-                                <el-form-item label="创建时间" prop="timeStart">
+                                <el-form-item label="创建时间" prop="cooperationStart">
                                     <el-date-picker
                                         format="yyyy-MM-dd"
-                                        v-model="form.timeStart"
+                                        v-model="form.cooperationStart"
                                         type="date"
                                         placeholder="选择日期"
                                         style="width:150px"
@@ -47,10 +40,10 @@
                                 </el-form-item>
                             </el-col>
                             <el-col :span="19">
-                                <el-form-item prop="timeEnd" label="至">
+                                <el-form-item prop="cooperationEnd" label="至">
                                     <el-date-picker
                                         format="yyyy-MM-dd"
-                                        v-model="form.timeEnd"
+                                        v-model="form.cooperationEnd"
                                         type="date"
                                         placeholder="选择日期"
                                         style="width:150px"
@@ -70,7 +63,7 @@
                     <el-button class="reset" @click="resetForm('form')">重置</el-button>
                 </el-col>
                 <el-col :span="2">
-                    <el-button type="primary" @click="search('form')">搜索</el-button>
+                    <el-button type="primary" @click="search">搜索</el-button>
                 </el-col>
             </el-row>
             <div class="search-result">共搜索到 956家门店，56个经纪人，900家无代理商</div>
@@ -136,12 +129,15 @@
 <script>
 import BreadCrumb from '@/components/common/BreadCrumb';
 import EditorStore from '@/components/store/_EditorStore';
+import Region from '@/components/common/Region';
 
 export default {
   name: 'StoreManagement',
-  components:{BreadCrumb,EditorStore},
+  components:{BreadCrumb,EditorStore,Region},
   data () {
     return {
+        startLevel:1,//二级联动城市传参
+        endLevel:2,//二级联动城市传参
         qrCodeShow:false,
         firstDialogVisible: false,//第一个终止合作弹出框
         secondDialogVisible:false,//第二个终止合作弹出框
@@ -151,11 +147,12 @@ export default {
         title:'',//判断是编辑门店还是添加门店
         // 表单查询信息
         form: {
-            agent:'',//代理商
-            city:'',//门店所属城市
+            agency:'',//门店所属代理商
+            cityId:'',//门店所属城市Id
+            cityList:[],//城市二级联动所需
             companyName:'',//门店所属公司
-            timeStart:'',//创建开始时间
-            timeEnd:'',//创建结束时间
+            cooperationStart:'',//创建开始时间
+            cooperationEnd:'',//创建结束时间
             storeName: '',//门店名称
             storeType:'全部',//门店类型
         },
@@ -224,9 +221,8 @@ export default {
             }
         },
         //根据表单信息搜索
-        search(val){
-            console.log(val,1111111)
-            console.log(this.form);
+        search(){
+            console.log(this.form,222222222);
         },
         //每页多少条
         handleSizeChange(val) {

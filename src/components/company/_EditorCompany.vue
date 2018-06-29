@@ -150,7 +150,7 @@ export default {
                 address:'',//地址
                 agencyId:'',//代理商Id
                 businessType:'',//房源类型,0为选择，1.新上，2.二手房，3.新房＋二手房
-                cityId:'',//所属城市
+                cityId:'',//所属城市Id
                 cityList:[],
                 corporate:'',//法人代表
                 corporatePhone:'',//电话
@@ -160,6 +160,7 @@ export default {
                 name:'',//公司名称
                 organizationCode:'',//组织机构代码
                 operator:'',//操作人
+                provinceId:'',//省份Id
                 resourceKey:'',//上传的资源key
                 state:''//状态1.合作中，2.合作终止 
             },
@@ -188,7 +189,7 @@ export default {
     methods:{
         open() {
             if(this.title=='编辑公司'){
-                this.form=Object.assign({},this.currentCompanyInfo,{cityList:[]});
+                this.form=Object.assign({},this.currentCompanyInfo,{cityList:[this.currentCompanyInfo.provinceId,this.currentCompanyInfo.cityId]});
             }else{
                 this.form={
                     abbreviation:'',//公司简称
@@ -205,6 +206,7 @@ export default {
                     name:'',//公司名称
                     organizationCode:'',//组织机构代码
                     operator:'',//操作人
+                    provinceId:'',//省份Id
                     resourceKey:'',//上传的资源key 
                 }
             }
@@ -219,7 +221,6 @@ export default {
             .catch(_ => {});
         },
         submitForm(formName) {
-            console.log(this.form,formName,111)
             this.$refs.form.validate((valid) => {
                 if (valid) {
                     this.dialogVisible=false;
@@ -227,14 +228,20 @@ export default {
                     if(this.title=='编辑公司'){
                         this.$emit('editSuccess',this.form);
                     }else{
-                        this.$http.put('/company/single',this.form)
+                        if(this.form.cityList.length){
+                            this.form.provinceId=this.form.cityList[0];
+                            this.form.cityId=this.form.cityList[1];
+                        }
+                        let realForm=Object.assign({},this.form);
+                        delete realForm.cityList;
+                        this.$http.put(this.$apiUrl.company.add,realForm)
                             .then(function(data){
                                 console.log(data);
                             })
                             .catch(function(error){
                                 console.log(error)
                             });
-                        this.$emit('addSuccess',this.form);
+                        this.$emit('addSuccess',realForm);
                     };
                     // 此处代码需要加在请求成功之后;
                     // this.$refs[formName].resetFields();
