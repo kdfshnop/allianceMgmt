@@ -93,14 +93,12 @@
             }
         },
         data() {
-            let innerItem = Object.assign({}, this.item);
-            if(this.item.same){
-                innerItem = Object.assign({}, this.serviceManager, {same: true});                
-            }
             return {
                 expand: true,
                 status: "",                
-                innerItem: innerItem                
+                innerItem: {
+                    
+                }                
             };
         },
         computed: {
@@ -213,8 +211,7 @@
                 this.innerItem = Object.assign({}, this.$store.state.BDManager);                
             },
             handleComplete() {
-                this.status = ''; 
-                // this.$emit('update:item', this.innerItem);
+                this.status = '';                 
                 this.updateItem(this.innerItem);                               
             },
             handleCancel() {

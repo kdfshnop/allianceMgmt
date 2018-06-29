@@ -1,21 +1,22 @@
 export default {
     namespaced: true,
     state: {
-        type: "",
-        startDate: "",
-        endDate: "",
+        agentType: "",
+        startTime: "",
+        endTime: "",        
+        parent: "",
         agentCity: [],
-        parent: ""
+        status: "",// 代理商状态
     },
     mutations: {
-        updateType(state, val) {
-            state.type = val;
+        updateAgentType(state, val) {
+            state.agentType = val;
         },
-        updateStartDate(state, val) {
-            state.startDate = val;
+        updateStartTime(state, val) {
+            state.startTime = val;
         },
-        updateEndDate(state, val) {
-            state.endDate = val;
+        updateEndTime(state, val) {
+            state.endTime = val;
         },
         updateAgentCity(state, val) {
             state.agentCity = val;
@@ -24,9 +25,9 @@ export default {
             state.parent = val;
         },
         updateItem(state, item) {                                    
-            state.type = item.type;
-            state.startDate = item.startDate;
-            state.endDate = item.endDate;
+            state.agentType = item.agentType;
+            state.startTime = item.startTime;
+            state.endTime = item.endTime;
             state.agentCity = item.agentCity;
             state.parent = item.parent;
         }

@@ -6,7 +6,7 @@
             <el-button v-show="mode === 'edit' && status === 'editing'" @click="handleCancel" type="danger" size="mini">取消</el-button>         
             <el-button v-show="mode === 'edit' && status === 'editing'" @click="handleComplete" type="success" size="mini">完成</el-button>                                   
         </div>
-        <el-form :model="item" label-width= "180px" v-show="mode === 'create' || mode === 'edit' && status === 'editing'">
+        <el-form :model="innerItem" label-width= "180px" v-show="mode === 'create' || mode === 'edit' && status === 'editing'">
             <el-form-item label="代理商是否已注册公司">
                 <el-switch
                     v-model="signed"
@@ -14,7 +14,7 @@
                     inactive-color="#aaa">
                 </el-switch>
             </el-form-item>
-            <el-row>
+            <el-row v-show="signed">
                 <el-col :span="12">
                     <el-form-item label="公司名">
                         <el-input v-model="name"></el-input>
@@ -26,7 +26,7 @@
                     </el-form-item>
                 </el-col>
             </el-row>   
-            <el-row>
+            <el-row v-show="signed">
                 <el-col :span="12">
                     <el-form-item label="营业执照号">
                         <el-input v-model="number"></el-input>
@@ -38,15 +38,15 @@
                     </el-form-item>
                 </el-col>
             </el-row>     
-            <el-form-item label="公司具体地址">
+            <el-form-item label="公司具体地址" v-show="signed">
                 <el-input v-model="address"></el-input>
             </el-form-item> 
-            <el-form-item label="上传营业执照">                
+            <el-form-item label="上传营业执照" v-show="signed">                
                     <upload v-if="mode === 'create' || mode === 'edit' && status === 'editing'"></upload>
             </el-form-item>  
 
             <!-- 下面是未注册显示的 -->
-            <el-row>
+            <el-row v-show="!signed">
                 <el-col :span="12">
                     <el-form-item label="预计注册完成时间">
                         <el-date-picker
@@ -57,7 +57,7 @@
                     </el-form-item>                                                                         
                 </el-col>               
             </el-row>  
-            <el-row>
+            <el-row v-show="!signed">
                 <el-col :span="12">
                     <el-form-item label="代理商负责跟踪人">
                         <el-input v-model="tracerName"></el-input>
@@ -69,7 +69,7 @@
                     </el-form-item>                                                                         
                 </el-col>
             </el-row>     
-            <el-row>
+            <el-row v-show="!signed">
                 <el-col :span="12">
                     <el-form-item label="邮箱号">
                         <el-input v-model="email"></el-input>
@@ -81,23 +81,23 @@
                     </el-form-item>                                                                         
                 </el-col>
             </el-row>  
-            <el-form-item label="备注信息">
+            <el-form-item label="备注信息" v-show="!signed">
                 <el-input type="textarea" v-model="remark"></el-input>
             </el-form-item> 
 
-            <el-form-item label="上传身份证正面照">                
+            <el-form-item label="上传身份证正面照" v-show="!signed">                
                     <upload v-if="mode === 'create' || mode === 'edit' && status === 'editing'"></upload>
             </el-form-item>
-            <el-form-item label="上传身份证反面照">
+            <el-form-item label="上传身份证反面照" v-show="!signed">
                 <upload v-if="mode === 'create' || mode === 'edit' && status === 'editing'"></upload>
             </el-form-item>
         </el-form>
 
-        <el-form :model="item" label-width= "180px" v-show="mode === 'view' || mode === 'edit' && status === ''">
+        <el-form :model="innerItem" label-width= "180px" v-show="mode === 'view' || mode === 'edit' && status === ''">
             <el-form-item label="代理商是否已注册公司">
-                {{item.signed&&"是" || "否"}}                
+                {{signed&&"是" || "否"}}                
             </el-form-item>
-            <el-row>
+            <el-row v-show="signed">
                 <el-col :span="12">
                     <el-form-item label="公司名">
                         {{name}}
@@ -109,7 +109,7 @@
                     </el-form-item>
                 </el-col>
             </el-row>   
-            <el-row>
+            <el-row v-show="signed">
                 <el-col :span="12">
                     <el-form-item label="营业执照号">
                         {{number}}
@@ -121,22 +121,22 @@
                     </el-form-item>
                 </el-col>
             </el-row>     
-            <el-form-item label="公司具体地址">
+            <el-form-item label="公司具体地址" v-show="signed">
                 {{address}}
             </el-form-item> 
-            <el-form-item label="上传营业执照">                
+            <el-form-item label="上传营业执照" v-show="signed">                
                     <file-list></file-list>
             </el-form-item>  
 
             <!-- 下面是未注册显示的 -->
-            <el-row>
+            <el-row v-show="!signed">
                 <el-col :span="12">
                     <el-form-item label="预计注册完成时间">
                         {{finishDate}}
                     </el-form-item>                                                                         
                 </el-col>               
             </el-row>  
-            <el-row>
+            <el-row v-show="!signed">
                 <el-col :span="12">
                     <el-form-item label="代理商负责跟踪人">
                         {{tracerName}}
@@ -148,7 +148,7 @@
                     </el-form-item>                                                                         
                 </el-col>
             </el-row>     
-            <el-row>
+            <el-row v-show="!signed">
                 <el-col :span="12">
                     <el-form-item label="邮箱号">
                         {{email}}
@@ -160,14 +160,14 @@
                     </el-form-item>                                                                         
                 </el-col>
             </el-row>  
-            <el-form-item label="备注信息">
+            <el-form-item label="备注信息" v-show="!signed">
                 {{remark}}
             </el-form-item> 
 
-            <el-form-item label="上传身份证正面照">                
+            <el-form-item label="上传身份证正面照" v-show="!signed">                
                     <file-list></file-list>
             </el-form-item>
-            <el-form-item label="上传身份证反面照">
+            <el-form-item label="上传身份证反面照" v-show="!signed">
                 <file-list></file-list>
             </el-form-item>
         </el-form>

@@ -10,18 +10,18 @@
             <el-row>
                 <el-col :span="12">
                     <el-form-item label="代理商类型">
-                        <el-select v-model="type" placeholder="请选择">
+                        <el-select v-model="agentType" placeholder="请选择" @change="handleAgentTypeChange">
                             <el-option
                                 v-for="item in agentTypes"
                                 :key="item.value"
-                                :label="item.label"
+                                :label="item.label"                                
                                 :value="item.value">
                             </el-option>
                         </el-select>
                     </el-form-item>
                     <el-form-item label="合作开始时间">                        
                          <el-date-picker
-                            v-model="startDate"
+                            v-model="startTime"
                             type="date"
                             placeholder="选择日期">
                          </el-date-picker>
@@ -32,18 +32,24 @@
                 </el-col>
                 <el-col :span="12">  
                     <el-form-item label="上级代理商">              
-                        <el-select v-model="parent" placeholder="请选择">
+                        <el-select v-model="parent" placeholder="请选择"                                                     
+                            filterable
+                            :remote="remote"
+                            :remote-method="getAgents"
+                            @change="handleParentAgentChange"
+                            :loading="parentAgentLoading"
+                        >
                             <el-option
                                 v-for="item in parentAgents"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value">
+                                :key="item.agencyId"
+                                :label="item.agencyCompanyName"
+                                :value="item.agencyId">
                             </el-option>
                         </el-select>
                     </el-form-item>   
                     <el-form-item label="合作结束时间">
                         <el-date-picker
-                            v-model="endDate"
+                            v-model="endTime"
                             type="date"
                             placeholder="选择日期">
                          </el-date-picker>
@@ -105,6 +111,10 @@ export default {
             innerItem: {
 
             },
+            /*:remote-method="getAgents"
+                            @change="handleParentAgentChange"
+                            :loading="parentAgentLoading"*/
+            parentAgentLoading: false,            
             agentTypes: [{
                 label: "请选择",
                 value: "0"
@@ -115,25 +125,21 @@ export default {
                 label: "区代理商（二级代理商）",
                 value: "2"
             }],
-            parentAgents: [{
-                label: "请选择",
-                value: "0"
-            },{
-                label: "无上级代理商",
-                value: "1"
-            },{
-                label: "城市代理商A",
-                value: "2"
-            },{
-                label: "城市代理商B",
-                value: "3"
-            },{
-                label: "城市代理商C",
-                value: "4"
-            }]
+            // parentAgents: [],
+            remoteAgents: [{agencyId: '', agencyCompanyName: "请选择"}, {agencyId: 0, agencyCompanyName: "无上级代理商"}]
         };
     },
     methods: {
+        handleParentAgentChange() {
+
+        },
+        getAgents() {
+            this.parentAgentLoading = true;
+            this.$http.get(this.$apiUrl.agent.list).then((data)=>{
+                this.parentAgentLoading = false;
+                this.remoteAgents = data.data.data && data.data.data.unshift({"agencyId": "", "agencyCompanyName": "请选择"},{"agencyId": 0, "agencyCompanyName": "无上级代理商"})&&data.data.data || [];
+            });
+        },
         handleEdit() {
             this.status = 'editing';                
             let tmp = JSON.parse(JSON.stringify(this.$store.state.AgentBasicInfo || {}));          
@@ -148,20 +154,24 @@ export default {
         handleCancel() {
             this.status = '';            
         },
+        handleAgentTypeChange(val) {
+            // if(val != 2) {
+                this.parent = '';
+            // }
+        },
 
-
-        ...mapMutations("AgentBasicInfo", ['updateItem', 'updateType', 'updateParent', 'updateStartDate', 'updateEndDate', 'updateAgentCity'])
+        ...mapMutations("AgentBasicInfo", ['updateItem', 'updateAgentType', 'updateParent', 'updateStartTime', 'updateEndTime', 'updateAgentCity'])
     },
     computed: {
-        type: generateComputed('type', 'AgentBasicInfo', 'updateType'),
+        agentType: generateComputed('agentType', 'AgentBasicInfo', 'updateAgentType'),
         parent: generateComputed('parent', 'AgentBasicInfo', 'updateParent'),
-        startDate: generateComputed('startDate', 'AgentBasicInfo', 'updateStartDate'),
-        endDate: generateComputed('endDate', 'AgentBasicInfo', 'updateEndDate'),
+        startTime: generateComputed('startTime', 'AgentBasicInfo', 'updateStartTime'),
+        endTime: generateComputed('endTime', 'AgentBasicInfo', 'updateEndTime'),
         agentCity: generateComputed('agentCity', 'AgentBasicInfo', 'updateAgentCity'),
 
         typeStr() {
             let type = this.agentTypes.filter((t)=>{
-                return t.value == this.type;
+                return t.value == this.agentType;
             });
 
             if(type && type.length){
@@ -183,10 +193,10 @@ export default {
             return '';
         },
         startDateStr() {
-            return getDateStr(this.startDate);
+            return getDateStr(this.startTime);
         },
         endDateStr() {
-            return getDateStr(this.endDate);
+            return getDateStr(this.endTime);
         },
         agentCityStr() {
             if(this.agentCity && this.agentCity.length && this.agentCity.label && this.agentCity.label.length) {
@@ -194,6 +204,20 @@ export default {
             }
 
             return '';
+        },
+        remote() {
+            return this.agentType == 2;// 非区域代理都可能有上级代理
+        },
+        parentAgents:{
+            get() {
+                if(this.remote) {// 远程
+                    return this.remoteAgents;
+                }
+                return [{agencyId: '', agencyCompanyName: "请选择"}, {agencyId: 0, agencyCompanyName: "无上级代理商"}]
+            },
+            set(val) {
+                // if()
+            }
         }
     }
 }

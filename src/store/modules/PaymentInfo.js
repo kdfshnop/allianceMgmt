@@ -4,13 +4,34 @@ export default {
         paymentStatus: false,
         type: "",
         actualPayment: "",
-        containPayment: [],
+        containPayment: [],// 费用包含
         number: "",
         subbankName: "",
         fileList: [],
         remark: '',
+        stageNumber: 0, // 支付费用归属第几期
+
+        planPaymentDate: "",// 预计支付时间
+        brokerName: "", // 对接人姓名
+        brokerMobile: "", // 对接人手机
+        promiseFileList: "", // 承诺书文件
     },
     mutations: {
+        updateStageNumber(state, val) {
+            state.stageNumber = val;
+        },
+        updatePlanPaymentDate(state, val){
+            state.planPaymentDate = val;
+        },
+        updateBrokerName(state, val){
+            state.brokerName = val;
+        },
+        updateBrokerMobile(state, val){
+            state.brokerMobile = val;
+        },
+        updatePromiseFileList(state, val){
+            state.promiseFileList = val;
+        },
         updatePaymentStatus(state, status) {
             state.paymentStatus = status;
         },
@@ -44,6 +65,12 @@ export default {
             state.subbankName = item.subbankName;
             state.fileList = item.fileList;
             state.remark = item.remark;
+                        
+            state.stageNumber = item.stageNumber;
+            state.planPaymentDate = item.planPaymentDate;
+            state.brokerName = item.brokerName;
+            state.brokerMobile = item.brokerMobile;
+            state.promiseFileList = item.promiseFileList;
         }
     }
 };

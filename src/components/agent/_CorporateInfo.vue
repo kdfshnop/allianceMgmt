@@ -6,27 +6,27 @@
             <el-button v-show="mode === 'edit' && status === 'editing'" @click="handleCancel" type="danger" size="mini">取消</el-button>         
             <el-button v-show="mode === 'edit' && status === 'editing'" @click="handleComplete" type="success" size="mini">完成</el-button>                                  
         </div>
-        <el-form :model="item" label-width= "180px" v-show="mode === 'create' || mode === 'edit' && status === 'editing'">
+        <el-form :model="innerItem" label-width= "180px" v-show="mode === 'create' || mode === 'edit' && status === 'editing'">
             <el-row>
                 <el-col :span="12">
                     <el-form-item label="法人姓名">
-                        <el-input v-model="item.name"></el-input>
+                        <el-input v-model="name"></el-input>
                     </el-form-item>
                     <el-form-item label="法人手机号">
-                        <el-input v-model="item.mobile"></el-input>
+                        <el-input v-model="mobile"></el-input>
                     </el-form-item>
 
                     <el-form-item label="芝麻信用分">
-                        <el-input v-model="item.score"></el-input>
+                        <el-input v-model="score"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">                    
                     <el-form-item label="法人身份证">
-                        <el-input v-model="item.idCard"></el-input>
+                        <el-input v-model="idCard"></el-input>
                     </el-form-item>
                     
                     <el-form-item label="法人邮箱">
-                        <el-input v-model="item.email"></el-input>
+                        <el-input v-model="email"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -39,6 +39,9 @@
             </el-form-item>
             <el-form-item label="上传芝麻信用截图">                
                     <upload v-if="mode === 'create' || mode === 'edit' && status === 'editing'"></upload>
+            </el-form-item>
+            <el-form-item label="备注信息">                
+                <el-input type="textarea" v-model="remark"></el-input>                   
             </el-form-item>
         </el-form>
 
@@ -46,29 +49,28 @@
             <el-row>
                 <el-col :span="12">
                     <el-form-item label="法人姓名">
-                        {{item.name}}
+                        {{name}}
                     </el-form-item>
                     <el-form-item label="法人手机号">
-                        {{item.mobile}}
+                        {{mobile}}
                     </el-form-item>
 
                     <el-form-item label="芝麻信用分">
-                        {{item.score}}
+                        {{score}}
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">                    
                     <el-form-item label="法人身份证">
-                        {{item.idCard}}
+                        {{idCard}}
                     </el-form-item>
                     
                     <el-form-item label="法人邮箱">
-                        {{item.email}}
+                        {{email}}
                     </el-form-item>
                 </el-col>
             </el-row>
                         
-            <el-form-item label="上传身份证正面照">                
-                    <!-- <upload></upload> -->
+            <el-form-item label="上传身份证正面照">                                    
                     <file-list></file-list>
             </el-form-item>
             <el-form-item label="上传身份证反面照">                
@@ -76,6 +78,9 @@
             </el-form-item>
             <el-form-item label="上传芝麻信用截图">                
                     <file-list></file-list>
+            </el-form-item>
+            <el-form-item label="备注信息">                
+                {{remark}}
             </el-form-item>
         </el-form>
     </CollapsePanel>
@@ -87,6 +92,8 @@
     import CollapsePanel from '@/components/common/CollapsePanel';
     import Upload from '@/components/common/Upload';
     import FileList from '@/components/common/FileList';
+    import {generateComputed} from './_Utils';
+    import {mapMutations} from 'vuex';
     // 服务人员信息
     export default {
         name: "corporateInfo",
@@ -102,24 +109,56 @@
             return {
                 expand: true,
                 status: "",
-                originalItem: {
+                innerItem: {
 
                 },
             };
         },
+        computed: {
+            "name": generateComputed("name", "CorporateInfo", "updateName"),
+            "mobile": generateComputed("mobile", "CorporateInfo", "updateMobile"),
+            "idCard": generateComputed("idCard", "CorporateInfo", "updateIdCard"),
+            "email": generateComputed("email", "CorporateInfo", "updateEmail"),
+            "score": generateComputed("score", "CorporateInfo", "updateScore"),
+            "idCardFrontFileList": generateComputed("idCardFrontFileList", "CorporateInfo", "updateIdCardFrontFileList"),
+            "idCardBackFileList": generateComputed("idCardBackFileList", "CorporateInfo", "updateIdCardBackFileList"),
+            "scoreFileList": generateComputed("scoreFileList", "CorporateInfo", "updateScoreFileList"),
+            "remark": generateComputed("remark", "CorporateInfo", "updateRemark"),
+        },
         methods: {
             handleEdit() {
-                this.status = 'editing';
-                this.originalItem = this.item;
-                this.item = JSON.parse(JSON.stringify(this.item || {}));          
+                this.status = 'editing';                
+                this.innerItem = JSON.parse(JSON.stringify(this.$store.state.CorporateInfo || {}));          
             },
             handleComplete() {
                 this.status = '';                                
+                this.updateItem(this.innerItem);
             },
             handleCancel() {
-                this.status = '';
-                this.item = this.originalItem;                
-            }
+                this.status = '';                              
+            },
+
+/**
+ * state.name = item.name;
+            state.mobile = item.mobile;
+            state.idCard = item.idCard;
+            state.email = item.email;
+            state.score = item.score;
+            state.idCardFrontFileList = item.idCardFrontFileList;
+            state.idCardBackFileList = item.idCardBackFileList;
+            state.scoreFileList = item.scoreFileList;
+            state.remark = item.remark;
+ */
+            ...mapMutations("CorporateInfo", ['updateItem', 
+                'updateMobile', 
+                'updateName', 
+                'updateIdCard', 
+                'updateEmail', 
+                'updateScore',
+                'updateIdCardFrontFileList',
+                'updateIdCardBackFileList',
+                'updateScoreFileList',
+                'updateRemark'])
         },
         watch: {
             
