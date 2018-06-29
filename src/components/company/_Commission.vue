@@ -1,49 +1,50 @@
 <template>
     <el-dialog title="设置分佣账户" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
-        <el-form :model="ruleForm" :rules="rules"  ref="ruleForm" label-width="110px" class="demo-ruleForm">
+        <el-form :model="form" :rules="rules"  ref="form" label-width="110px" class="demo-form">
             <el-row>
                 <el-col :span="12">
                     <el-form-item label="开户银行类型" prop="bankType" class="tl">
-                        <el-input v-model="ruleForm.bankType"></el-input>
+                        <el-input v-model="form.bankType"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="开户支行" prop="subBranch">
-                        <el-input v-model="ruleForm.subBranch"></el-input>
+                        <el-input v-model="form.subBranch"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
             <el-row>
                 <el-col :span="12">
                     <el-form-item label="账户名" prop="name" class="tl">
-                        <el-input v-model="ruleForm.name"></el-input>
+                        <el-input v-model="form.name"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="银行账号" prop="account">
-                        <el-input v-model="ruleForm.account"></el-input>
+                        <el-input v-model="form.account"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
         </el-form>
             <span slot="footer" class="dialog-footer">
-            <el-button @click="submitForm('ruleForm')" type="primary">保存</el-button>
-            <el-button @click="resetForm('ruleForm')">关闭</el-button>
+            <el-button @click="submitForm" type="primary">保存</el-button>
+            <el-button @click="resetForm">关闭</el-button>
         </span> 
     </el-dialog>
 </template>
 
 <script>
 export default {
+    name:'commission',
+    props:['currentCompanyInfo'],
     data(){
         return {
             dialogVisible:false,
-            ruleForm:{
-                name: '',//账户名
-                subBranch: '',//开户支行
+            form:{
                 account:'',//银行账户
-                a:'',
-                bankType:'',//开户银行类型  
+                bankType:'',//开户银行类型 
+                name: '',//账户名
+                subBranch: '',//开户支行 
             },
             rules: {
                 bankType:[{ required: true, message: '请输入开户银行类型', trigger: 'blur' }],
@@ -54,21 +55,30 @@ export default {
         }
     },
     methods:{
-        submitForm(formName) {
-            console.log(this.ruleForm,234)
-            this.$refs[formName].validate((valid) => {
+        submitForm() {
+            this.$refs.form.validate((valid) => {
                 if (valid) {
                     this.dialogVisible=false;
                     alert('提交成功');
-                    this.$refs[formName].resetFields();
+                    // 获取输入的表单信息,以及该公司的标识如公司Id;
+                    this.form.companyId=this.currentCompanyInfo.companyId||'';
+                    this.$http.post(this.$apiUrl.company.commission,this.form)
+                        .then(function(data){
+                            console.log(data,'成功');
+                        })
+                        .catch(function(err){
+                            console.log(err,'失败');
+                        });
+                    // 提交成功后重置
+                    // this.$refs.form.resetFields();
                 } else {
                     alert('请填写必填信息')
                     return false;
                 }
             });
         },
-        resetForm(formName) {
-            this.$refs[formName].resetFields();
+        resetForm() {
+            this.$refs.form.resetFields();
             this.dialogVisible=false;
         },
         handleClose(done) {
@@ -76,7 +86,7 @@ export default {
             this.$confirm('确认关闭？')
             .then(_ => { 
                 //此处执行点击确定 
-                this.$refs.ruleForm.resetFields();
+                this.$refs.form.resetFields();
                 done();
             })
             .catch(_ => {

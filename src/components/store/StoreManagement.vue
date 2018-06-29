@@ -128,7 +128,7 @@
                 </span>
             </el-dialog>
             <!--编辑添加门店组件-->
-            <editor-store ref="editor" v-if="isShow" :title="title" @editSuccess='editSuccess' @addSuccess='addSuccess' :currentStoreInfo="currentStoreInfo"></editor-store>
+            <editor-store ref="editor"  :title="title" @editSuccess='editSuccess' @addSuccess='addSuccess' :currentStoreInfo="currentStoreInfo"></editor-store>
         </el-main>
     </el-container> 
 </template>
@@ -149,7 +149,6 @@ export default {
         companyInfoIndex:'',//操作门店时该门店处于所有列表的位置
         currentStoreInfo:'',//当前编辑的门店信息
         title:'',//判断是编辑门店还是添加门店
-        isShow:false,
         // 表单查询信息
         form: {
             agent:'',//代理商
@@ -241,7 +240,6 @@ export default {
         addStore(){
             // 调用子组件方法，显示对话框 
             this.title='增加门店';
-            this.isShow=true;
             setTimeout(()=>{
                 this.$refs.editor.open();
             },200); 
@@ -253,7 +251,6 @@ export default {
             // 当前编辑的门店信息;
             this.currentStoreInfo=this.tableData[this.companyInfoIndex]; 
             this.title='编辑门店';
-            this.isShow=true;//为了每天编辑组件都可以将父组件信息传递;
             // 调用子组件方法，显示对话框,用setTimeout是为了可以加载添加公司组件;
             setTimeout(()=>{
                 this.$refs.editor.open();

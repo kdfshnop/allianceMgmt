@@ -24,7 +24,8 @@ export default {
         province: "/province/list",// 省份接口
         city: "/city/list",// 城市接口
         district: "/region/list",// 区域接口
-        town: "/plate/list"// 板块接口
+        town: "/plate/list",// 板块接口
+        agency: "/agency/list"//代理商列表，get
     },
     agent: {
         create: "agency/single",// put 增
@@ -33,6 +34,7 @@ export default {
     },
     company:{//公司
         add:"company/single",//添加公司 put
+        commission:'company/commission',//分佣账号设置 post
         edit:"agency/company",//编辑公司 post
         list:"company/list",//公司列表 post
         summary:"company/summary"//公司汇总 get

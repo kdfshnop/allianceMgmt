@@ -19,7 +19,7 @@
             <el-row>
                 <el-col :span="8">
                     <el-form-item label="城市" prop="city" label-width="60px">
-                        <el-input v-model="form.city" @focus="aa"></el-input>
+                        <el-input v-model="form.city"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="8">
@@ -89,9 +89,6 @@ export default {
         }
     },
     methods:{
-        aa(){
-
-        },
         open() {
             if(this.title=='编辑门店'){
                 this.ruleForm=Object.assign({},this.currentStoreInfo);

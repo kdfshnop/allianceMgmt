@@ -146,9 +146,9 @@
                 </span>
             </el-dialog>
             <!--编辑公司组件-->
-            <editor-company v-if="isShow" ref="editor" :currentCompanyInfo="currentCompanyInfo" :title="title" @editSuccess='editSuccess' @addSuccess='addSuccess'></editor-company>
+            <editor-company ref="editor" :currentCompanyInfo="currentCompanyInfo" :title="title" @editSuccess='editSuccess' @addSuccess='addSuccess'></editor-company>
             <!--分佣账号组件-->
-            <commission ref="commission"></commission>
+            <commission ref="commission" :currentCompanyInfo="currentCompanyInfo" ></commission>
         </el-main>
     </el-container> 
 </template>
@@ -172,12 +172,11 @@ export default {
             companyInfoIndex:'',//操作公司时该公司处于所有列表的位置
             currentCompanyInfo:'',//当前编辑的公司信息
             title:'',//判断是编辑公司还是添加公司
-            isShow:false,
             total:400,
             // 表单查询信息
             form:{
                 agency:'',//代理商
-                businessType:'',//房源类型,0未选择，1.新房，2.二手房，3.新房＋二手房
+                businessType:'',//房源类型,空为未选择，1.新房，2.二手房，3.新房＋二手房
                 cityId:'',//所属城市Id
                 cityList:[],
                 corporateStart:'',//合作开始时间
@@ -262,31 +261,8 @@ export default {
             this.form.pageSize=10;
             this.total++;
         },
-        // 子组件编辑成功之后，传递给父组件的值;
-        editSuccess(editInfo){
-            // 替换原有已经被编辑的数据;
-            this.tableData.splice(this.companyInfoIndex,1,editInfo);
-        },
-        //form表单信息改变   
-        formInfo(){
-
-        },
         resetForm(formName) {
             this.$refs.form.resetFields();
-        },
-        //重置表单信息   
-        reset(){
-            this.form= {
-                agent:'',//代理商
-                business:'全部',//业务
-                city:'',//门店所属城市
-                companyName:'',//公司名称
-                timeStart:'',//创建开始时间
-                timeEnd:'',//创建结束时间
-                storeName: '',//门店名称
-                storeAddress:'',//门店地址
-                timeOver:''//到期查询
-            }
         },
         //根据表单信息搜索
         search(val){
@@ -307,8 +283,7 @@ export default {
         // 添加公司
         addCompany(){
             // 调用子组件方法，显示对话框 
-            this.title='增加公司';
-            this.isShow=true;
+            this.title='增加公司';            
             setTimeout(()=>{
                 this.$refs.editor.open();
             },200); 
@@ -321,14 +296,19 @@ export default {
             // 当前编辑的公司信息;
             this.currentCompanyInfo=row;
             this.title='编辑公司';
-            this.isShow=true;//为了每天编辑组件都可以将父组件信息传递;
             // 调用子组件方法，显示对话框,用setTimeout是为了可以加载添加公司组件;
             setTimeout(()=>{
                 this.$refs.editor.open();
             },200);  
         },
+        // 子组件编辑成功之后，传递给父组件的值;
+        editSuccess(editInfo){
+            // 替换原有已经被编辑的数据;
+            this.tableData.splice(this.companyInfoIndex,1,editInfo);
+        },
         //分佣账号设置 
         bankAccount(index, row){
+            this.currentCompanyInfo=row;
             this.$refs.commission.open();
         },
         //终止合作,第一次弹框
@@ -351,12 +331,9 @@ export default {
                 this.form.cityId=this.form.cityList[1];
             };
             let realForm=Object.assign({},this.form);
+            console.log(realForm,1111111111111)
             delete realForm.cityList;//删除表单中的cityList选项，因为提交数据时不需要该参数
             delete realForm.searchType;//同上
-            if(realForm.businessType==""){
-                realForm.businessType=0;
-            };
-            console.log(realForm,22)
             this.$http.post(this.$apiUrl.company.list,realForm)
                 .then(function(data){
                     console.log(data,'成功');
