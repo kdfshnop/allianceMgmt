@@ -15,8 +15,8 @@
             </el-row>
             <el-row>
                 <el-col :span="12">
-                    <el-form-item label="所属城市" prop="cityId" class="tl">
-                        <el-input v-model="form.cityId" placeholder="请选择..."></el-input>
+                    <el-form-item label="所属城市" prop="cityList" class="tl">
+                        <region v-model="form.cityList" :startLevel="startLevel" :endLevel="endLevel"></region>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
@@ -32,11 +32,12 @@
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
-                    <el-form-item prop="businessType">
-                        <el-checkbox-group v-model="form.businessType">
-                            <el-checkbox label="1" >二手房</el-checkbox>
-                            <el-checkbox label="2" >新房</el-checkbox>
-                        </el-checkbox-group>
+                    <el-form-item prop="businessType" label="业务" placeholder="请选择">
+                        <el-select v-model="form.businessType" filterable>
+                                <el-option label="新房和二手房" value="3"></el-option>
+                                <el-option label="新房" value="1"></el-option>
+                                <el-option label="二手房" value="2"></el-option>
+                            </el-select>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -92,12 +93,12 @@
             </el-row>
             <el-form-item label="代理商" class="tl" prop="agencyId">
                 <el-select v-model="form.agencyId" placeholder="请选择">
-                    <el-option label="暂无代理商" value="暂无代理商"></el-option>
+                    <el-option label="暂无代理商" value="0"></el-option>
                     <el-option
-                        v-for="item in agency"
-                        :key="item"
-                        :label="item"
-                        :value="item">
+                        v-for="item in agencyList"
+                        :key="item.agencyId"
+                        :label="item.agencyName"
+                        :value="item.agencyId">
                     </el-option>
                 </el-select>
             </el-form-item>
@@ -124,18 +125,33 @@
 </template>
 
 <script>
+import Region from '@/components/common/Region'
 export default {
     name:'editorCompany',
     props:['currentCompanyInfo','title'],
+    components:{Region},
     data(){
         return {
+            agencyList:[
+                {
+                    agencyId:'1',
+                    agencyName:'北京代理商'
+                },
+                {
+                    agencyId:"2",
+                    agencyName:'上海代理商'
+                }
+            ],
             dialogVisible:false,
+            startLevel:1,//二级联动城市传参
+            endLevel:2,//二级联动城市传参
             form:{
                 abbreviation:'',//公司简称
                 address:'',//地址
-                agencyId:'暂无代理商',//代理商Id
-                businessType:[],//房源类型,0为选择，1.新上，2.二手房，3.新房＋二手房
+                agencyId:'',//代理商Id
+                businessType:'',//房源类型,0为选择，1.新上，2.二手房，3.新房＋二手房
                 cityId:'',//所属城市
+                cityList:[],
                 corporate:'',//法人代表
                 corporatePhone:'',//电话
                 corporateStart:'',//合作开始时间
@@ -147,12 +163,11 @@ export default {
                 resourceKey:'',//上传的资源key
                 state:''//状态1.合作中，2.合作终止 
             },
-            agency:['代理商1','代理商2'],//模拟代理商下拉框选项
             // 必填设置
             rules: {
                 name: [{ required: true, message: '请输入公司名称', trigger: 'blur' }],
                 abbreviation: [{ required: true, message: '请输入公司简称', trigger: 'blur' }],
-                cityId: [{ required: true, message: '请输入城市', trigger: 'blur' }],
+                cityList: [{ required: true, message: '请输入城市', trigger: 'blur' }],
                 deposit: [{ required: true, message: '请输入保证金', trigger: 'blur' }],
                 organizationCode: [{ required: true, message: '请输入组织机构代码', trigger: 'blur' }],
                 corporateStart: [{ required: true, message: '请输入合作开始时间', trigger: 'blur' }],
@@ -160,17 +175,28 @@ export default {
             }
         }
     },
+    created(){
+        // 获取代理商列表;
+        this.$http.get(this.$apiUrl.common.agency)
+            .then(function(data){
+                 console.log(data,'代理商列表成功');
+            })
+            .catch(function(err){
+                console.log(err,'代理商接口错误');
+            })
+    },
     methods:{
         open() {
             if(this.title=='编辑公司'){
-                this.form=Object.assign({},this.currentCompanyInfo);
+                this.form=Object.assign({},this.currentCompanyInfo,{cityList:[]});
             }else{
                 this.form={
                     abbreviation:'',//公司简称
                     address:'',//地址
-                    agencyId:'暂无代理商',//代理商Id
-                    businessType:[],//房源类型,0为选择，1.新上，2.二手房，3.新房＋二手房
+                    agencyId:'',//代理商Id
+                    businessType:'',//房源类型,空为未选择，1.新上，2.二手房，3.新房＋二手房
                     cityId:'',//所属城市
+                    cityList:[],//城市二级联动所需
                     corporate:'',//法人代表
                     corporatePhone:'',//电话
                     corporateStart:'',//合作开始时间
@@ -179,8 +205,7 @@ export default {
                     name:'',//公司名称
                     organizationCode:'',//组织机构代码
                     operator:'',//操作人
-                    resourceKey:'',//上传的资源key
-                    state:''//状态1.合作中，2.合作终止 
+                    resourceKey:'',//上传的资源key 
                 }
             }
             this.dialogVisible = true;
@@ -195,13 +220,20 @@ export default {
         },
         submitForm(formName) {
             console.log(this.form,formName,111)
-            this.$refs[formName].validate((valid) => {
+            this.$refs.form.validate((valid) => {
                 if (valid) {
                     this.dialogVisible=false;
                     alert('提交成功');
                     if(this.title=='编辑公司'){
                         this.$emit('editSuccess',this.form);
                     }else{
+                        this.$http.put('/company/single',this.form)
+                            .then(function(data){
+                                console.log(data);
+                            })
+                            .catch(function(error){
+                                console.log(error)
+                            });
                         this.$emit('addSuccess',this.form);
                     };
                     // 此处代码需要加在请求成功之后;

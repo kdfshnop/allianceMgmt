@@ -1,41 +1,45 @@
 <template>
-    <el-dialog :title="title" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
-        <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="120px">
-            <el-form-item label="门店名称" prop="storeName" >
-                <el-input v-model="ruleForm.name"></el-input>
+    <el-dialog :title="title" :visible.sync="dialogVisible" width="50%" :before-close="handleClose">
+        <el-form :model="form" :rules="rules" ref="form" label-width="120px">
+            <el-form-item label="门店名称" prop="name" >
+                <el-input v-model="form.name"></el-input>
             </el-form-item>
             <el-form-item label="门店类型" prop="storeType">
-                <el-select v-model="ruleForm.storeType" filterable placeholder="请选择加盟或直营">
-                        <el-option label="代理商直营门店" value="代理商直营门店"></el-option>
-                        <el-option label="加盟门店" value="加盟门店"></el-option>
+                <el-select v-model="form.storeType" filterable placeholder="请选择加盟或直营">
+                        <el-option label="代理商直营门店" value="1"></el-option>
+                        <el-option label="加盟门店" value="2"></el-option>
                 </el-select>
             </el-form-item>
             <el-form-item label="代理商公司名称" prop="companyName" >
-                <el-input v-model="ruleForm.companyName"></el-input>
+                <el-input v-model="form.companyName"></el-input>
             </el-form-item>
-            <el-form-item label="门店地址" prop="storeAdress">
-                <el-input v-model="ruleForm.storeAdress"></el-input>
+            <el-form-item label="门店地址" prop="address">
+                <el-input v-model="form.address"></el-input>
             </el-form-item>
             <el-row>
-                <el-col :span="12">
-                    <!--<el-form-item label="区域" prop="area">
-                        <el-input v-model="ruleForm.area" ></el-input>
+                <el-col :span="8">
+                    <el-form-item label="城市" prop="city" label-width="60px">
+                        <el-input v-model="form.city"></el-input>
                     </el-form-item>
                 </el-col>
-                <el-col :span="12">
-                    <el-form-item label="板块" prop="plate">
-                        <el-input v-model="ruleForm.plate"></el-input>
-                    </el-form-item>-->
-                    <region v-model="array"></region>
+                <el-col :span="8">
+                    <el-form-item label="区域" prop="districtId">
+                        <el-input v-model="form.districtId"></el-input>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                    <el-form-item label="板块" prop="townId">
+                        <el-input v-model="form.city"></el-input>
+                    </el-form-item>
                 </el-col>
             </el-row>
-            <el-form-item label="经纬度" prop="abbreviation">
-                <el-input v-model="ruleForm.date"></el-input>
+            <el-form-item label="经纬度" prop="lonlat" placeholder="经度,纬度">
+                <el-input v-model="form.lonLat"></el-input>
             </el-form-item>
         </el-form>
         <span slot="footer" class="dialog-footer">
-            <el-button @click="submitForm('ruleForm')" type="primary">保存</el-button>
-            <el-button @click="resetForm('ruleForm')">关闭</el-button>
+            <el-button @click="submitForm('form')" type="primary">保存</el-button>
+            <el-button @click="resetForm('form')">关闭</el-button>
         </span>
     </el-dialog>
 </template>
@@ -49,16 +53,24 @@ export default {
     components:{Region},
     data(){
         return {
+            startLevel:2,//二级联动城市传参
+            endLevel:4,//二级联动城市传参
             dialogVisible:false,
-            ruleForm: {
+            form: {
                 address:'',//地址
-                area:'',//区域
-                companyName:'',//公司名称
-                plate:'',//板块
-                storeAdress:'',//门店地址
-                storeName:'',//门店名称
-                storeType:'',//门店类型
+                agencyId:'',//代理商Id
+                city:'',//门店所属城市
+                companyId:'',//公司Id
+                companyName:'',//代理商名称
+                districtId:'',//区域Id
+                name:'',//门店名称
+                status:'',
+                storeType:'',//门店类型1.直营，2.加盟
+                storeState:'',//门店状态1.合作中，2终止
+                townId:'',//板块Id
+                lonLat:''//经度纬度
             },
+            cityList:'',//城市列表
             array:[],
             // 必填设置
             rules: {
@@ -68,10 +80,10 @@ export default {
                 cash: [{ required: true, message: '请输入保证金', trigger: 'blur' }],
                 code: [{ required: true, message: '请输入组织机构代码', trigger: 'blur' }],
                 bd: [{ required: true, message: '请输入bd', trigger: 'blur' }],
-                area: [{ required: true, message: '请输入区域', trigger: 'blur' }],
-                plate:[{ required: true, message: '请输入板块', trigger: 'blur' }],
-                storeAdress:[{ required: true, message: '请输入门店地址', trigger: 'blur' }],
-                storeName:[{ required: true, message: '请输入门店名称', trigger: 'blur' }],
+                districtId: [{ required: true, message: '请输入区域', trigger: 'blur' }],
+                townId:[{ required: true, message: '请输入板块', trigger: 'blur' }],
+                address:[{ required: true, message: '请输入门店地址', trigger: 'blur' }],
+                name:[{ required: true, message: '请输入门店名称', trigger: 'blur' }],
                 storeType:[{ required: true, message: '请输入门店类型', trigger: 'blur' }]
             }
         }
