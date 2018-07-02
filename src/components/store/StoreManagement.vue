@@ -60,7 +60,7 @@
             </el-form>
             <el-row :gutter="20">
                 <el-col :span="2" :offset="11">
-                    <el-button class="reset" @click="resetForm('form')">重置</el-button>
+                    <el-button class="reset" @click="resetForm">重置</el-button>
                 </el-col>
                 <el-col :span="2">
                     <el-button type="primary" @click="search">搜索</el-button>
@@ -82,10 +82,9 @@
                     <template slot-scope="scope">
                         <el-button size="mini" @click="editStore(scope.$index, scope.row)" type="text">编辑|</el-button>
                         <el-button size="mini" @click="qrCode(scope.$index, scope.row)" type="text">二维码|</el-button>
-                        <el-button size="mini"  type="text" @click="firstDialogVisible = true,handleEnd(scope.$index, scope.row)">终止合作</el-button>
+                        <el-button size="mini"  type="text" @click="handleEnd(scope.$index, scope.row)">终止合作</el-button>
                     </template>
                 </el-table-column>
-                <el-table-column prop="name" label="门店" align="center"></el-table-column>
             </el-table>
             <div class="pagination">
                 <el-pagination
@@ -105,19 +104,18 @@
                     </div>
                 </el-dialog>
             <!--终止合作对话框-->
-            <el-dialog title="终止公司合作" :visible.sync="firstDialogVisible" width="30%" >
-                <p>1、对公司通知合作，旗下的门店也将一起会被停止合作</p>
-                <p>2、终止合作门店下的经纪人账号将会被冻结</p>
-                <p>3、公司和门店被停止合作后将无法重新再被恢复</p>
+            <el-dialog title="终止门店合作" :visible.sync="firstDialogVisible" width="30%" >
+                <p>1、将不会再被恢复，有房有客app中不可以再选择到该门店</p>
+                <p>2、门店旗下的经纪人账号被冻结</p>
                 <span slot="footer" class="dialog-footer">
                     <el-button type="primary" @click="firstDialogVisible = false,secondDialogVisible = true">以了解风险，下一步</el-button>
                 </span>
             </el-dialog>
             <el-dialog title="终止公司合作" :visible.sync="secondDialogVisible" width="30%" >
-                <textarea name="" id="" rows="10" placeholder="请添加终止合作原因" v-model="noJoin" style="width:100%;"></textarea>
+                <textarea name="" id="" rows="10" placeholder="请添加终止合作原因" v-model="textarea" style="width:100%;"></textarea>
                 <span slot="footer" class="dialog-footer">
-                    <el-button @click="secondDialogVisible = false,continueJoin()">取 消</el-button>
-                    <el-button type="primary" @click="secondDialogVisible = false,endJoin()" >确 定</el-button>
+                    <el-button @click="continueJoin">取 消</el-button>
+                    <el-button type="primary" @click="endJoin" >确 定</el-button>
                 </span>
             </el-dialog>
             <!--编辑添加门店组件-->
@@ -141,7 +139,7 @@ export default {
         qrCodeShow:false,
         firstDialogVisible: false,//第一个终止合作弹出框
         secondDialogVisible:false,//第二个终止合作弹出框
-        noJoin:'',//终止合作原因
+        textarea:'',//终止合作原因
         companyInfoIndex:'',//操作门店时该门店处于所有列表的位置
         currentStoreInfo:'',//当前编辑的门店信息
         title:'',//判断是编辑门店还是添加门店
@@ -199,10 +197,6 @@ export default {
             // 替换原有已经被编辑的数据;
             this.tableData.splice(this.companyInfoIndex,1,editInfo);
         },
-        //form表单信息改变   
-        formInfo(){
-
-        },
         resetForm(formName) {
             this.$refs.form.resetFields();
         },
@@ -258,13 +252,22 @@ export default {
         },
         //终止合作,第一次弹框
         handleEnd(index,row){
+            this.currentStoreInfo=row;
+            this.firstDialogVisible=true;
         },
         //确定终止合作,第二次弹框
         endJoin(){
+            let form={
+                storeId:this.currentStoreInfo.storeId,
+                textarea:this.textarea
+            };
+            this.$router.push({path:'/ProfessionEndVerify'})
+            this.secondDialogVisible=false;
             //将该公司信息删除;
         },
         //点击二次对话框取消按钮，继续合作
         continueJoin(){
+            this.secondDialogVisible=false;
             this.noJoin='';
         }
     },

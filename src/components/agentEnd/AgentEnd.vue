@@ -8,15 +8,8 @@
             <el-form ref="form" :model="form" label-width="180px" class="gap-2">
                 <el-row >
                     <el-col :span="12">
-                        <el-form-item label="门店所属城市" prop="city">
-                            <el-select v-model="form.city" placeholder="二级选择区域" filterable>
-                                <el-option
-                                    v-for="(item,index) in city"
-                                    :key="index"
-                                    :label="item"
-                                    :value="item">
-                                </el-option>
-                            </el-select>
+                        <el-form-item label="门店所属城市" prop="cityList">
+                            <region v-model="form.cityList" :startLevel="startLevel" :endLevel="endLevel"></region>
                         </el-form-item>
                         <el-form-item label="合作开始时间" prop="storeAddress">
                             <el-date-picker
@@ -34,9 +27,34 @@
                                 <el-option label="区域代理" value="区域代理"></el-option>
                             </el-select>
                         </el-form-item>
-                        <el-form-item label="到期查询" prop="storeAddress">
-                            <el-input v-model="form.storeAddress" style="width:220px;"></el-input>
-                        </el-form-item>
+                        <el-row>
+                            <el-col :span="12">
+                                <el-form-item label="到期查询" prop="searchType">
+                                    <el-select v-model="form.searchType" filterable>
+                                        <el-option label="请选择查询方式" value="0"></el-option>
+                                        <el-option label="按即将到期天数查询" value="1"></el-option>
+                                        <el-option label="按合作结束日期查询" value="2"></el-option>
+                                    </el-select>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="12" v-if="form.searchType==1">
+                                <el-form-item prop="searchDay" class="expire">
+                                    <el-input v-model="form.searchDay" placeholder="请输入整数" style="width:200px;"></el-input>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="12" v-if="form.searchType==2">
+                                <el-form-item prop="searchDate" class="expire">
+                                    <el-date-picker
+                                        format="yyyy-MM-dd"
+                                        v-model="form.timeStart"
+                                        type="date"
+                                        placeholder="选择日期"
+                                        style="width:200px"
+                                        value-format="yyyy-MM-dd">
+                                    </el-date-picker>
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="合作状态" prop="companyName">
@@ -85,7 +103,7 @@
                 <el-table-column prop="name" label="合作结束" align="center"></el-table-column>
                 <el-table-column prop="name" label="操作" width="300px" align="center">
                     <template slot-scope="scope">
-                        <el-button size="mini" @click="detail(scope.$index, scope.row)" type="text" v-if="false">详情|</el-button>
+                        <el-button size="mini" @click="detail(scope.$index, scope.row)" type="text" v-if="true">详情|</el-button>
                         <el-tooltip placement="right" effect="light" v-if="true">
                             <el-button type="text" size="mini">更多</el-button>
                             <div slot="content" @click="edit(scope.$index)">编辑</div>
@@ -96,7 +114,7 @@
                     </template>
                 </el-table-column>
             </el-table>
-            <div class="block">
+            <div class="pagination">
                 <el-pagination
                     @size-change="handleSizeChange"
                     @current-change="handleCurrentChange"
@@ -116,7 +134,7 @@
                 </span>
             </el-dialog>
             <el-dialog title="!终止合作,一旦终止合作,将无法重新再启用" :visible.sync="secondDialogVisible" width="30%" >
-                <textarea name="" id="" rows="10" placeholder="请添加终止合作原因" v-model="noJoin" style="width:100%;"></textarea>
+                <textarea name="" id="" rows="10" placeholder="请添加终止合作原因" v-model="textarea" style="width:100%;"></textarea>
                 <span slot="footer" class="dialog-footer">
                     <el-button @click="secondDialogVisible = false,continueJoin()">取 消</el-button>
                     <el-button type="primary" @click="secondDialogVisible = false,NoJoin()" >确 定</el-button>
@@ -128,27 +146,33 @@
 
 <script>
 import BreadCrumb from '@/components/common/BreadCrumb';
+import Region from '@/components/common/Region';
 
 export default {
   name: 'CompanyManagement',
-  components:{BreadCrumb},
+  components:{BreadCrumb,Region},
   data () {
     return {
+        startLevel:1,//二级联动城市传参
+        endLevel:2,//二级联动城市传参
         firstDialogVisible: false,//第一个终止合作弹出框
         secondDialogVisible:false,//第二个终止合作弹出框
-        noJoin:'',//终止合作原因
+        textarea:'',//终止合作原因
         companyInfoIndex:'',//操作公司时该公司处于所有列表的位置
         currentCompanyInfo:'',//当前编辑的公司信息
         title:'',//判断是编辑公司还是添加公司
-        isShow:false,
         // 表单查询信息
         form: {
             agent:'',//代理商
             business:'全部',//业务
             city:'',//门店所属城市
+            cityList:[],//二级联动城市
             companyName:'',//公司名称
             timeStart:'',//创建开始时间
             timeEnd:'',//创建结束时间
+            searchDate:'',//到期日期
+            searchDay:'',//即将到期天数
+            searchType:'',//到期查询方式
             storeName: '',//门店名称
             storeAddress:'',//门店地址
             timeOver:''//到期查询
@@ -194,7 +218,7 @@ export default {
             this.firstDialogVisible=true;
         },
         // 确定终止合作;
-        noJoin(){},
+        NoJoin(){},
         // 详情
         detail(){},
         // 重新提交
@@ -240,7 +264,7 @@ export default {
         margin-bottom: 20px;
         margin-top: 50px;
     }
-    .block{
+    .pagination{
         margin-top: 100px;
         text-align: center;
     }
@@ -252,6 +276,9 @@ export default {
     }
     .cz{
         margin-top: 10px;
+    }
+    .expire .el-form-item__content{
+        margin-left: 0 !important;
     }
 </style>
 

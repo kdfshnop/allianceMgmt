@@ -74,7 +74,7 @@
                     </el-row>
                 </el-col>
                 <el-col :span="12">
-                    <el-form-item label="法人代表" prop="corporate">
+                    <el-form-item label="法人代表" prop="corporate" >
                         <el-input v-model="form.corporate"></el-input>
                     </el-form-item>
                 </el-col>
@@ -92,7 +92,7 @@
                 </el-col>
             </el-row>
             <el-form-item label="代理商" class="tl" prop="agencyId">
-                <el-select v-model="form.agencyId" placeholder="请选择">
+                <el-select v-model="form.agencyId" placeholder="请选择" @focus="agencyListe" filterable>
                     <el-option label="暂无代理商" value="0"></el-option>
                     <el-option
                         v-for="item in agencyList"
@@ -211,6 +211,25 @@ export default {
                 }
             }
             this.dialogVisible = true;
+        },
+        agencyListe(){
+            this.agencyList=[
+                {
+                    agencyId:'1',
+                    agencyName:'商丘代理商'
+                },
+                {
+                    agencyId:"2",
+                    agencyName:'上海代理商'
+                }
+            ];
+            this.$http.get(this.$apiUrl.agent.list)
+            .then(function(data){
+                console.log(data,'代理商列表成功aaaaa');
+            })
+            .catch(function(err){
+                console.log(err,'代理商列表失败');
+            })
         },
         handleClose(done) {
             this.$confirm('确认关闭？')

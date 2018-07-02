@@ -20,7 +20,7 @@
                                         type="date"
                                         placeholder="选择日期"
                                         style="width:150px"
-                                        value-format="yyyy-MM-dd">
+                                        value-format="yyyy-MM-dd HH-mm-ss">
                                     </el-date-picker>
                                 </el-form-item>
                             </el-col>
@@ -32,7 +32,7 @@
                                         type="date"
                                         placeholder="选择日期"
                                         style="width:150px"
-                                        value-format="yyyy-MM-dd">
+                                        value-format="yyyy-MM-dd HH-mm-ss">
                                     </el-date-picker>
                                 </el-form-item>
                             </el-col>
