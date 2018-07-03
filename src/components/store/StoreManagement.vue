@@ -1,3 +1,10 @@
+<!--
+    @页面名称：门店管理列表页
+    @作者：豆亚东 (douyadong@lifang.com)
+    @业务逻辑说明：
+        1.
+        2.        
+-->
 <template>
     <el-container>
         <el-main>    
@@ -74,10 +81,8 @@
                 <el-table-column prop="address" label="经纪人数量" align="center" ></el-table-column>
                 <el-table-column prop="address" label="门店所属代理商" align="center"></el-table-column>
                 <el-table-column prop="name" label="门店所属公司" align="center"></el-table-column>
+                <el-table-column prop="name" label="门店所属城市" align="center"></el-table-column>
                 <el-table-column prop="name" label="创建时间" align="center"></el-table-column>
-                <el-table-column prop="name" label="操作" align="center"></el-table-column>
-                <el-table-column prop="name" label="创建时间" align="center"></el-table-column>
-                <el-table-column prop="name" label="创建人" align="center"></el-table-column>
                 <el-table-column prop="name" label="操作" width="300px" align="center">
                     <template slot-scope="scope">
                         <el-button size="mini" @click="editStore(scope.$index, scope.row)" type="text">编辑|</el-button>
@@ -152,7 +157,7 @@ export default {
             cooperationStart:'',//创建开始时间
             cooperationEnd:'',//创建结束时间
             storeName: '',//门店名称
-            storeType:'全部',//门店类型
+            storeType:'0',//门店类型
         },
         // 分页功能
         pagination:{
@@ -239,7 +244,7 @@ export default {
             //操作门店时，该门店所处所有信息列表的位置;
             this.companyInfoIndex=(this.pagination.currentPage-1)*this.pagination.pageSize+index;
             // 当前编辑的门店信息;
-            this.currentStoreInfo=this.tableData[this.companyInfoIndex]; 
+            this.currentStoreInfo=row; 
             this.title='编辑门店';
             // 调用子组件方法，显示对话框,用setTimeout是为了可以加载添加公司组件;
             setTimeout(()=>{
@@ -248,6 +253,7 @@ export default {
         },
         //二维码
         qrCode(index, row){
+            this.currentStoreInfo=row;
             this.qrCodeShow=true;
         },
         //终止合作,第一次弹框
@@ -261,14 +267,13 @@ export default {
                 storeId:this.currentStoreInfo.storeId,
                 textarea:this.textarea
             };
-            this.$router.push({path:'/ProfessionEndVerify'})
             this.secondDialogVisible=false;
-            //将该公司信息删除;
+            //将该门店终止合作申请提交，该公司信息进入终止合作列表;
         },
         //点击二次对话框取消按钮，继续合作
         continueJoin(){
             this.secondDialogVisible=false;
-            this.noJoin='';
+            this.textarea='';
         }
     },
     computed:{

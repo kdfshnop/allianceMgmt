@@ -1,3 +1,10 @@
+<!--
+    @页面名称：(中介)公司管理列表页
+    @作者：豆亚东 (douyadong@lifang.com)
+    @业务逻辑说明：
+        1.
+        2.        
+-->
 <template>
     <el-container>
         <el-main>    
@@ -102,8 +109,8 @@
             <el-table :data="searInfoList" border style="width: 100%">
                 <el-table-column type="index" label="序号" align="center" width="100" ></el-table-column>
                 <el-table-column prop="city" label="城市" align="center" ></el-table-column>
-                <el-table-column prop="name" label="公司全称" align="center" ></el-table-column>
-                <el-table-column prop="abbreviation" label="公司简称" align="center" ></el-table-column>
+                <el-table-column prop="name" label="中介公司全称" align="center" ></el-table-column>
+                <el-table-column prop="abbreviation" label="中介公司简称" align="center" ></el-table-column>
                 <el-table-column prop="operator" label="代理商公司" align="center"></el-table-column>
                 <el-table-column prop="corporateStart" label="有效期始" align="center"></el-table-column>
                 <el-table-column prop="corporateEnd" label="有效期止" align="center"></el-table-column>
@@ -114,7 +121,7 @@
                     <template slot-scope="scope">
                         <el-button size="mini" @click="editorCompany(scope.$index, scope.row)" type="text">编辑|</el-button>
                         <el-button size="mini" @click="bankAccount(scope.$index, scope.row)" type="text">分佣账号设置|</el-button>
-                        <el-button size="mini"  type="text" @click="firstDialogVisible = true,handleEnd(scope.$index, scope.row)">终止合作</el-button>
+                        <el-button size="mini"  type="text" @click="handleEnd(scope.$index, scope.row)">终止合作</el-button>
                     </template>
                 </el-table-column>
                 <el-table-column prop="storeAccount" label="门店" align="center"></el-table-column>
@@ -139,7 +146,7 @@
                 </span>
             </el-dialog>
             <el-dialog title="终止公司合作" :visible.sync="secondDialogVisible" width="30%" >
-                <textarea name="" id="" rows="10" placeholder="请添加终止合作原因" v-model="noJoin" style="width:100%;"></textarea>
+                <textarea name="" id="" rows="10" placeholder="请添加终止合作原因" v-model="textarea" style="width:100%;"></textarea>
                 <span slot="footer" class="dialog-footer">
                     <el-button @click="secondDialogVisible = false,continueJoin()">取 消</el-button>
                     <el-button type="primary" @click="secondDialogVisible = false,endJoin()" >确 定</el-button>
@@ -168,7 +175,7 @@ export default {
             endLevel:2,//二级联动城市传参
             firstDialogVisible: false,//第一个终止合作弹出框
             secondDialogVisible:false,//第二个终止合作弹出框
-            noJoin:'',//终止合作原因
+            textarea:'',//终止合作原因
             companyInfoIndex:'',//操作公司时该公司处于所有列表的位置
             currentCompanyInfo:'',//当前编辑的公司信息
             title:'',//判断是编辑公司还是添加公司
@@ -313,15 +320,18 @@ export default {
         },
         //终止合作,第一次弹框
         handleEnd(index,row){
-            this.noJoin='';
+            this.firstDialogVisible = true,
+            this.currentCompanyInfo=row;
+            this.textarea='';
         },
         //确定终止合作,第二次弹框
         endJoin(){
-            //将该公司信息删除;
+            // 公司id;
+            //将该公司终止合作原因提交，该公司终止合作信息将进入终止合作列表;
         },
         //点击二次对话框取消按钮，继续合作
         continueJoin(){
-            this.noJoin='';
+            this.textarea='';
         },
         // 列表信息请求公共函数
         requestList(){

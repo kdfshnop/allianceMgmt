@@ -12,7 +12,7 @@ import ProfessionAuditResult from '@/components/professionAudit/ProfessionAuditR
 import ProfessionEndResult from '@/components/professionEnd/ProfessionEndResult';
 import ProfessionAuditVerify from '@/components/professionAudit/ProfessionAuditVerify';
 import ProfessionEndVerify from '@/components/professionEnd/ProfessionEndVerify';
-import AgentEnd from '@/components/agentEnd/AgentEnd';
+import AgentManagement from '@/components/agentManagement/AgentManagement';
 import Record from '@/components/record/Record';
 import AgentDetail from '@/components/agent/AgentDetail';
 import EditAgent from '@/components/agent/EditAgent';
@@ -35,17 +35,17 @@ let router = new Router({
       component: MaterialVerify
     },
     {
-      path: '/CompanyManagement',
+      path: '/companyManagement',
       name: 'CompanyManagement',
       component: CompanyManagement
     },
     {
-      path: '/StoreManagement',
+      path: '/storeManagement',
       name: 'StoreManagement',
       component: StoreManagement
     },
     {
-      path:'/TeamEnd',
+      path:'/teamEnd',
       name:'TeamEnd',
       component:TeamEnd
     },
@@ -55,37 +55,37 @@ let router = new Router({
       component:MaterialAuditResult
     },
     {
-      path:'/ServiceFeeAuditResult',
+      path:'/serviceFeeAuditResult',
       name:'ServiceFeeAuditResult',
       component:ServiceFeeAuditResult
     },
     {
-      path:'/ProfessionAuditResult',
+      path:'/professionAuditResult',
       name:'ProfessionAuditResult',
       component:ProfessionAuditResult
     },
     {
-      path:'/ProfessionEndResult',
+      path:'/professionEndResult',
       name:'ProfessionEndResult',
       component:ProfessionEndResult
     },
     {
-      path:'/ProfessionAuditVerify',
+      path:'/professionAuditVerify',
       name:'ProfessionAuditVerify',
       component:ProfessionAuditVerify
     },
     {
-      path:'/ProfessionEndVerify',
+      path:'/professionEndVerify',
       name:'ProfessionEndVerify',
       component:ProfessionEndVerify
     },
     {
-      path:'/AgentEnd',
-      name:'AgentEnd',
-      component:AgentEnd
+      path:'/agentManagement',
+      name:'AgentManagement',
+      component:AgentManagement
     },
     {
-      path:'/Record',
+      path:'/record',
       name:'Record',
       component:Record
     },{
