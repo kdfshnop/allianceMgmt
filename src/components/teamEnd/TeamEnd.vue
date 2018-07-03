@@ -1,3 +1,10 @@
+<!--
+    @页面名称：终止合作汇总页
+    @作者：豆亚东 (douyadong@lifang.com)
+    @业务逻辑说明：
+        1.代理商公司，中介公司，门店经过审核之后，同意终止合作后的信息汇总
+        2.        
+-->
 <template>
     <el-container>
         <el-main>    
@@ -17,41 +24,32 @@
                 </div>
                 <p style="clear:both;"></p>
             </div>
-            <div class="search-result" >共搜索到 956条数据</div>
-            <el-table :data="searInfoList" border style="width: 100%">
-                <el-table-column prop="name" label="代理商名称" align="center" ></el-table-column>
-                <el-table-column prop="submitPeople" label="提交人" align="center" ></el-table-column>
-                <el-table-column prop="auditPeople" label="审核人" align="center" ></el-table-column>
-                <el-table-column prop="auditTime" label="审核时间" align="center" ></el-table-column>
-                <el-table-column prop="endReason" label="终止合作原因" align="center"></el-table-column>
-            </el-table>
-            <div class="block">
-                <el-pagination
-                    @size-change="handleSizeChange"
-                    @current-change="handleCurrentChange"
-                    :current-page="pagination.currentPage"
-                    :page-sizes="[10, 2, 3, 400]"
-                    :page-size="pagination.pageSize"
-                    layout="total, sizes, prev, pager, next, jumper"
-                    :total="pagination.total">
-                </el-pagination>
-            </div>
+            <!--代理商终止合作列表-->
+            <agent-end-list v-if="agent"></agent-end-list>
+            <!--公司终止合作列表-->
+            <company-end-list v-if="company"></company-end-list>
+            <!--门店终止合作列表-->
+            <store-end-list v-if="store"></store-end-list>
         </el-main>
     </el-container>
 </template>
 
 <script>
 import BreadCrumb from '@/components/common/BreadCrumb';
+import AgentEndList from '@/components/teamEnd/_AgentEndList';
+import CompanyEndList from '@/components/teamEnd/_CompanyEndList';
+import StoreEndList from '@/components/teamEnd/_StoreEndList';
 
 export default {
     name:'TeamEnd',
-    components:{BreadCrumb},
+    components:{BreadCrumb,AgentEndList,CompanyEndList,StoreEndList},
     data(){
         return {
             breadCrumb: [{text:'加盟管理'},{text: "终止合作"}],
             agent:true,
             company:false,
             store:false,
+            label:'代理商民称',
             // 分页功能
             pagination:{
                 currentPage:1,//默认当前页为1;
@@ -109,6 +107,7 @@ export default {
             this.agent=true;
             this.company=false;
             this.store=false;
+            this.label="代理商名称";
             this.pagination.currentPage=1;
             this.pagination.pageSize=10;
         },
@@ -116,6 +115,7 @@ export default {
             this.agent=false;
             this.company=true;
             this.store=false;
+            this.label="公司名称";
             this.pagination.currentPage=1;
             this.pagination.pageSize=10;
         },
@@ -123,8 +123,18 @@ export default {
             this.agent=false;
             this.company=false;
             this.store=true;
+            this.label="门店名称";
             this.pagination.currentPage=1;
             this.pagination.pageSize=10;
+        },
+        // 查看详情;
+        detail(){
+            // 代理商详情;
+            if(this.agent){};
+            // 公司详情;
+            if(this.company){};
+            // 门店详情;
+            if(this.store){};
         },
         //每页多少条
         handleSizeChange(val) {

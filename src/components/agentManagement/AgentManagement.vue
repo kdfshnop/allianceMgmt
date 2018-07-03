@@ -104,7 +104,7 @@
                     <el-button type="primary" @click="search">搜索</el-button>
                 </el-col>
             </el-row>
-            <div class="search-result">共搜索到 956家公司，56家有代理商，900家无代理商</div>
+            <div class="search-result">共搜索到 {{summary.agencyTotal}}家代理商，{{summary.regionTotal}}个代理区域，{{summary.storeTotal}}家门店</div>
             <el-table :data="agencyInfo.data" border style="width: 100%">
                 <el-table-column prop="agencyCompanyName" label="代理商公司名称" align="center" ></el-table-column>
                 <el-table-column prop="cityId" label="城市" align="center"></el-table-column>
@@ -121,7 +121,7 @@
                             <el-button type="text" size="mini">更多</el-button>
                             <div slot="content" @click="edit(scope.$index)">编辑</div>
                             <div slot="content" class="cz" @click="followUp" >跟进</div>
-                            <div slot="content" class="cz" @click="endJoin" v-if="scope.row.isEnd">终止合作</div>
+                            <div slot="content" class="cz" @click="endJoin(scope.$index,scope.row)" v-if="scope.row.isEnd">终止合作</div>
                         </el-tooltip>
                         <el-button v-if="false" size="mini" @click="reSubmit(scope.$index, scope.row)" type="text">重新提交</el-button>
                     </template>
@@ -139,7 +139,7 @@
                 </el-pagination>
             </div>
             <el-dialog title="!终止合作" :visible.sync="firstDialogVisible" width="30%" >
-                <p>该代理商旗下共有15家门店,请先对门店处理完毕后再终止合作</p>
+                <p>该代理商旗下共有{{agencySotre}}家门店,请先对门店处理完毕后再终止合作</p>
                 <p>a、可对门店终止合作</p>
                 <p>b、可对门店重新绑定代理商,继续服务</p>
                 <span slot="footer" class="dialog-footer">
@@ -147,10 +147,10 @@
                 </span>
             </el-dialog>
             <el-dialog title="!终止合作,一旦终止合作,将无法重新再启用" :visible.sync="secondDialogVisible" width="30%" >
-                <textarea name="" id="" rows="10" placeholder="请添加终止合作原因" v-model="textarea" style="width:100%;"></textarea>
+                <textarea name="" id="" rows="10" placeholder="请添加终止合作原因" v-model="remark" style="width:100%;"></textarea>
                 <span slot="footer" class="dialog-footer">
-                    <el-button @click="secondDialogVisible = false,continueJoin()">取 消</el-button>
-                    <el-button type="primary" @click="secondDialogVisible = false,NoJoin()" >确 定</el-button>
+                    <el-button @click="continueJoin">取 消</el-button>
+                    <el-button type="primary" @click="noJoin" >确 定</el-button>
                 </span>
             </el-dialog>
         </el-main>
@@ -162,18 +162,20 @@ import BreadCrumb from '@/components/common/BreadCrumb';
 import Region from '@/components/common/Region';
 
 export default {
-    name: 'CompanyManagement',
+    name: 'AgentManagement',
     components:{BreadCrumb,Region},
     data () {
         return {
             agencyInfo:{},//代理商信息
+            agencySotre:'',//该代理商旗下有多少家门店
+            summary:{},//summary信息
             startLevel:1,//二级联动城市传参
             endLevel:2,//二级联动城市传参
             firstDialogVisible: false,//第一个终止合作弹出框
             secondDialogVisible:false,//第二个终止合作弹出框
-            textarea:'',//终止合作原因
-            companyInfoIndex:'',//操作公司时该公司处于所有列表的位置
-            currentCompanyInfo:'',//当前编辑的公司信息
+            remark:'',//终止合作原因
+            companyInfoIndex:'',//操作代理商公司时该公司处于所有列表的位置
+            currentCompanyInfo:'',//当前编辑的代理商公司信息
             title:'',//判断是编辑公司还是添加公司
             // 表单查询信息
             form: {
@@ -207,13 +209,26 @@ export default {
 
         },
         // 终止合作;第一次弹出对话框
-        endJoin(){
+        endJoin(index,row){
+            this.currentCompanyInfo=row;
+            this.agencySotre=this.currentCompanyInfo.storeTotal;
             this.firstDialogVisible=true;
         },
         // 确定终止合作;
-        NoJoin(){},
+        noJoin(){
+            this.secondDialogVisible = false;
+            this.$http.post(this.$apiUrl.agent.terminate+"/"+this.currentCompanyInfo.agencyId+"?remark="+remark)
+                .then(function(data){
+                    console.log(data,'提交代理商终止合作');
+                })
+                .catch(function(err){
+                    console.log(err);
+                });
+        },
         // 详情
-        detail(){},
+        detail(index,row){
+            this.currentCompanyInfo=row;
+        },
         // 重新提交
         reSubmit(){},
         // 重置表单
@@ -244,7 +259,8 @@ export default {
         },
         //点击二次对话框取消按钮，继续合作
         continueJoin(){
-            this.noJoin='';
+            this.secondDialogVisible = false;
+            this.remark='';
         },
         // 代理商列表请求公共函数;
         requestList(){
@@ -257,6 +273,7 @@ export default {
             let realForm=Object.assign({},this.form);
             delete realForm.cityList;
             delete realForm.searchType;
+            // 获取代理商列表信息;
             this.$http.post(this.$apiUrl.agent.list,realForm)
                 .then(function(data){
                     self.agencyInfo=data.data.data;
@@ -264,6 +281,23 @@ export default {
                 })
                 .catch(function(err){
                     console.log(err,'代理商列表接口错误');
+                });
+            // 获取该页面summary信息;
+            let summary={
+                agencyTag:realForm.agencyTag,
+                agencyName:realForm.agencyName,
+                agencyState:realForm.agencyState,
+                agencyType:realForm.agencyType,
+                cityId:realForm.cityId,
+                endTime:realForm.endTime,
+                startTime:realForm.startTime
+            };
+            this.$http.post(this.$apiUrl.agent.summary)
+                .then(function(data){
+                    self.summary=data.data.data;
+                })
+                .catch(function(err){
+                    console.log(err);
                 })
         }
     },

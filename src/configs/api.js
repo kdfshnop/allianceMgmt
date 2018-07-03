@@ -32,6 +32,8 @@ export default {
         detail: "/agency/single", // ?agencyId=2&agencyState=0 get 查
         edit: "/agency/single", // post 改
         list: "/agency/list", // 代理商列表接口
+        summary:"agency/summary",//代理商汇总 post
+        terminate:"agency/terminate",//终止合作 post
     },
     company:{//公司
         add:"company/single",//添加公司 put

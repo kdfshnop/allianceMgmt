@@ -1,3 +1,10 @@
+<!--
+    @页面名称：代理商业务编辑审核是否通过
+    @作者：豆亚东 (douyadong@lifang.com)
+    @业务逻辑说明：
+        1.代理商初次审核后再次编辑，仍需再次审核;
+        2.        
+-->
 <template>
     <el-container>
         <el-main>    

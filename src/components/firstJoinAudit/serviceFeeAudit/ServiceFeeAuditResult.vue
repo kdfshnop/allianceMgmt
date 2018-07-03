@@ -1,3 +1,10 @@
+<!--
+    @页面名称：代理商首次加盟填写资料后平台服务费审核列表页
+    @作者：豆亚东 (douyadong@lifang.com)
+    @业务逻辑说明：
+        1.
+        2.        
+-->
 <template>
     <el-container>
         <el-main>    

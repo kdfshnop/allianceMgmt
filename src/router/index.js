@@ -50,7 +50,7 @@ let router = new Router({
       component:TeamEnd
     },
     {
-      path:'/MaterialAuditResult',
+      path:'/materialAuditResult',
       name:'MaterialAuditResult',
       component:MaterialAuditResult
     },
