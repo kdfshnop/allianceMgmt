@@ -46,32 +46,19 @@
             </el-form-item>
             <el-row>
                 <el-col :span="12">
-                    <el-row>
-                        <el-col :span="10">
-                            <el-form-item label="合作时间" prop="corporateStart" class="tl team-time">
-                                <el-date-picker
-                                    format="yyyy-MM-dd"
-                                    v-model="form.corporateStart"
-                                    type="date"
-                                    placeholder="选择日期"
-                                    style="width:150px"
-                                    value-format="yyyy-MM-dd">
-                                </el-date-picker>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="10">
-                            <el-form-item prop="corporateEnd" label="至" class="team-time">
-                                <el-date-picker
-                                    format="yyyy-MM-dd"
-                                    v-model="form.corporateEnd"
-                                    type="date"
-                                    placeholder="选择日期"
-                                    style="width:150px"
-                                    value-format="yyyy-MM-dd">
-                                </el-date-picker>
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
+                    <el-form-item label="合作开始时间" prop="corporateStart">
+                            <el-date-picker
+                                v-model="form.corporateStart"
+                                type="daterange"
+                                align="right"
+                                unlink-panels
+                                range-separator="至"
+                                start-placeholder="开始日期"
+                                end-placeholder="结束日期"
+                                value-format="yyyy-MM-dd"
+                                format="yyyy-MM-dd">
+                            </el-date-picker>
+                        </el-form-item>
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="法人代表" prop="corporate" >

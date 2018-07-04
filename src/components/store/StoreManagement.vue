@@ -33,7 +33,7 @@
                         <el-form-item label="门店名称" prop="storeName">
                             <el-input v-model="form.storeName"></el-input>
                         </el-form-item>
-                        <el-row>
+                        <!--<el-row>
                             <el-col :span="5">
                                 <el-form-item label="创建时间" prop="cooperationStart">
                                     <el-date-picker
@@ -58,7 +58,20 @@
                                     </el-date-picker>
                                 </el-form-item>
                             </el-col>
-                        </el-row>
+                        </el-row>-->
+                        <el-form-item label="创建时间" prop="corporateStart">
+                            <el-date-picker
+                                v-model="form.corporateStart"
+                                type="daterange"
+                                align="right"
+                                unlink-panels
+                                range-separator="至"
+                                start-placeholder="开始日期"
+                                end-placeholder="结束日期"
+                                value-format="yyyy-MM-dd"
+                                format="yyyy-MM-dd">
+                            </el-date-picker>
+                        </el-form-item>
                         <el-form-item label="门店所属公司" prop="companyName">
                             <el-input v-model="form.companyName"></el-input>
                         </el-form-item>

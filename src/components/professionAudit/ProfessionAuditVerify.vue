@@ -53,7 +53,7 @@
                 </el-table-column>
             </el-table> 
             <el-dialog :title="title" :visible.sync="dialogVisible" width="30%">
-                <textarea name="" id="" style="width:100%;" rows="10" placeholder="请添加备注" v-model="textarea"></textarea>
+                <textarea name="" id="" style="width:100%;" rows="10" placeholder="请添加备注" v-model="remark"></textarea>
                 <span slot="footer" class="dialog-footer">
                     <el-button @click="dialogVisible = false">取 消</el-button>
                     <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
@@ -75,7 +75,7 @@ export default {
             historyRecords:[],// 历史审核记录
             searInfoList:[],
             dialogVisible:false,
-            textarea:'',
+            remark:'',
             title:''
         }
     },
@@ -86,7 +86,7 @@ export default {
         },
         handleApprove(){
             this.dialogVisible=true;
-            this.title='通过';
+            this.title='审核通过';
         },
         handleClose(){
             history.back();

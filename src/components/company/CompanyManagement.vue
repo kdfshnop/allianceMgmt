@@ -18,32 +18,19 @@
                         <el-form-item label="公司所属城市" prop="cityList">
                             <region v-model="form.cityList" :startLevel="startLevel" :endLevel="endLevel"></region>
                         </el-form-item>
-                        <el-row>
-                            <el-col :span="5">
-                                <el-form-item label="创建时间" prop="corporateStart">
-                                    <el-date-picker
-                                        format="yyyy-MM-dd"
-                                        v-model="form.corporateStart"
-                                        type="date"
-                                        placeholder="选择日期"
-                                        style="width:150px"
-                                        value-format="yyyy-MM-dd HH-mm-ss">
-                                    </el-date-picker>
-                                </el-form-item>
-                            </el-col>
-                            <el-col :span="19">
-                                <el-form-item prop="corporateEnd" label="至">
-                                    <el-date-picker
-                                        format="yyyy-MM-dd"
-                                        v-model="form.corporateEnd"
-                                        type="date"
-                                        placeholder="选择日期"
-                                        style="width:150px"
-                                        value-format="yyyy-MM-dd HH-mm-ss">
-                                    </el-date-picker>
-                                </el-form-item>
-                            </el-col>
-                        </el-row>
+                        <el-form-item label="合作时间" prop="corporateStart">
+                            <el-date-picker
+                                v-model="form.corporateStart"
+                                type="daterange"
+                                align="right"
+                                unlink-panels
+                                range-separator="至"
+                                start-placeholder="开始日期"
+                                end-placeholder="结束日期"
+                                value-format="yyyy-MM-dd"
+                                format="yyyy-MM-dd">
+                            </el-date-picker>
+                        </el-form-item>
                         <el-form-item label="业务" prop="businessType">
                             <el-select v-model="form.businessType" filterable>
                                 <el-option label="新房和二手房" value="3"></el-option>

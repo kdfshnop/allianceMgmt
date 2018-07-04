@@ -29,12 +29,16 @@
                         </el-form-item>
                         <el-form-item label="合作开始时间" prop="startTime">
                             <el-date-picker
-                                        format="yyyy-MM-dd"
-                                        v-model="form.startTime"
-                                        type="date"
-                                        placeholder="选择日期"
-                                        value-format="yyyy-MM-dd">
-                                    </el-date-picker>
+                                v-model="form.startTime"
+                                type="daterange"
+                                align="right"
+                                unlink-panels
+                                range-separator="至"
+                                start-placeholder="开始日期"
+                                end-placeholder="结束日期"
+                                value-format="yyyy-MM-dd"
+                                format="yyyy-MM-dd">
+                            </el-date-picker>
                         </el-form-item>
                         <el-form-item label="代理商类型" prop="agencyType">
                             <el-select v-model="form.agencyType" filterable>
@@ -81,15 +85,6 @@
                                 <el-option label="首次待缴费" value="3"></el-option>
                             </el-select>
                         </el-form-item>
-                        <el-form-item label="合作结束时间" prop="endTime">
-                            <el-date-picker
-                                        format="yyyy-MM-dd"
-                                        v-model="form.endTime"
-                                        type="date"
-                                        placeholder="选择日期"
-                                        value-format="yyyy-MM-dd">
-                            </el-date-picker>
-                        </el-form-item>
                         <el-form-item label="代理商公司名称" prop="agencyName">
                             <el-input v-model="form.agencyName" style="width:220px;"></el-input>
                         </el-form-item>
@@ -98,7 +93,7 @@
             </el-form>
             <el-row>
                 <el-col :span="2" :offset="10">
-                    <el-button class="reset" @click="resetForm">重置</el-button>
+                    <el-button class="reset" @click="reset">重置</el-button>
                 </el-col>
                 <el-col :span="2">
                     <el-button type="primary" @click="search">搜索</el-button>
@@ -232,7 +227,7 @@ export default {
         // 重新提交
         reSubmit(){},
         // 重置表单
-        resetForm(formName) {
+        reset(){
             this.$refs.form.resetFields();
         },
         //根据表单信息搜索
