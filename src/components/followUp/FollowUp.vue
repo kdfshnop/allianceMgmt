@@ -36,6 +36,7 @@ export default {
     data(){
         return {
             breadCrumb:[{text:'加盟管理'},{text:'代理商'},{text:'跟进'}],
+            agencyId:this.$route.params.id,
             mockData:[
                 {
                     addPeople:'豆豆',
@@ -61,9 +62,12 @@ export default {
             ]
         }
     },
+    created(){
+        
+    },
     methods:{
         addFollowUp(){
-            this.$router.push({name:'AddFollowUp'});
+            this.$router.push({name:'AddFollowUp',params:{id:this.agencyId}});
         },
         detail(index,row){
             this.$router.push({name:'FollowUpDetail',params:{id:row.id}});

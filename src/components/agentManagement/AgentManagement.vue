@@ -115,7 +115,7 @@
                         <el-tooltip placement="right" effect="light" v-if="scope.row.agencyType!=2">
                             <el-button type="text" size="mini">更多</el-button>
                             <div slot="content" @click="edit(scope.$index,scope.row)">编辑</div>
-                            <div slot="content" class="cz" @click="followUp" >跟进</div>
+                            <div slot="content" class="cz" @click="followUp(scope.$index,scope.row)" >跟进</div>
                             <div slot="content" class="cz" @click="endJoin(scope.$index,scope.row)">终止合作</div>
                         </el-tooltip>
                         <el-button v-if="false" size="mini" @click="reSubmit(scope.$index, scope.row)" type="text">重新提交</el-button>
@@ -199,8 +199,8 @@ export default {
             this.$router.push({name:'EditAgent',params:{id:row.agencyId}});
         },
         // 跟进
-        followUp(){
-
+        followUp(index,row){
+            this.$router.push({name:'FollowUp',params:{id:row.agencyId}});
         },
         // 终止合作;第一次弹出对话框
         endJoin(index,row){

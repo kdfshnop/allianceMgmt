@@ -100,15 +100,15 @@ let router = new Router({
       name: 'EditAgent',
       component: EditAgent
     },{
-      path:'/followUp',
+      path:'/followUp/:id',
       name:'FollowUp',
       component:FollowUp
     },{
-      path:'/addFollowUp',
+      path:'/addFollowUp/:id',
       name:'AddFollowUp',
       component:AddFollowUp
     },{
-      path:'/followUp/:id',
+      path:'/followUpDetail/:id',
       name:'FollowUpDetail',
       component:FollowUpDetaile
     }
