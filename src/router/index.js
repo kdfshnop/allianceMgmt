@@ -16,6 +16,9 @@ import AgentManagement from '@/components/agentManagement/AgentManagement';
 import Record from '@/components/record/Record';
 import AgentDetail from '@/components/agent/AgentDetail';
 import EditAgent from '@/components/agent/EditAgent';
+import FollowUp from '@/components/followUp/FollowUp';
+import AddFollowUp from '@/components/followUp/AddFollowUp';
+import FollowUpDetaile from '@/components/followUp/FollowUpDetail';
 
 Vue.use(Router);
 
@@ -70,7 +73,7 @@ let router = new Router({
       component:ProfessionEndResult
     },
     {
-      path:'/professionAuditVerify',
+      path:'/professionAuditVerify/:agencyId',
       name:'ProfessionAuditVerify',
       component:ProfessionAuditVerify
     },
@@ -96,6 +99,18 @@ let router = new Router({
       path: '/editagent/:id',
       name: 'EditAgent',
       component: EditAgent
+    },{
+      path:'/followUp',
+      name:'FollowUp',
+      component:FollowUp
+    },{
+      path:'/addFollowUp',
+      name:'AddFollowUp',
+      component:AddFollowUp
+    },{
+      path:'/followUp/:id',
+      name:'FollowUpDetail',
+      component:FollowUpDetaile
     }
   ]
 });

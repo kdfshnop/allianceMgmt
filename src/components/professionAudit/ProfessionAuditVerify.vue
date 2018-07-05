@@ -56,7 +56,7 @@
                 <textarea name="" id="" style="width:100%;" rows="10" placeholder="请添加备注" v-model="remark"></textarea>
                 <span slot="footer" class="dialog-footer">
                     <el-button @click="dialogVisible = false">取 消</el-button>
-                    <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+                    <el-button type="primary" @click="dialogVisible = false, submit()">确 定</el-button>
                 </span>
             </el-dialog>
         </el-main>
@@ -76,13 +76,18 @@ export default {
             searInfoList:[],
             dialogVisible:false,
             remark:'',
-            title:''
+            title:'',
+            agencyId:''//代理商公司Id;
         }
+    },
+    created(){
+        this.agencyId=this.$route.params.agencyId;
     },
     methods:{
         handleReject(){
             this.dialogVisible=true;
             this.title='驳回';
+            
         },
         handleApprove(){
             this.dialogVisible=true;
@@ -90,6 +95,25 @@ export default {
         },
         handleClose(){
             history.back();
+        },
+        submit(){
+            if(this.title=='驳回'){
+                this.$http.post(this.$apiUrl.agent.againReject+'/'+this.agencyId+"?remark="+this.remark)
+                .then(function(data){
+                    console.log(data,'驳回');
+                })
+                .catch(function(err){
+                    console.log(err)
+                })
+            }else{
+                this.$http.post(this.$apiUrl.agent.againAudit+'/'+this.agencyId+"?remark="+this.remark)
+                .then(function(data){
+                    console.log(data,'通过');
+                })
+                .catch(function(err){
+                    console.log(err)
+                })
+            }  
         }
     }
 }

@@ -44,6 +44,7 @@ export default {
             },
             tableData:[
                 {
+                    agencyId:"0",
                     name:'key',
                     submitPeople:'wk',
                     auditPeople:'经纪人',
@@ -51,6 +52,7 @@ export default {
                     endReason:'不合格'
                 },
                 {
+                    agencyId:"1",
                     name:'key',
                     submitPeople:'wk',
                     auditPeople:'经纪人',
@@ -58,6 +60,7 @@ export default {
                     endReason:'不合格'
                 },
                 {
+                    agencyId:"2",
                     name:'key',
                     submitPeople:'wk',
                     auditPeople:'经纪人',
@@ -65,6 +68,7 @@ export default {
                     endReason:'不合格'
                 },
                 {
+                    agencyId:"3",
                     name:'key',
                     submitPeople:'wk',
                     auditPeople:'经纪人',
@@ -77,13 +81,16 @@ export default {
     methods:{
         //每页多少条
         handleSizeChange(val) {
+            console.log(123)
             this.pagination.pageSize=val;
         },
         //当前页
         handleCurrentChange(val) {
             this.pagination.currentPage=val;
         },
-        audit(){}
+        audit(index,row){
+            this.$router.push({name:'ProfessionAuditVerify',params:{agencyId:row.agencyId}});
+        }
     },
     computed:{
         //分页显示多少条数据

@@ -27,9 +27,9 @@
                                 <el-option label="已到期" value="4"></el-option>
                             </el-select>
                         </el-form-item>
-                        <el-form-item label="合作开始时间" prop="startTime">
+                        <el-form-item label="合作开始时间" prop="cooperationTime">
                             <el-date-picker
-                                v-model="form.startTime"
+                                v-model="form.cooperationTime"
                                 type="daterange"
                                 align="right"
                                 unlink-panels
@@ -102,21 +102,21 @@
             <div class="search-result">共搜索到 {{summary.agencyTotal}}家代理商，{{summary.regionTotal}}个代理区域，{{summary.storeTotal}}家门店</div>
             <el-table :data="agencyInfo.data" border style="width: 100%">
                 <el-table-column prop="agencyCompanyName" label="代理商公司名称" align="center" ></el-table-column>
-                <el-table-column prop="cityId" label="城市" align="center"></el-table-column>
-                <el-table-column prop="agencyType" label="代理商类型" align="center" ></el-table-column>
+                <el-table-column prop="cityName" label="城市" align="center"></el-table-column>
+                <el-table-column prop="agencyTypeName" label="代理商类型" align="center" ></el-table-column>
                 <el-table-column prop="regionTotal" label="代理区域数量" align="center" ></el-table-column>
                 <el-table-column prop="storeTotal" label="门店数量" align="center"></el-table-column>
-                <el-table-column prop="agencyState" label="合作状态" align="center"></el-table-column>
+                <el-table-column prop="tagsName" label="合作状态" align="center"></el-table-column>
                 <el-table-column prop="startTime" label="合作开始" align="center"></el-table-column>
                 <el-table-column prop="endTime" label="合作结束" align="center"></el-table-column>
-                <el-table-column prop="name" label="操作" width="300px" align="center">
+                <el-table-column label="操作" width="300px" align="center">
                     <template slot-scope="scope">
-                        <el-button size="mini" @click="detail(scope.$index, scope.row)" type="text">详情|</el-button>
-                        <el-tooltip placement="right" effect="light">
+                        <el-button size="mini" @click="detail(scope.$index, scope.row)" v-if="scope.row.agencyType!=2" type="text">详情|</el-button>
+                        <el-tooltip placement="right" effect="light" v-if="scope.row.agencyType!=2">
                             <el-button type="text" size="mini">更多</el-button>
-                            <div slot="content" @click="edit(scope.$index)">编辑</div>
+                            <div slot="content" @click="edit(scope.$index,scope.row)">编辑</div>
                             <div slot="content" class="cz" @click="followUp" >跟进</div>
-                            <div slot="content" class="cz" @click="endJoin(scope.$index,scope.row)" v-if="scope.row.isEnd">终止合作</div>
+                            <div slot="content" class="cz" @click="endJoin(scope.$index,scope.row)">终止合作</div>
                         </el-tooltip>
                         <el-button v-if="false" size="mini" @click="reSubmit(scope.$index, scope.row)" type="text">重新提交</el-button>
                     </template>
@@ -175,15 +175,14 @@ export default {
             // 表单查询信息
             form: {
                 agencyName:'',//代理商公司名称
-                agencyState:'',//合作状态
-                agencyTag:'',//合作标签
+                agencyState:'0',//合作状态
+                agencyTag:'0',//合作标签
                 agencyType:'0',//代理商类型
                 cityId:'',//代理商所属城市
                 cityList:[],//二级联动城市
+                cooperationTime:[],//合作时间段
                 currentPage:1,//页码默认为1
-                endTime:'',//合作结束时间
                 pageSize:10,//页面量默认为10
-                startTime:'',//合作开始时间
                 searchDate:'',//到期日期
                 searchDay:'',//即将到期天数
                 searchType:'',//到期查询方式
@@ -196,8 +195,8 @@ export default {
     },
     methods:{
         // 编辑
-        edit(index){
-            console.log(index,2222)
+        edit(index,row){
+            this.$router.push({name:'EditAgent',params:{id:row.agencyId}});
         },
         // 跟进
         followUp(){
@@ -212,7 +211,7 @@ export default {
         // 确定终止合作;
         noJoin(){
             this.secondDialogVisible = false;
-            this.$http.post(this.$apiUrl.agent.terminate+"/"+this.currentCompanyInfo.agencyId+"?remark="+remark)
+            this.$http.post(this.$apiUrl.agent.terminate+"/"+this.currentCompanyInfo.agencyId+"?remark="+this.remark)
                 .then(function(data){
                     console.log(data,'提交代理商终止合作');
                 })
@@ -222,7 +221,7 @@ export default {
         },
         // 详情
         detail(index,row){
-            this.currentCompanyInfo=row;
+            this.$router.push({name:'AgentDetail',params:{id:row.agencyId}});
         },
         // 重新提交
         reSubmit(){},

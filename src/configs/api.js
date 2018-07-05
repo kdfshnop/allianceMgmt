@@ -34,6 +34,8 @@ export default {
         list: "/agency/list", // 代理商列表接口
         summary:"agency/summary",//代理商汇总 post
         terminate:"agency/terminate",//终止合作 post
+        againAudit:"agency/auditing",//代理商第一次通过审核后，再次编辑，需再次审核通过接口post
+        againReject:"agency/reject",//代理商第一次通过审核后，再次编辑，需再次审核驳回接口post
     },
     company:{//公司
         add:"company/single",//添加公司 put
