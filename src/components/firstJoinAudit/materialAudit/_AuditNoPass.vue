@@ -3,52 +3,39 @@
         <el-form ref="form" :model="form" label-width="180px" class="gap-2">
             <el-row >
                 <el-col :span="12">
-                    <el-form-item label="提交人" prop="city">
-                        <el-input v-model="form.city"></el-input>
+                    <el-form-item label="提交人" prop="submitName">
+                        <el-input v-model="form.submitName"></el-input>
                     </el-form-item>
-                    <el-row>
-                        <el-col :span="5">
-                            <el-form-item label="审核时间" prop="timeStart">
-                                <el-date-picker
-                                    format="yyyy-MM-dd"
-                                    v-model="form.timeStart"
-                                    type="date"
-                                    placeholder="选择日期"
-                                    style="width:150px"
-                                    value-format="yyyy-MM-dd">
-                                </el-date-picker>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="19">
-                            <el-form-item prop="timeEnd" label="至">
-                                <el-date-picker
-                                    format="yyyy-MM-dd"
-                                    v-model="form.timeEnd"
-                                    type="date"
-                                    placeholder="选择日期"
-                                    style="width:150px"
-                                    value-format="yyyy-MM-dd">
-                                </el-date-picker>
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
+                    <el-form-item label="审核时间" prop="auditTime">
+                            <el-date-picker
+                                v-model="form.auditTime"
+                                type="daterange"
+                                align="right"
+                                unlink-panels
+                                range-separator="至"
+                                start-placeholder="开始日期"
+                                end-placeholder="结束日期"
+                                value-format="yyyy-MM-dd"
+                                format="yyyy-MM-dd">
+                            </el-date-picker>
+                        </el-form-item>
                 </el-col>
                 <el-col :span="12">
-                    <el-form-item label="审核人" prop="companyName">
-                        <el-input v-model="form.companyName"></el-input>
+                    <el-form-item label="审核人" prop="auditName">
+                        <el-input v-model="form.auditName"></el-input>
                     </el-form-item>
-                    <el-form-item label="门店/代理商" prop="agent">
-                        <el-input v-model="form.agent"></el-input>
+                    <el-form-item label="代理商" prop="agencyName">
+                        <el-input v-model="form.agencyName"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
         </el-form>
         <el-row :gutter="20">
             <el-col :span="2" :offset="11">
-                <el-button class="reset" @click="resetForm('form')">重置</el-button>
+                <el-button class="reset" @click="resetForm">重置</el-button>
             </el-col>
             <el-col :span="2">
-                <el-button type="primary" @click="search('form')">搜索</el-button>
+                <el-button type="primary" @click="search">搜索</el-button>
             </el-col>
         </el-row>
         <div class="search-result" >共搜索到 956条数据</div>
@@ -87,15 +74,14 @@ export default {
             },
             // 表单查询信息
             form: {
-                agent:'',//代理商
-                business:'全部',//业务
-                city:'',//门店所属城市
-                companyName:'',//公司名称
-                timeStart:'',//创建开始时间
-                timeEnd:'',//创建结束时间
-                storeName: '',//门店名称
-                storeAddress:'',//门店地址
-                timeOver:''//到期查询
+                auditName:'',//审核人
+                auditType:'1',//资料审核
+                auditTime:[],//审核时间
+                agencyName:'',//代理商名称
+                currentPage:1,//页码默认为1
+                pageSize:10,//页面量默认为10
+                submitName:'',//提交人
+                targetState:'2',//已驳回
             },
             tableData:[
                 {

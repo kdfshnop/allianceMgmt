@@ -45,7 +45,8 @@ export default {
     },
     methods:{
         submit(){
-
+            this.getNowFormatDate();
+            console.log(this.currentdate,2222)
         },
         //   上传附件的方法;
         handleRemove(file, fileList) {

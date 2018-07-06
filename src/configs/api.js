@@ -36,6 +36,9 @@ export default {
         terminate:"agency/terminate",//终止合作 post
         againAudit:"agency/auditing",//代理商第一次通过审核后，再次编辑，需再次审核通过接口post
         againReject:"agency/reject",//代理商第一次通过审核后，再次编辑，需再次审核驳回接口post
+        followUp:"agency/follow",//代理商跟进列表post,跟进详情get,添加跟进put
+        firstAuditSummary:"first/audit/summary",//首次加盟汇总 post
+        firstWaitAuditList:"first/audit/list",//首次加盟待审核代理商列表,post
     },
     company:{//公司
         add:"company/single",//添加公司 put

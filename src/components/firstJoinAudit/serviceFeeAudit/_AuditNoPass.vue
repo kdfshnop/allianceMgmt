@@ -37,7 +37,7 @@
                     <el-form-item label="审核人" prop="companyName">
                         <el-input v-model="form.companyName"></el-input>
                     </el-form-item>
-                    <el-form-item label="门店/代理商" prop="agent">
+                    <el-form-item label="代理商" prop="agent">
                         <el-input v-model="form.agent"></el-input>
                     </el-form-item>
                 </el-col>
@@ -53,7 +53,7 @@
         </el-row>
         <div class="search-result" >共搜索到 956条数据</div>
         <el-table :data="searInfoList" border style="width: 100%">
-            <el-table-column prop="name" label="门店/代理商公司名称" align="center" ></el-table-column>
+            <el-table-column prop="name" label="代理商公司名称" align="center" ></el-table-column>
             <el-table-column prop="submitPeople" label="类型" align="center" ></el-table-column>
             <el-table-column prop="auditPeople" label="提交人" align="center" ></el-table-column>
             <el-table-column prop="endReason" label="审核人" align="center"></el-table-column>

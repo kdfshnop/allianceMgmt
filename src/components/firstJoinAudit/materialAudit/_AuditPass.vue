@@ -6,7 +6,7 @@
                     <el-form-item label="提交人" prop="city">
                         <el-input v-model="form.city"></el-input>
                     </el-form-item>
-                    <el-row>
+                    <!--<el-row>
                         <el-col :span="5">
                             <el-form-item label="审核时间" prop="timeStart">
                                 <el-date-picker
@@ -31,13 +31,26 @@
                                 </el-date-picker>
                             </el-form-item>
                         </el-col>
-                    </el-row>
+                    </el-row>-->
+                    <el-form-item label="审核时间" prop="auditStartTime">
+                            <el-date-picker
+                                v-model="form.auditStartTime"
+                                type="daterange"
+                                align="right"
+                                unlink-panels
+                                range-separator="至"
+                                start-placeholder="开始日期"
+                                end-placeholder="结束日期"
+                                value-format="yyyy-MM-dd"
+                                format="yyyy-MM-dd">
+                            </el-date-picker>
+                        </el-form-item>
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="审核人" prop="companyName">
                         <el-input v-model="form.companyName"></el-input>
                     </el-form-item>
-                    <el-form-item label="门店/代理商" prop="agent">
+                    <el-form-item label="代理商" prop="agent">
                         <el-input v-model="form.agent"></el-input>
                     </el-form-item>
                 </el-col>
@@ -53,7 +66,7 @@
         </el-row>
         <div class="search-result" >共搜索到 956条数据</div>
         <el-table :data="searInfoList" border style="width: 100%">
-            <el-table-column prop="name" label="门店/代理商名称" align="center" ></el-table-column>
+            <el-table-column prop="name" label="代理商名称" align="center" ></el-table-column>
             <el-table-column prop="submitPeople" label="类型" align="center" ></el-table-column>
             <el-table-column prop="auditPeople" label="提交人" align="center" ></el-table-column>
             <el-table-column prop="endReason" label="审核人" align="center"></el-table-column>
@@ -87,6 +100,7 @@ export default {
             },
             // 表单查询信息
             form: {
+                auditStartTime:'',
                 agent:'',//代理商
                 business:'全部',//业务
                 city:'',//门店所属城市

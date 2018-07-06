@@ -1,5 +1,5 @@
 <!--
-    @页面名称：跟进页
+    @页面名称：跟进列表页
     @作者：豆亚东 (douyadong@lifang.com)
     @业务逻辑说明：
         1.代理商、公司、门店列表页终止合作后信息流转至该页面，进行审核
@@ -10,14 +10,13 @@
         <el-main>
             <bread-crumb :items="breadCrumb"></bread-crumb>
             <div style="text-align:right;margin-bottom:50px;">
-                <el-button type="primary">返回</el-button>
+                <el-button type="primary" @click="goBack">返回</el-button>
                 <el-button type="primary" @click="addFollowUp">+添加跟进</el-button>
             </div>
-            <el-table :data="mockData" border style="width: 100%">
-                <el-table-column prop="time" label="创建时间" align="center"></el-table-column>
-                <el-table-column prop="addPeople" label="添加人" align="center" ></el-table-column>
-                <el-table-column prop="name" label="中介公司全称" align="center" ></el-table-column>
-                <el-table-column prop="info" label="信息" align="center" ></el-table-column>
+            <el-table :data="apiData" border style="width: 100%">
+                <el-table-column prop="createTime" label="创建时间" align="center"></el-table-column>
+                <el-table-column prop="operator" label="添加人" align="center" ></el-table-column>
+                <el-table-column prop="message" label="信息" align="center" ></el-table-column>
                 <el-table-column  label="操作" align="center">
                     <template slot-scope="scope">
                         <el-button size="mini" type="text" @click="detail(scope.$index,scope.row)">详情</el-button>
@@ -36,41 +35,30 @@ export default {
     data(){
         return {
             breadCrumb:[{text:'加盟管理'},{text:'代理商'},{text:'跟进'}],
-            agencyId:this.$route.params.id,
-            mockData:[
-                {
-                    addPeople:'豆豆',
-                    time:'2015-03-02',
-                    name:'上海好居',
-                    info:'今天去拜访了，但是谈的条件比较严格，还要回来继续讨……',
-                    id:'1'
-                },
-                {
-                    addPeople:'豆豆',
-                    time:'2015-03-02',
-                    name:'上海好居',
-                    info:'今天去拜访了，但是谈的条件比较严格，还要回来继续讨……',
-                    id:2
-                },
-                {
-                    addPeople:'豆豆',
-                    time:'2015-03-02',
-                    name:'上海好居',
-                    info:'今天去拜访了，但是谈的条件比较严格，还要回来继续讨……',
-                    id:3
-                }
-            ]
+            agencyId:this.$route.query.agencyId,
+            apiData:[]
         }
     },
     created(){
-        
+        let self=this;
+        this.$http.post(this.$apiUrl.agent.followUp,{agencyId:this.agencyId})
+            .then(function(data){
+                self.apiData=data.data.data.data;
+                console.log(data.data.data.data,'列表成功');
+            })
+            .catch(function(err){
+                console.log(err,'列表失败');
+            })
     },
     methods:{
         addFollowUp(){
-            this.$router.push({name:'AddFollowUp',params:{id:this.agencyId}});
+            this.$router.push({name:'AddFollowUp',query:{agencyId:this.agencyId}});
         },
         detail(index,row){
-            this.$router.push({name:'FollowUpDetail',params:{id:row.id}});
+            this.$router.push({name:'FollowUpDetail',query:{id:row.id}});
+        },
+        goBack(){
+            history.back();
         }
     }
 }

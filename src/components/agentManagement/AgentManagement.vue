@@ -200,7 +200,7 @@ export default {
         },
         // 跟进
         followUp(index,row){
-            this.$router.push({name:'FollowUp',params:{id:row.agencyId}});
+            this.$router.push({name:'FollowUp',query:{agencyId:row.agencyId}});
         },
         // 终止合作;第一次弹出对话框
         endJoin(index,row){
@@ -210,14 +210,22 @@ export default {
         },
         // 确定终止合作;
         noJoin(){
-            this.secondDialogVisible = false;
-            this.$http.post(this.$apiUrl.agent.terminate+"/"+this.currentCompanyInfo.agencyId+"?remark="+this.remark)
-                .then(function(data){
-                    console.log(data,'提交代理商终止合作');
-                })
-                .catch(function(err){
-                    console.log(err);
-                });
+            let self=this;
+            if(this.remark){
+                this.secondDialogVisible = false;
+                this.$http.post(this.$apiUrl.agent.terminate+"/"+this.currentCompanyInfo.agencyId+"?remark="+this.remark)
+                    .then(function(data){
+                        console.log(data,'提交代理商终止合作');
+                        self.remark='';
+                        alert('已将终止合作信息流转到审核流程');
+                    })
+                    .catch(function(err){
+                        console.log(err);
+                    });
+            }else{
+                alert('请填写终止合作原因');
+            }
+            
         },
         // 详情
         detail(index,row){

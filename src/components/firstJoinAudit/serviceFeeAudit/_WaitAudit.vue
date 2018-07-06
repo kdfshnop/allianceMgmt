@@ -2,7 +2,7 @@
     <div>
         <div class="search-result" >共搜索到 956条数据</div>
         <el-table :data="searInfoList" border style="width: 100%">
-            <el-table-column prop="name" label="门店/代理商公司名称" align="center" ></el-table-column>
+            <el-table-column prop="name" label="代理商公司名称" align="center" ></el-table-column>
             <el-table-column prop="submitPeople" label="地区" align="center" ></el-table-column>
             <el-table-column prop="auditPeople" label="提交人" align="center" ></el-table-column>
             <el-table-column  label="状态" align="center" >
