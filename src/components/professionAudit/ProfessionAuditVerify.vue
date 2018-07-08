@@ -71,23 +71,38 @@ export default {
     components:{BreadCrumb},
     data(){
         return {
+            auditType:'1',//编辑审核
             breadCrumb: [{text:'业务审核'},{text: "编辑审核"},{text:'审核'}],
             historyRecords:[],// 历史审核记录
             searInfoList:[],
             dialogVisible:false,
             remark:'',
             title:'',
-            agencyId:''//代理商公司Id;
+            id:this.$route.query.id//代理商公司Id;
         }
     },
     created(){
-        this.agencyId=this.$route.params.agencyId;
+        // 编辑更改了哪些字段;
+        this.$http.get(this.$apiUrl.professionAudit.detailContract+"?id="+this.id)
+            .then(function(data){
+                console.log('编辑详情')
+            })
+            .catch(function(err){
+                console.log(err);
+            });
+        // 历史审核记录
+        this.$http.get(this.$apiUrl.professionAudit.historyAudit+"?id="+this.id)
+            .then(function(data){
+                console.log('历史审核记录');
+            })
+            .catch(function(err){
+                console.log(err);
+            });
     },
     methods:{
         handleReject(){
             this.dialogVisible=true;
             this.title='驳回';
-            
         },
         handleApprove(){
             this.dialogVisible=true;
@@ -97,21 +112,28 @@ export default {
             history.back();
         },
         submit(){
+            let form={
+                targetId:this.id,
+                auditType:this.auditType,
+                remark:this.remark
+            };
             if(this.title=='驳回'){
-                this.$http.post(this.$apiUrl.agent.againReject+'/'+this.agencyId+"?remark="+this.remark)
+                this.$http.post(this.$apiUrl.professionAudit.reject,form)
                 .then(function(data){
-                    console.log(data,'驳回');
+                    console.log('驳回');
+                    this.remark="";
                 })
                 .catch(function(err){
-                    console.log(err)
+                    console.log(err);
                 })
             }else{
-                this.$http.post(this.$apiUrl.agent.againAudit+'/'+this.agencyId+"?remark="+this.remark)
+                this.$http.post(this.$apiUrl.professionAudit.pass,form)
                 .then(function(data){
-                    console.log(data,'通过');
+                    console.log('通过');
+                    this.remark="";
                 })
                 .catch(function(err){
-                    console.log(err)
+                    console.log(err);
                 })
             }  
         }

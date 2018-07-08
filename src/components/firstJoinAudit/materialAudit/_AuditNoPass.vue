@@ -40,10 +40,10 @@
         </el-row>
         <div class="search-result" >共搜索到 956条数据</div>
         <el-table :data="searInfoList" border style="width: 100%">
-            <el-table-column prop="name" label="门店/代理商公司名称" align="center" ></el-table-column>
+            <el-table-column prop="name" label="代理商公司名称" align="center" ></el-table-column>
             <el-table-column prop="submitPeople" label="类型" align="center" ></el-table-column>
-            <el-table-column prop="auditPeople" label="提交人" align="center" ></el-table-column>
-            <el-table-column prop="endReason" label="审核人" align="center"></el-table-column>
+            <el-table-column prop="submitterName" label="提交人" align="center" ></el-table-column>
+            <el-table-column prop="auditorName" label="审核人" align="center"></el-table-column>
             <el-table-column prop="endReason" label="驳回时间" align="center"></el-table-column>
             <el-table-column prop="endReason" label="驳回原因" align="center"></el-table-column>
         </el-table>
@@ -51,11 +51,11 @@
             <el-pagination
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
-                :current-page="pagination.currentPage"
-                :page-sizes="[10, 2, 3, 400]"
-                :page-size="pagination.pageSize"
+                :current-page="form.currentPage"
+                :page-sizes="[10, 20, 50, 100,500]"
+                :page-size="form.pageSize"
                 layout="total, sizes, prev, pager, next, jumper"
-                :total="pagination.total">
+                :total="total">
             </el-pagination>
         </div>
     </div>  
@@ -67,11 +67,7 @@ export default {
     data(){
         return {
             // 分页功能
-            pagination:{
-                currentPage:1,//默认当前页为1;
-                pageSize:10,//默认显示10条
-                total:400//一共有多少条数据
-            },
+            total:100,
             // 表单查询信息
             form: {
                 auditName:'',//审核人
@@ -86,8 +82,8 @@ export default {
             tableData:[
                 {
                     name:'key',
-                    submitPeople:'wk',
-                    auditPeople:'经纪人',
+                    submitterName:'wk',
+                    auditorName:'经纪人',
                     auditTime:'2018-12-05',
                     endReason:'不合格'
                 },
@@ -115,27 +111,42 @@ export default {
             ]
         }
     },
+    created(){
+        this.requestList();
+    },
     methods:{
         //每页多少条
         handleSizeChange(val) {
-            this.pagination.pageSize=val;
+            this.form.pageSize=val;
+            this.requestList();
         },
         //当前页
         handleCurrentChange(val) {
-            this.pagination.currentPage=val;
+            this.form.currentPage=val;
+            this.requestList();
         },
-        resetForm(formName) {
+        resetForm() {
             this.$refs.form.resetFields();
         },
-        search(formName){
-
+        search(){
+            this.requestList();
         },
-        audit(){}
+        // 请求公共函数
+        requestList(){
+            let self=this;
+            this.$http.post(this.$apiUrl.agent.firstWaitAuditList,this.form)
+                .then(function(data){
+                    console.log(data,'成功');
+                })
+                .catch(function(err){
+                    console.log(err,'失败');
+                });
+        }
     },
     computed:{
         //分页显示多少条数据
         searInfoList(){
-            return this.tableData.slice((this.pagination.currentPage-1)*this.pagination.pageSize,this.pagination.currentPage*this.pagination.pageSize); 
+            return this.tableData.slice((this.form.currentPage-1)*this.form.pageSize,this.form.currentPage*this.form.pageSize); 
         }
     },
 }

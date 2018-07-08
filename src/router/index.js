@@ -73,7 +73,7 @@ let router = new Router({
       component:ProfessionEndResult
     },
     {
-      path:'/professionAuditVerify/:agencyId',
+      path:'/professionAuditVerify',
       name:'ProfessionAuditVerify',
       component:ProfessionAuditVerify
     },

@@ -41,11 +41,18 @@ export default {
         return {
             breadCrumb: [{text:'加盟管理'},{text: "代理商"},{text:'跟进'},{text:'跟进详情'}],
             remark:'',
-            material:''
+            material:'',
+            id:this.$route.query.id
         }
     },
     created(){
-
+        this.$http.get(this.$apiUrl.agent.followUp+"?id="+this.id)
+            .then(function(data){
+                console.log(data,'成功');
+            })
+            .catch(function(err){
+                console.log(err);
+            })
     },
     methods:{
         back(){

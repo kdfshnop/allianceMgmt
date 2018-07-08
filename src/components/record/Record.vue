@@ -21,6 +21,7 @@ export default {
     name:'Record',
     data(){
         return {
+            agencyId:'1',
              tableData: [{
           date: '2016-05-02',
           name: '王小虎',
@@ -39,6 +40,15 @@ export default {
           address: '上海市普陀区金沙江路 1516 弄'
         }]
         }
+    },
+    created(){
+        this.$http.get(this.$apiUrl.agent.record+"/"+this.agencyId)
+        .then(function(data){
+            console.log('成功');
+        })
+        .catch(function(err){
+            console.log(err,'失败');
+        })
     },
     computed:{
         recordData(){

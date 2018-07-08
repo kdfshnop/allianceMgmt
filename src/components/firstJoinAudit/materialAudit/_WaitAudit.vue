@@ -44,8 +44,7 @@ export default {
                 pageSize:10,//默认显示10条
                 total:10//一共有多少条数据
             },
-            targetState:"1",//1
-            waitAuditList:[]//待审核代理商列表;
+            waitAuditList:[]//代理商资料待审核列表;
         }
     },
     created(){
@@ -54,13 +53,11 @@ export default {
     methods:{
         //每页多少条
         handleSizeChange(val) {
-            console.log(111111)
             this.pagination.pageSize=val;
             this.requestList();
         },
         //当前页
         handleCurrentChange(val) {
-            console.log(123456);
             this.pagination.currentPage=val;
             this.requestList();
         },
@@ -72,10 +69,10 @@ export default {
         requestList(){
             let self=this;
             let requestInfo={
-                auditType:"1",
+                auditType:this.auditType,
                 currentPage:this.pagination.currentPage,
                 pageSize:this.pagination.pageSize,
-                targetState:"1"
+                targetState:this.targetState
             }
             this.$http.post(this.$apiUrl.agent.firstWaitAuditList,requestInfo)
                 .then(function(data){

@@ -41,12 +41,22 @@ export default {
         return {
             breadCrumb: [{text:'加盟管理'},{text: "代理商"},{text:'跟进'},{text:'添加跟进'}],
             remark:'',
+            fileKey:'',//上传文件key
         }
     },
     methods:{
         submit(){
-            this.getNowFormatDate();
-            console.log(this.currentdate,2222)
+            let form={
+                remark:this.remark,
+                fileKey:this.fileKey
+            }
+            this.$http.put(this.$apiUrl.agent.followUp,form)
+                .then(function(data){
+                    alert('已提交');
+                })
+                .catch(function(err){
+                    console.log(err)
+                })
         },
         //   上传附件的方法;
         handleRemove(file, fileList) {

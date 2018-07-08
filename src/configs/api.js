@@ -39,6 +39,7 @@ export default {
         followUp:"agency/follow",//代理商跟进列表post,跟进详情get,添加跟进put
         firstAuditSummary:"first/audit/summary",//首次加盟汇总 post
         firstWaitAuditList:"first/audit/list",//首次加盟待审核代理商列表,post
+        record:"agency/operateLog"//日志
     },
     company:{//公司
         add:"company/single",//添加公司 put
@@ -46,6 +47,14 @@ export default {
         edit:"agency/company",//编辑公司 post
         list:"company/list",//公司列表 post为查询,get获取所有
         summary:"company/summary"//公司汇总 get
+    },
+    professionAudit:{
+        auditList:"business/audit/list",//业务审核列表post
+        detailContract:"business/audit/edit/detail",//编辑详情新旧对比get
+        historyAudit:"business/audit/history",//历史审核记录get
+        pass:"business/audit/adopt",//审核通过post
+        reject:"business/audit/reject",//审核驳回post
+        summary:"business/audit/summary"//汇总
     },
     store:{//门店
         add:"sotre/single",//添加门店 put
