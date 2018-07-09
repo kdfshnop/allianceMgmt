@@ -46,7 +46,7 @@ export default {
         commission:'company/commission',//分佣账号设置 post
         edit:"agency/company",//编辑公司 post
         list:"company/list",//公司列表 post为查询,get获取所有
-        summary:"company/summary"//公司汇总 get
+        summary:"company/summary"//公司汇总 post
     },
     professionAudit:{
         auditList:"business/audit/list",//业务审核列表post

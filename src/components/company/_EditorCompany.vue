@@ -41,14 +41,14 @@
                     </el-form-item>
                 </el-col>
             </el-row>
-            <el-form-item label="bd" prop="operator"  label-width="40px" class="tl">
-                <el-input v-model="form.operator" placeholder="请选择"></el-input>
+            <el-form-item label="bd" prop="bd"  label-width="40px" class="tl">
+                <el-input v-model="form.bd" placeholder="请选择"></el-input>
             </el-form-item>
             <el-row>
                 <el-col :span="12">
-                    <el-form-item label="合作开始时间" prop="corporateStart">
+                    <el-form-item label="合作时间" prop="cooperationStart" class="tl">
                             <el-date-picker
-                                v-model="form.corporateStart"
+                                v-model="form.cooperationStart"
                                 type="daterange"
                                 align="right"
                                 unlink-panels
@@ -79,12 +79,12 @@
                 </el-col>
             </el-row>
             <el-form-item label="代理商" class="tl" prop="agencyId">
-                <el-select v-model="form.agencyId" placeholder="请选择" @focus="agencyListe" filterable>
+                <el-select v-model="form.agencyId" placeholder="请选择" @focus="agencyList" filterable>
                     <el-option label="暂无代理商" value="0"></el-option>
                     <el-option
-                        v-for="item in agencyList"
+                        v-for="item in agencyInfoList"
                         :key="item.agencyId"
-                        :label="item.agencyName"
+                        :label="item.agencyCompanyName"
                         :value="item.agencyId">
                     </el-option>
                 </el-select>
@@ -105,8 +105,8 @@
             </el-form-item>
         </el-form>
         <span slot="footer" class="dialog-footer">
-            <el-button @click="submitForm('form')" type="primary">保存</el-button>
-            <el-button @click="resetForm('form')">关闭</el-button>
+            <el-button @click="submitForm" type="primary">保存</el-button>
+            <el-button @click="resetForm">关闭</el-button>
         </span>
     </el-dialog>
 </template>
@@ -119,37 +119,26 @@ export default {
     components:{Region},
     data(){
         return {
-            agencyList:[
-                {
-                    agencyId:'1',
-                    agencyName:'北京代理商'
-                },
-                {
-                    agencyId:"2",
-                    agencyName:'上海代理商'
-                }
-            ],
+            agencyInfoList:[],
             dialogVisible:false,
             startLevel:1,//二级联动城市传参
             endLevel:2,//二级联动城市传参
             form:{
-                abbreviation:'',//公司简称
+                abbreviation:'',//中介公司简称
                 address:'',//地址
                 agencyId:'',//代理商Id
+                bd:'',//bd
                 businessType:'',//房源类型,0为选择，1.新上，2.二手房，3.新房＋二手房
                 cityId:'',//所属城市Id
-                cityList:[],
+                cityList:[],//值必须为number
                 corporate:'',//法人代表
                 corporatePhone:'',//电话
-                corporateStart:'',//合作开始时间
-                corporateEnd:'',//合作结束时间
+                cooperationStart:[],//合作时间段
                 deposit:'',//保证金
-                name:'',//公司名称
+                name:'',//中介公司名称
                 organizationCode:'',//组织机构代码
-                operator:'',//操作人
                 provinceId:'',//省份Id
-                resourceKey:'',//上传的资源key
-                state:''//状态1.合作中，2.合作终止 
+                resourceKey:'',//上传的资源key 
             },
             // 必填设置
             rules: {
@@ -158,20 +147,9 @@ export default {
                 cityList: [{ required: true, message: '请输入城市', trigger: 'blur' }],
                 deposit: [{ required: true, message: '请输入保证金', trigger: 'blur' }],
                 organizationCode: [{ required: true, message: '请输入组织机构代码', trigger: 'blur' }],
-                corporateStart: [{ required: true, message: '请输入合作开始时间', trigger: 'blur' }],
-                corporateEnd: [{ required: true, message: '请输入合作结束时间', trigger: 'blur' }]
+                cooperationStart: [{ required: true, message: '请输入合作时间段', trigger: 'blur' }]
             }
         }
-    },
-    created(){
-        // 获取代理商列表;
-        this.$http.get(this.$apiUrl.common.agency)
-            .then(function(data){
-                 console.log(data,'代理商列表成功');
-            })
-            .catch(function(err){
-                console.log(err,'代理商接口错误');
-            })
     },
     methods:{
         open() {
@@ -179,40 +157,30 @@ export default {
                 this.form=Object.assign({},this.currentCompanyInfo,{cityList:[this.currentCompanyInfo.provinceId,this.currentCompanyInfo.cityId]});
             }else{
                 this.form={
-                    abbreviation:'',//公司简称
+                    abbreviation:'',//中介公司简称
                     address:'',//地址
                     agencyId:'',//代理商Id
-                    businessType:'',//房源类型,空为未选择，1.新上，2.二手房，3.新房＋二手房
-                    cityId:'',//所属城市
-                    cityList:[],//城市二级联动所需
+                    bd:'',//bd
+                    businessType:'',//房源类型,0为选择，1.新上，2.二手房，3.新房＋二手房
+                    cityId:'',//所属城市Id
+                    cityList:[],
                     corporate:'',//法人代表
                     corporatePhone:'',//电话
-                    corporateStart:'',//合作开始时间
-                    corporateEnd:'',//合作结束时间
+                    cooperationStart:[],//合作时间段
                     deposit:'',//保证金
-                    name:'',//公司名称
+                    name:'',//中介公司名称
                     organizationCode:'',//组织机构代码
-                    operator:'',//操作人
                     provinceId:'',//省份Id
                     resourceKey:'',//上传的资源key 
                 }
             }
             this.dialogVisible = true;
         },
-        agencyListe(){
-            this.agencyList=[
-                {
-                    agencyId:'1',
-                    agencyName:'商丘代理商'
-                },
-                {
-                    agencyId:"2",
-                    agencyName:'上海代理商'
-                }
-            ];
+        agencyList(){
+            let self=this;
             this.$http.get(this.$apiUrl.agent.list)
             .then(function(data){
-                console.log(data,'代理商列表成功aaaaa');
+                self.agencyInfoList=data.data.data.data;
             })
             .catch(function(err){
                 console.log(err,'代理商列表失败');
@@ -226,7 +194,7 @@ export default {
             })
             .catch(_ => {});
         },
-        submitForm(formName) {
+        submitForm() {
             this.$refs.form.validate((valid) => {
                 if (valid) {
                     this.dialogVisible=false;
@@ -257,8 +225,8 @@ export default {
                 }
             });
         },
-        resetForm(formName) {
-            this.$refs[formName].resetFields();
+        resetForm() {
+            this.$refs.form.resetFields();
             this.dialogVisible=false;
         },
         //   上传附件的方法;

@@ -92,18 +92,18 @@
                     <el-button type="primary" @click="search">搜索</el-button>
                 </el-col>
             </el-row>
-            <div class="search-result">共搜索到 956家公司，56家有代理商，900家无代理商</div>
-            <el-table :data="searInfoList" border style="width: 100%">
+            <div class="search-result">共搜索到 {{summary.companyTotal}}家公司，{{summary.hATotal}}家有代理商，{{summary.nATotal}}家无代理商</div>
+            <el-table :data="companyInfoList" border style="width: 100%">
                 <el-table-column type="index" label="序号" align="center" width="100" ></el-table-column>
                 <el-table-column prop="city" label="城市" align="center" ></el-table-column>
-                <el-table-column prop="name" label="中介公司全称" align="center" ></el-table-column>
-                <el-table-column prop="abbreviation" label="中介公司简称" align="center" ></el-table-column>
-                <el-table-column prop="operator" label="代理商公司" align="center"></el-table-column>
-                <el-table-column prop="corporateStart" label="有效期始" align="center"></el-table-column>
-                <el-table-column prop="corporateEnd" label="有效期止" align="center"></el-table-column>
-                <el-table-column prop="operator" label="bd" align="center"></el-table-column>
-                <el-table-column prop="setUpTime" label="创建时间" align="center"></el-table-column>
-                <el-table-column prop="corporate" label="创建人" align="center"></el-table-column>
+                <el-table-column prop="companyName" label="中介公司全称" align="center" ></el-table-column>
+                <el-table-column prop="companyAbbreviation" label="中介公司简称" align="center" ></el-table-column>
+                <el-table-column prop="agencyName" label="代理商公司" align="center"></el-table-column>
+                <el-table-column prop="cooperationStart" label="有效期始" align="center"></el-table-column>
+                <el-table-column prop="cooperationEnd" label="有效期止" align="center"></el-table-column>
+                <el-table-column prop="bd" label="bd" align="center"></el-table-column>
+                <el-table-column prop="createTime" label="创建时间" align="center"></el-table-column>
+                <el-table-column prop="creater" label="创建人" align="center"></el-table-column>
                 <el-table-column prop="name" label="操作" width="300px" align="center">
                     <template slot-scope="scope">
                         <el-button size="mini" @click="editorCompany(scope.$index, scope.row)" type="text">编辑|</el-button>
@@ -133,7 +133,7 @@
                 </span>
             </el-dialog>
             <el-dialog title="终止公司合作" :visible.sync="secondDialogVisible" width="30%" >
-                <textarea name="" id="" rows="10" placeholder="请添加终止合作原因" v-model="textarea" style="width:100%;"></textarea>
+                <textarea name="" id="" rows="10" placeholder="请添加终止合作原因" v-model="remark" style="width:100%;"></textarea>
                 <span slot="footer" class="dialog-footer">
                     <el-button @click="secondDialogVisible = false,continueJoin()">取 消</el-button>
                     <el-button type="primary" @click="secondDialogVisible = false,endJoin()" >确 定</el-button>
@@ -162,23 +162,23 @@ export default {
             endLevel:2,//二级联动城市传参
             firstDialogVisible: false,//第一个终止合作弹出框
             secondDialogVisible:false,//第二个终止合作弹出框
-            textarea:'',//终止合作原因
+            remark:'',//终止合作原因
+            summary:{},//summary信息
+            companyInfoList:[],//公司列表信息
             companyInfoIndex:'',//操作公司时该公司处于所有列表的位置
             currentCompanyInfo:'',//当前编辑的公司信息
             title:'',//判断是编辑公司还是添加公司
-            total:400,
+            total:400,//根据查询信息查询到的信息总数;
+            currentPage:1,//默认当前页为1
+            pageSize:10,//默认显示10条信息
             // 表单查询信息
             form:{
-                agency:'',//代理商
-                businessType:'',//房源类型,空为未选择，1.新房，2.二手房，3.新房＋二手房
+                agency:'',//代理商名称
+                businessType:'',//公司业务类型,空为未选择，1.新房，2.二手房，3.新房＋二手房
                 cityId:'',//所属城市Id
                 cityList:[],//城市二级联动所需
-                corporateStart:'',//合作开始时间
-                corporateEnd:'',//合作结束时间
-                currentPage:1,//默认当前页为1
+                cooperationStart:'',//合作时间段
                 name:'',//公司名称
-                pageSize:10,//默认显示10条信息
-                provinceId:'',//省份Id
                 searchDate:'',//到期日期
                 searchDay:'',//即将到期天数 
                 searchType:'',//到期查询方式
@@ -186,63 +186,11 @@ export default {
                 storeName:''//门店名称
             },
             breadCrumb: [{text:'加盟管理'},{text: "公司管理"}],//面包屑
-            tableData: [{
-                city: '北京',
-                name: '上海好居科技有限公司',
-                address: '上海市长宁区 996 弄',
-                abbreviation:'悟空找房',
-                corporateStart:'2018-8-8',
-                corporateEnd:'2018-9-9',
-                operator:'cc',
-                corporate:'dd',
-                setUpTime:'2015-09-02',
-                storeAccount:10
-                }, {
-                    city: '上海',
-                    name: '上海有限公司好居科技有限公司',
-                    address: '上区 996 弄海市长宁',
-                    abbreviation:'悟空找房',
-                    corporateStart:'3000-8-8',
-                    corporateEnd:'2080-9-9',
-                    operator:'mm',
-                    corporate:'qq',
-                    setUpTime:'2015-09-02',
-                    storeAccount:100
-                }, {
-                    city: '上海',
-                    name: '上海有限公司好居科技有限公司',
-                    address: '上区 996 弄海市长宁',
-                    abbreviation:'悟空找房',
-                    corporateStart:'3000-8-8',
-                    corporateEnd:'2080-9-9',
-                    operator:'mm',
-                    corporate:'qq',
-                    setUpTime:'2015-09-02',
-                    storeAccount:100
-                }, {
-                    city: '上海',
-                    name: '上海有限公司好居科技有限公司',
-                    address: '上区 996 弄海市长宁',
-                    abbreviation:'悟空找房',
-                    corporateStart:'3000-8-8',
-                    corporateEnd:'2080-9-9',
-                    operator:'mm',
-                    corporate:'qq',
-                    setUpTime:'2015-09-02',
-                    storeAccount:100
-                }]
         }
     },
     created(){
         this.requestList();
-        // 获取summary信息
-        this.$http.get(this.$apiUrl.company.summary)
-        .then(function(data){
-            console.log(data,'summary成功');
-        })
-        .catch(function(err){
-            console.log(err,'summary失败');
-        })
+        this.requestSummary();
     },
     methods:{
         // 子组件添加公司成功之后，传递给父组件的值;
@@ -251,26 +199,27 @@ export default {
 
             //第二种
             this.tableData.unshift(addInfo);
-            this.form.currentPage=1;
-            this.form.pageSize=10;
+            this.currentPage=1;
+            this.pageSize=10;
             this.total++;
         },
         resetForm(formName) {
             this.$refs.form.resetFields();
         },
         //根据表单信息搜索
-        search(val){
+        search(){
             this.requestList();
+            this.requestSummary();
         },
         //每页多少条
         handleSizeChange(val) {
-            this.form.pageSize=val;
+            this.pageSize=val;
             // 状态改变发送请求
             this.requestList();
         },
         //当前页
         handleCurrentChange(val) {
-            this.form.currentPage=val;
+            this.currentPage=val;
             //状态改变发送请求
             this.requestList();
         },
@@ -286,7 +235,7 @@ export default {
         editorCompany(index, row){
             console.log(row,'编辑信息')
             //操作公司时，该公司所处所有信息列表的位置;
-            this.companyInfoIndex=(this.form.currentPage-1)*this.form.pageSize+index;
+            this.companyInfoIndex=(this.currentPage-1)*this.pageSize+index;
             // 当前编辑的公司信息;
             this.currentCompanyInfo=row;
             this.title='编辑公司';
@@ -309,7 +258,7 @@ export default {
         handleEnd(index,row){
             this.firstDialogVisible = true,
             this.currentCompanyInfo=row;
-            this.textarea='';
+            this.remark='';
         },
         //确定终止合作,第二次弹框
         endJoin(){
@@ -318,32 +267,50 @@ export default {
         },
         //点击二次对话框取消按钮，继续合作
         continueJoin(){
-            this.textarea='';
+            this.remark='';
         },
         // 列表信息请求公共函数
         requestList(){
+            let self=this;
             // 判断是否选择了省市;
             if(this.form.cityList.length){
-                this.form.provinceId=this.form.cityList[0];
                 this.form.cityId=this.form.cityList[1];
             };
-            let realForm=Object.assign({},this.form);
+            let realForm=Object.assign({},this.form,{currentPage:this.currentPage,pageSize:this.pageSize});
             delete realForm.cityList;//删除表单中的cityList选项，因为提交数据时不需要该参数
             delete realForm.searchType;//同上
-            console.log(realForm,1111111111111)
             this.$http.post(this.$apiUrl.company.list,realForm)
                 .then(function(data){
-                    console.log(data,'成功');
+                    self.companyInfoList=data.data.data.data;
+                    console.log(data,'12成功');
                 })
                 .catch(function(err){
                     console.log(err,'失败');
                 })
+        },
+        // summary信息请求
+        requestSummary(){
+            let self=this;
+            // 判断是否选择了城市;
+            if(this.form.cityList.length){
+                this.form.cityId=this.form.cityList[1];
+            };
+            let formSummary=Object.assign({},this.form);
+            delete formSummary.cityList;
+            delete formSummary.searchType;
+            this.$http.post(this.$apiUrl.company.summary,formSummary)
+                .then(function(data){
+                    self.summary=data.data.data;
+                })
+                .catch(function(err){
+                    console.log(err);
+                });
         }
     },
     computed:{
         //分页显示多少条数据
         searInfoList(){
-            return this.tableData.slice((this.form.currentPage-1)*this.form.pageSize,this.form.currentPage*this.form.pageSize);
+            return this.tableData.slice((this.currentPage-1)*this.pageSize,this.currentPage*this.pageSize);
         }
     }
 }
