@@ -18,9 +18,9 @@
                         <el-form-item label="公司所属城市" prop="cityList">
                             <region v-model="form.cityList" :startLevel="startLevel" :endLevel="endLevel"></region>
                         </el-form-item>
-                        <el-form-item label="合作时间" prop="corporateStart">
+                        <el-form-item label="合作时间" prop="cooperationStart">
                             <el-date-picker
-                                v-model="form.corporateStart"
+                                v-model="form.cooperationStart"
                                 type="daterange"
                                 align="right"
                                 unlink-panels
@@ -177,7 +177,7 @@ export default {
                 businessType:'',//公司业务类型,空为未选择，1.新房，2.二手房，3.新房＋二手房
                 cityId:'',//所属城市Id
                 cityList:[],//城市二级联动所需
-                cooperationStart:'',//合作时间段
+                cooperationStart:[],//合作时间段
                 name:'',//公司名称
                 searchDate:'',//到期日期
                 searchDay:'',//即将到期天数 
@@ -196,12 +196,14 @@ export default {
         // 子组件添加公司成功之后，传递给父组件的值;
         addSuccess(addInfo){
             // 第一种再次发送请求，同时表单查询重置;
+            this.$refs.form.resetFields();
+            this.requestList();
 
             //第二种
-            this.tableData.unshift(addInfo);
-            this.currentPage=1;
-            this.pageSize=10;
-            this.total++;
+            // this.tableData.unshift(addInfo);
+            // this.currentPage=1;
+            // this.pageSize=10;
+            // this.total++;
         },
         resetForm(formName) {
             this.$refs.form.resetFields();
@@ -247,7 +249,7 @@ export default {
         // 子组件编辑成功之后，传递给父组件的值;
         editSuccess(editInfo){
             // 替换原有已经被编辑的数据;
-            this.tableData.splice(this.companyInfoIndex,1,editInfo);
+            this.companyInfoList.splice(this.companyInfoIndex,1,editInfo);
         },
         //分佣账号设置 
         bankAccount(index, row){

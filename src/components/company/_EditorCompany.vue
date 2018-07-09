@@ -3,13 +3,13 @@
         <el-form :model="form" :rules="rules" ref="form" label-width="110px">
             <el-row>
                 <el-col :span="12">
-                    <el-form-item label="公司名称" prop="name" class="tl">
-                        <el-input v-model="form.name" placeholder="50字以内"></el-input>
+                    <el-form-item label="公司名称" prop="companyName" class="tl">
+                        <el-input v-model="form.companyName" placeholder="50字以内"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
-                    <el-form-item label="公司简称" prop="abbreviation">
-                        <el-input v-model="form.abbreviation" placeholder="50字以内"></el-input>
+                    <el-form-item label="公司简称" prop="companyAbbreviation">
+                        <el-input v-model="form.companyAbbreviation" placeholder="50字以内"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -46,9 +46,9 @@
             </el-form-item>
             <el-row>
                 <el-col :span="12">
-                    <el-form-item label="合作时间" prop="cooperationStart" class="tl">
+                    <el-form-item label="合作开始时间" prop="cooperationTime">
                             <el-date-picker
-                                v-model="form.cooperationStart"
+                                v-model="form.cooperationTime"
                                 type="daterange"
                                 align="right"
                                 unlink-panels
@@ -124,32 +124,46 @@ export default {
             startLevel:1,//二级联动城市传参
             endLevel:2,//二级联动城市传参
             form:{
-                abbreviation:'',//中介公司简称
                 address:'',//地址
                 agencyId:'',//代理商Id
                 bd:'',//bd
                 businessType:'',//房源类型,0为选择，1.新上，2.二手房，3.新房＋二手房
                 cityId:'',//所属城市Id
                 cityList:[],//值必须为number
+                companyAbbreviation:'',//中介公司简称
+                companyName:'',//公司名称
                 corporate:'',//法人代表
                 corporatePhone:'',//电话
-                cooperationStart:[],//合作时间段
+                cooperationEnd:'',//合作结束时间
+                cooperationStart:'',//合作开始时间
+                cooperationTime:[],//合作时间段
                 deposit:'',//保证金
-                name:'',//中介公司名称
                 organizationCode:'',//组织机构代码
                 provinceId:'',//省份Id
                 resourceKey:'',//上传的资源key 
             },
             // 必填设置
             rules: {
-                name: [{ required: true, message: '请输入公司名称', trigger: 'blur' }],
-                abbreviation: [{ required: true, message: '请输入公司简称', trigger: 'blur' }],
+                companyName: [{ required: true, message: '请输入公司名称', trigger: 'blur' }],
+                companyAbbreviation: [{ required: true, message: '请输入公司简称', trigger: 'blur' }],
                 cityList: [{ required: true, message: '请输入城市', trigger: 'blur' }],
                 deposit: [{ required: true, message: '请输入保证金', trigger: 'blur' }],
                 organizationCode: [{ required: true, message: '请输入组织机构代码', trigger: 'blur' }],
-                cooperationStart: [{ required: true, message: '请输入合作时间段', trigger: 'blur' }]
+                cooperationTime: [{ required: true, message: '请输入合作时间段', trigger: 'blur' }]
             }
         }
+    },
+    created(){
+        let self=this;
+        // 获取代理商列表;
+        this.$http.get(this.$apiUrl.agent.list)
+        .then(function(data){
+            self.agencyInfoList=data.data.data.data;
+            console.log(self.agencyInfoList,123456);
+        })
+        .catch(function(err){
+            console.log(err,'代理商列表失败');
+        });
     },
     methods:{
         open() {
@@ -166,7 +180,9 @@ export default {
                     cityList:[],
                     corporate:'',//法人代表
                     corporatePhone:'',//电话
-                    cooperationStart:[],//合作时间段
+                    cooperationTime:[],//合作时间段
+                    cooperationEnd:'',//合作结束时间
+                    cooperationStart:'',//合作开始时间
                     deposit:'',//保证金
                     name:'',//中介公司名称
                     organizationCode:'',//组织机构代码
@@ -200,12 +216,23 @@ export default {
                     this.dialogVisible=false;
                     alert('提交成功');
                     if(this.title=='编辑公司'){
+                        this.form.cooperationStart=this.form.cooperationTime[0];
+                        this.form.cooperationEnd=this.form.cooperationTime[1];
+                        this.$http.post(this.$apiUrl.company.add,realForm)
+                            .then(function(data){
+                                console.log(data);
+                            })
+                            .catch(function(error){
+                                console.log(error)
+                            });
                         this.$emit('editSuccess',this.form);
                     }else{
                         if(this.form.cityList.length){
                             this.form.provinceId=this.form.cityList[0];
                             this.form.cityId=this.form.cityList[1];
-                        }
+                        };
+                        this.form.cooperationStart=this.form.cooperationTime[0];
+                        this.form.cooperationEnd=this.form.cooperationTime[1];
                         let realForm=Object.assign({},this.form);
                         delete realForm.cityList;
                         this.$http.put(this.$apiUrl.company.add,realForm)
