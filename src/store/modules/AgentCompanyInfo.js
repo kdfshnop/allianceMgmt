@@ -77,7 +77,8 @@ export default {
             state.idCard = item.idCard;
             state.remark = item.remark;
             state.idCardFrontFileList = item.idCardFrontFileList;
-            state.idCardBackFileList = item.idCardBackFileList;            
+            state.idCardBackFileList = item.idCardBackFileList;  
+            state.signed = item.signed;          
         }
     }
 };

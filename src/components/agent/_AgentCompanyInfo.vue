@@ -6,7 +6,7 @@
             <el-button v-show="mode === 'edit' && status === 'editing'" @click="handleCancel" type="danger" size="mini">取消</el-button>         
             <el-button v-show="mode === 'edit' && status === 'editing'" @click="handleComplete" type="success" size="mini">完成</el-button>                                   
         </div>
-        <el-form :model="innerItem" label-width= "180px" v-show="mode === 'create' || mode === 'edit' && status === 'editing'">
+        <el-form ref="form" :rules="rules" :model="this" label-width= "180px" v-show="mode === 'create' || mode === 'edit' && status === 'editing'">
             <el-form-item label="代理商是否已注册公司">
                 <el-switch
                     v-model="signed"
@@ -42,7 +42,7 @@
                 <el-input v-model="address"></el-input>
             </el-form-item> 
             <el-form-item label="上传营业执照" v-show="signed">                
-                    <upload v-if="mode === 'create' || mode === 'edit' && status === 'editing'"></upload>
+                    <upload :fileList.sync="numberFileList" v-if="mode === 'create' || mode === 'edit' && status === 'editing'"></upload>
             </el-form-item>  
 
             <!-- 下面是未注册显示的 -->
@@ -52,6 +52,8 @@
                         <el-date-picker
                             v-model="finishDate"
                             type="date"
+                            :value-format="valueFormat"
+                            :format="format"
                             placeholder="选择日期">
                         </el-date-picker>
                     </el-form-item>                                                                         
@@ -64,19 +66,19 @@
                     </el-form-item>                                                                         
                 </el-col>               
                 <el-col :span="12">
-                    <el-form-item label="手机号">
+                    <el-form-item label="手机号" prop="mobile">
                         <el-input v-model="mobile"></el-input>
                     </el-form-item>                                                                         
                 </el-col>
             </el-row>     
             <el-row v-show="!signed">
                 <el-col :span="12">
-                    <el-form-item label="邮箱号">
+                    <el-form-item label="邮箱号" prop="email">
                         <el-input v-model="email"></el-input>
                     </el-form-item>                                                                         
                 </el-col>               
                 <el-col :span="12">
-                    <el-form-item label="身份证号">
+                    <el-form-item label="身份证号" prop="idCard">
                         <el-input v-model="idCard"></el-input>
                     </el-form-item>                                                                         
                 </el-col>
@@ -86,10 +88,10 @@
             </el-form-item> 
 
             <el-form-item label="上传身份证正面照" v-show="!signed">                
-                    <upload v-if="mode === 'create' || mode === 'edit' && status === 'editing'"></upload>
+                    <upload :fileList.sync="idCardFrontFileList" v-if="mode === 'create' || mode === 'edit' && status === 'editing'"></upload>
             </el-form-item>
             <el-form-item label="上传身份证反面照" v-show="!signed">
-                <upload v-if="mode === 'create' || mode === 'edit' && status === 'editing'"></upload>
+                <upload :fileList.sync="idCardBackFileList" v-if="mode === 'create' || mode === 'edit' && status === 'editing'"></upload>
             </el-form-item>
         </el-form>
 
@@ -132,7 +134,7 @@
             <el-row v-show="!signed">
                 <el-col :span="12">
                     <el-form-item label="预计注册完成时间">
-                        {{finishDate}}
+                        {{finishDateStr}}
                     </el-form-item>                                                                         
                 </el-col>               
             </el-row>  
@@ -177,7 +179,7 @@
 import CollapsePanel from '@/components/common/CollapsePanel';
 import Upload from '@/components/common/Upload';
 import FileList from '@/components/common/FileList';
-import {generateComputed} from './_Utils';
+import {generateComputed, Validator, getDateStr} from './_Utils';
 import {mapMutations} from 'vuex';
 /**
  * 代理商公司信息组件
@@ -202,6 +204,23 @@ export default {
             innerItem: {
 
             },
+            valueFormat: "yyyy-MM-dd HH:mm:ss",
+            format: "yyyy-MM-dd",
+            rules: {
+                mobile: [{
+                    validator: Validator.mobile,
+                    trigger: 'blur'
+                }],
+                email: [{
+                    type: 'email',
+                    trigger: 'blur',
+                    message: '请输入正确的邮箱'
+                }],
+                idCard: [{
+                    validator: Validator.idCard,
+                    trigger: 'blur'
+                }]
+            }
         };
     },
     computed: {
@@ -220,6 +239,10 @@ export default {
         remark: generateComputed('remark', 'AgentCompanyInfo', 'updateRemark'),
         idCardFrontFileList: generateComputed('idCardFrontFileList', 'AgentCompanyInfo', 'updateIdCardFrontFileList'),
         idCardBackFileList: generateComputed('idCardBackFileList', 'AgentCompanyInfo', 'idCardBackFileList'),
+
+        finishDateStr: function() {
+            return getDateStr(this.finishDate);
+        }
     },
     methods: {
         handleEdit() {
@@ -232,6 +255,13 @@ export default {
             },
             handleCancel() {
                 this.status = '';                             
+            },
+            validate(fn) {
+                if(this.signed) {
+                    fn(true);
+                }else{
+                    this.$refs.form.validate(fn);
+                }                
             },
 
             ...mapMutations('AgentCompanyInfo', ['updateItem',

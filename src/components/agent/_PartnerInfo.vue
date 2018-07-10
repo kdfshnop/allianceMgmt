@@ -6,27 +6,27 @@
             <el-button v-show="mode === 'edit' && status === 'editing'" @click="handleCancel" type="danger" size="mini">取消</el-button>         
             <el-button v-show="mode === 'edit' && status === 'editing'" @click="handleComplete" type="success" size="mini">完成</el-button>                
         </div>
-        <el-form :model="innerItem" label-width= "180px" v-show="mode === 'create' || mode === 'edit' && status === 'editing'">
+        <el-form ref="form" :model="innerItem" label-width= "180px" v-show="mode === 'create' || mode === 'edit' && status === 'editing'" :rules="rules">
             <el-row>
                 <el-col :span="12">
                     <el-form-item label="姓名">
                         <el-input v-model="innerItem.name"></el-input>
                     </el-form-item>
-                    <el-form-item label="邮箱">
+                    <el-form-item label="邮箱" prop="email">
                         <el-input v-model="innerItem.email"></el-input>
                     </el-form-item>
 
-                    <el-form-item label="身份证号">
+                    <el-form-item label="身份证号" prop="idCode">
                         <el-input v-model="innerItem.idCode"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">                    
-                    <el-form-item label="手机号">
+                    <el-form-item label="手机号" prop="mobile">
                         <el-input v-model="innerItem.mobile"></el-input>
                     </el-form-item>
                     
                     <el-form-item label="芝麻信用">
-                        <el-input v-model="innerItem.credit"></el-input>
+                        <el-input type="number" v-model="innerItem.credit"></el-input>
                     </el-form-item>
                     
                     <el-form-item label="合伙人背景">                        
@@ -38,7 +38,7 @@
                             :value="bg.value">
                             </el-option>
                         </el-select>
-                        <el-input style="margin-top: 6px;" v-model="innerItem.backgroundRemark" v-show="item.bg=='5'"></el-input>
+                        <el-input style="margin-top: 6px;" v-model="innerItem.backgroundRemark" v-show="innerItem.background=='5'"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -88,6 +88,7 @@
  * 合伙人信息组件
  */
     import CollapsePanel from '@/components/common/CollapsePanel';
+    import {Validator} from './_Utils';
     // 服务人员信息
     export default {
         name: "partnerInfo",
@@ -125,7 +126,22 @@
                 },{
                     value: "5",
                     label: "其他"
-                }]
+                }],
+                rules: {
+                    mobile: [{
+                        validator: Validator.mobile,
+                        trigger: 'blur'                        
+                    }],
+                    email: [{
+                        type: "email",
+                        trigger: 'blur',
+                        message: '请输入正确的邮箱'                       
+                    }],
+                    idCode: [{
+                        validator: Validator.idCard,
+                        trigger: 'blur'                        
+                    }]
+                }
             };
         },
         methods: {
@@ -144,7 +160,10 @@
             },
             handleClose() {
                 this.$emit('close');
-            }       
+            },
+            validate(fn) {
+            this.$refs.form.validate(fn);
+        },
         },
         computed: {
             bgText() {                

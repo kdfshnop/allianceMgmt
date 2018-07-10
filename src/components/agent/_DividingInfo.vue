@@ -7,7 +7,7 @@
             <el-button v-show="mode === 'edit' && status === 'editing'" @click="handleCancel" type="danger" size="mini">取消</el-button>         
             <el-button v-show="mode === 'edit' && status === 'editing'" @click="handleComplete" type="success" size="mini">完成</el-button>                           
             </div>
-            <el-form :model="item" label-width= "180px" v-show="mode === 'create' || mode === 'edit' && status === 'editing'">
+            <el-form ref="form" :model="item" label-width= "180px" v-show="mode === 'create' || mode === 'edit' && status === 'editing'">
                 <el-row class="data-row" :key="index" v-for="(v, index) in dividingInfo">
                     <el-col :span="12">
                         <el-form-item :label="'第'+ (+index+1) +'期'">
@@ -15,14 +15,15 @@
                                 :value="v.date"
                                 @input="handleInputDate($event, index, v)"
                                 type="date"
-                                format="yyyy-MM-dd"
+                                :format="format"
+                                :value-format="valueFormat"
                                 placeholder="选择日期">
                             </el-date-picker>                                                                                                                
                         </el-form-item>                    
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="前支付平台服务费">
-                            <el-input :value="v.fee" @input="handleInputFee($event, index, v)">
+                            <el-input type="number" :value="v.fee" @input="handleInputFee($event, index, v)">
                                 <template slot="append">元</template>
                             </el-input>                            
                         </el-form-item>                    
@@ -37,12 +38,12 @@
                 <el-row :key="index" v-for="(d, index) in dividingInfo">
                     <el-col :span="12">
                         <el-form-item :label="'第' + (+index+1) + '期'">
-                            {{getDate(d.date)}}                                                                                   
+                            {{getDateStr(d.fee)}}
                         </el-form-item>                    
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="前支付平台服务费">
-                            {{d.fee}}元                                                 
+                            {{d.amount}}元                  
                         </el-form-item>                    
                     </el-col>
                 </el-row>                                                
@@ -51,7 +52,7 @@
 </template>
 <script>
 import CollapsePanel from '@/components/common/CollapsePanel';
-import {generateComputed} from './_Utils';
+import {generateComputed, getDateStr} from './_Utils';
 import {mapMutations} from 'vuex';
 export default {
     name: "",
@@ -67,7 +68,9 @@ export default {
         return {
             expand: true,
             status: "",
-            innerItem: []
+            innerItem: [],
+            format: "yyyy-MM-dd",
+            valueFormat: "yyyy-MM-dd HH:mm:ss"
         };
     },
     methods: {
@@ -103,20 +106,6 @@ export default {
             });
             this.dividingInfo = this.dividingInfo;
         },
-        getDate(d) {
-            if(d) {
-                return d.getFullYear() + "-" + this.padding(d.getMonth() + 1) + '-' + this.padding(d.getDate());
-            }
-
-            return '';
-        },
-        padding(s) {
-            if(s < 10) {
-                return '0' + s;
-            }
-
-            return s;
-        },
         handleRemove(index) {
             if(this.mode == 'create') {
                 this.removeItem(index);
@@ -124,8 +113,13 @@ export default {
                 this.innerItem.splice(index, 1);
             }
         },
+        validate(fn) {
+            this.$refs.form.validate(fn);
+        },
 
-        ...mapMutations('DividingInfo', ['updateItems', 'updateItem', 'removeItem'])
+        ...mapMutations('DividingInfo', ['updateItems', 'updateItem', 'removeItem']),
+
+        getDateStr: getDateStr
     },
     computed: {
         // dividingInfo: generateComputed("dividingInfo", "DividingInfo", "updateItems"),

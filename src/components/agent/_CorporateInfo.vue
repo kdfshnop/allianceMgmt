@@ -1,31 +1,31 @@
 <template>
-    <CollapsePanel class="gap-2" :expand="expand">    
+    <CollapsePanel class="gap-2" :expand="expand" v-show="needShow">    
         <div align-left slot="header" class="clearfix">
             <span style="margin-right: 30px">法人信息</span>      
             <el-button v-show="mode === 'edit' && status !== 'editing'" @click="handleEdit" type="primary" size="mini">编辑</el-button>         
             <el-button v-show="mode === 'edit' && status === 'editing'" @click="handleCancel" type="danger" size="mini">取消</el-button>         
             <el-button v-show="mode === 'edit' && status === 'editing'" @click="handleComplete" type="success" size="mini">完成</el-button>                                  
         </div>
-        <el-form :model="innerItem" label-width= "180px" v-show="mode === 'create' || mode === 'edit' && status === 'editing'">
+        <el-form :rules="rules" ref="form" :model="this" label-width= "180px" v-show="mode === 'create' || mode === 'edit' && status === 'editing'">
             <el-row>
                 <el-col :span="12">
                     <el-form-item label="法人姓名">
                         <el-input v-model="name"></el-input>
                     </el-form-item>
-                    <el-form-item label="法人手机号">
+                    <el-form-item label="法人手机号" prop="mobile">
                         <el-input v-model="mobile"></el-input>
                     </el-form-item>
 
                     <el-form-item label="芝麻信用分">
-                        <el-input v-model="score"></el-input>
+                        <el-input type="number" v-model="score"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">                    
-                    <el-form-item label="法人身份证">
+                    <el-form-item label="法人身份证" prop="idCard">
                         <el-input v-model="idCard"></el-input>
                     </el-form-item>
                     
-                    <el-form-item label="法人邮箱">
+                    <el-form-item label="法人邮箱" prop="email">
                         <el-input v-model="email"></el-input>
                     </el-form-item>
                 </el-col>
@@ -92,7 +92,7 @@
     import CollapsePanel from '@/components/common/CollapsePanel';
     import Upload from '@/components/common/Upload';
     import FileList from '@/components/common/FileList';
-    import {generateComputed} from './_Utils';
+    import {generateComputed, Validator} from './_Utils';
     import {mapMutations} from 'vuex';
     // 服务人员信息
     export default {
@@ -112,6 +112,21 @@
                 innerItem: {
 
                 },
+                rules: {
+                    mobile: [{
+                        validator: Validator.mobile,
+                        trigger: 'blur'
+                    }],
+                    idCard: [{
+                        validator: Validator.idCard,
+                        trigger: 'blur'
+                    }],
+                    email: [{
+                        type: 'email',
+                        trigger: 'blur',
+                        message: '请输入正确的邮箱'
+                    }]
+                }
             };
         },
         computed: {
@@ -124,6 +139,9 @@
             "idCardBackFileList": generateComputed("idCardBackFileList", "CorporateInfo", "updateIdCardBackFileList"),
             "scoreFileList": generateComputed("scoreFileList", "CorporateInfo", "updateScoreFileList"),
             "remark": generateComputed("remark", "CorporateInfo", "updateRemark"),
+            "needShow": function() {
+                return this.$store.state.AgentCompanyInfo.signed;
+            }
         },
         methods: {
             handleEdit() {
@@ -136,6 +154,12 @@
             },
             handleCancel() {
                 this.status = '';                              
+            },
+            validate(fn) {
+                if(this.needShow)
+                    this.$refs.form.validate(fn);
+                else
+                    fn(true);
             },
 
 /**

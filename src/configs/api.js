@@ -1,6 +1,8 @@
 export default {
     baseUrl: {
-        dev: "http://rap2api.taobao.org/app/mock/17025",
+        // dev: "http://rap2api.taobao.org/app/mock/17025",
+        // dev: "https://10.0.18.79:8125",
+        dev: "http://10.0.90.105:8080",
         test: "",
         sim: "",
         prod: ""
@@ -18,9 +20,10 @@ export default {
         detail: ""// 详情
     },
     test: "",
-    upload: "http://localhost:3000/upload", //resource",// 文件上传地址
+    // upload: "http://rap2api.taobao.org/app/mock/17025/resource", //resource",// 文件上传地址
+    upload: "/resource",
     common: {
-        employee: "/wkzf/person",// 员工接口，诸如BD人员、彩霞人员和一对一指导人员
+        employee: "/base/wkzf/person",// 员工接口，诸如BD人员、彩霞人员和一对一指导人员
         province: "/province/list",// 省份接口
         city: "/city/list",// 城市接口
         district: "/region/list",// 区域接口

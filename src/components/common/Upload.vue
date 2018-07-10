@@ -11,7 +11,9 @@
         :multiple="multiple"
         :limit="3"
         :on-exceed="handleExceed"
-        :file-list="innerFileList">
+        :file-list="fl"
+        multiple
+        >
         <el-button size="small" type="primary">{{ btnText || '点击上传'}}</el-button>
         <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
     </el-upload>
@@ -28,9 +30,14 @@ export default {
     props: ['fileList', 'btnText', 'tipText', 'mode', 'status', 'multiple'],// mode暂时没用到,status会是editing和空
     data() {
         return {
-            // url: Vue.apiUrl.getFullUrl(Vue.apiUrl.upload),
-            url: this.$apiUrl.upload,
-            innerFileList: this.filterList && this.fileList.slice() || []
+            url: Vue.apiUrl.getFullUrl(Vue.apiUrl.upload),
+            // url: this.$apiUrl.upload,
+            innerFileList: this.fileList && this.fileList.slice() || [],
+            fl: this.fileList && this.fileList.slice() || [],
+            name: ""
+            // headers: {
+            //     'Content-Type': 'multipart/form-data'
+            // }
         };
     },
     methods: {
@@ -38,9 +45,10 @@ export default {
 
         },
         handleRemove(data) {            
-            for(let i = this.fileList.length - 1; i >= 0; i--){
-                if(this.fileList[i].url == data.url || this.fileList[i].uid == data.uid){
-                    this.fileList.splice(i, 1);                    
+            for(let i = this.innerFileList.length - 1; i >= 0; i--){
+                if(this.innerFileList[i].url == data.url || this.innerFileList[i].uid == data.uid){
+                    this.innerFileList.splice(i, 1);  
+                    this.$emit('update:fileList', this.innerFileList);                  
                     break;
                 }
             }
@@ -56,14 +64,18 @@ export default {
         },
         handleSuccess(data, data2) {
             // TODO: 上传接口需要返回文件的名字和文件的地址            
-            this.fileList.push({
-                name: data.name,
-                url: data.url,
-                uid: data2.uid
+            this.innerFileList.push({
+                // name: data.name,
+                // url: data.url,
+                uid: data2.uid,
+                // key: data.key
+                ...data.data
             });
+            this.$emit('update:fileList', this.innerFileList);
         },
         beforeUpload(data) {
-            
+            this.name = data.name;
+            //console.log('beforeUpload；', data);
         }
     }
 }

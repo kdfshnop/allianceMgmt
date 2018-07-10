@@ -51,7 +51,7 @@ import PlatformServiceFee from './_PlatformServiceFee';
 import DividingInfo from './_DividingInfo';
 import PaymentInfo from './_PaymentInfo';
 import Region from '@/components/common/Region';
-import {initStore, generateParam} from './_Utils'; 
+import {generateParam} from './_Utils'; 
 export default {
     name: "",
      components: {
@@ -89,10 +89,13 @@ export default {
         getDetail() {
             // 获取指定代理商的详情
             let agentId = this.$route.params.id;
-            this.$http.get(this.$apiUrl.agent.detail + '/' + agentId).then((data)=>{
-                // initStore(this.$store, data.data);
-                console.log(data);
-            });
+            let agentState = this.$route.params.agentState || 0;
+
+            this.$store.dispatch({
+                type: 'getAgent',
+                agentId: agentId,
+                agentState: agentState
+            });            
         },
         handleClick(tab, event) {
             console.log(tab, event);
@@ -113,7 +116,12 @@ export default {
                     }
                     return true;
                 }                 
-            }).then(({ value }) => {  
+            }).then(({ value }) => { 
+                this.$store.commit("AgentBasicInfo/updateRemark", value);
+                let param = generateParam(this.$store.state);
+                this.$http.post(this.$apiUrl.agent.edit, param).then((data)=>{                    
+                    console.log(data);
+                }); 
                 // TODO: 接口调试              
                 // this.$http.post(this.$apiUrl.materialVerify.reject).then(()=>{
                 //     this.$message({

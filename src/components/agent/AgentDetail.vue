@@ -25,6 +25,7 @@
         </el-tab-pane>
         <el-tab-pane label="平台服务费" name="sixth">
             <platform-service-fee></platform-service-fee>
+            <dividing-info></dividing-info>            
             <payment-info></payment-info>
         </el-tab-pane>
     </el-tabs>
@@ -77,9 +78,20 @@ export default {
     created() {
         // 获取指定代理商的详情
         let agentId = this.$route.params.id;
-        this.$http.get(this.$apiUrl.agent.detail + '/' + agentId).then((data)=>{
-            // initStore(this.$store, data.data);
-            console.log(data);
+        let agentState = this.$route.params.state || 0;
+        // this.$http.get(this.$apiUrl.agent.detail,{
+        //     params: {
+        //         agencyId: agentId,
+        //         agencyState: agentState
+        //     }
+        // }).then((data)=>{
+        //     // initStore(this.$store, data.data);
+        //     console.log(data);
+        // });
+        this.$store.dispatch({
+            type: 'getAgent',
+            agentId: agentId,
+            agentState: agentState
         });
     },
     methods: {

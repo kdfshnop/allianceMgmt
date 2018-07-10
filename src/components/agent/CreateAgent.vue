@@ -12,30 +12,30 @@
     </el-steps>      
 
     <div v-show="active == 0">
-        <service-staff-info :mode='mode'></service-staff-info>    
-        <partner-infoes :mode='mode'></partner-infoes>
+        <service-staff-info :mode='mode' ref="serviceStaffInfo"></service-staff-info>    
+        <partner-infoes :mode='mode' ref="partnerInfoes"></partner-infoes>
     </div>
     <div v-show="active == 1">
-        <agent-basic-info :mode='mode'></agent-basic-info>
-        <agent-area :mode='mode'></agent-area>
+        <agent-basic-info :mode='mode' ref="agentBasicInfo"></agent-basic-info>
+        <agent-area :mode='mode' ref="agentArea"></agent-area>
     </div>
     <div v-show="active == 2">
-        <agent-company-info :mode='mode'></agent-company-info>
-        <corporate-info :mode='mode'></corporate-info>
-        <contract-info :mode='mode'></contract-info>
+        <agent-company-info :mode='mode' ref="agentCompanyInfo"></agent-company-info>
+        <corporate-info :mode='mode' ref="corporateInfo"></corporate-info>
+        <contract-info :mode='mode' ref="contractInfo"></contract-info>
     </div>
     <div v-show="active == 3">
-        <service-manager :mode='mode'></service-manager>
-        <b-d-manager :mode='mode'></b-d-manager>
+        <service-manager :mode='mode' ref="serviceManager"></service-manager>
+        <b-d-manager :mode='mode' ref="bdManager"></b-d-manager>
     </div>
     <div v-show="active == 4">
-        <agent-commission-ratio :mode='mode'></agent-commission-ratio>
-        <agent-commission-account :mode='mode'></agent-commission-account>        
+        <agent-commission-ratio :mode='mode' ref="agentCommissionRatio"></agent-commission-ratio>
+        <agent-commission-account :mode='mode' ref="agentCommissionAccount"></agent-commission-account>        
     </div>
     <div v-show="active == 5">
-        <platform-service-fee :mode='mode'></platform-service-fee>
-        <dividing-info :mode='mode'></dividing-info>
-        <payment-info :mode='mode'></payment-info>
+        <platform-service-fee :mode='mode' ref="platformServiceFee"></platform-service-fee>
+        <dividing-info :mode='mode' ref="dividingInfo"></dividing-info>
+        <payment-info :mode='mode' ref="paymentInfo"></payment-info>
     </div>
     <div v-show="active == 6" style="text-align: center; margin-top: 200px">
         <p>提交成功了，请等待审核结果</p>
@@ -46,7 +46,7 @@
         
     </div>
     <el-button-group class="gap-2" style="margin-left: auto; margin-right: auto; width: 200px; display: block;">
-        <el-button v-if="active>0 && active < stepNumber" @click="prev" type="primary">上一步</el-button><el-button type="primary" v-if="active<stepNumber" @click="next">下一步</el-button><el-button type="primary" v-if="active==5" @click="submit">提&nbsp;&nbsp;交</el-button>
+        <el-button v-if="active>0 && active < stepNumber" @click="prev" type="primary">上一步</el-button><el-button type="primary" v-if="active<stepNumber-1" @click="next">下一步</el-button><el-button type="primary" v-if="active==stepNumber - 1" @click="submit">提&nbsp;&nbsp;交</el-button>
     </el-button-group>    
     </el-main>
   </el-container>
@@ -106,8 +106,8 @@ export default {
         }], 
         arr: [],
         initId: "33",   
-      active: 1,// 控制步骤
-      stepNumber: 5,// 总步数
+      active: 0,// 控制步骤
+      stepNumber: 6,// 总步数
       mode: "create",      
     }
   },
@@ -117,7 +117,49 @@ export default {
               return;
           }
 
-          this.active++;
+          let forms = [];
+          // 验证当前页的表单是否通过验证
+          switch(this.active) {
+              case 0:
+                //forms.push('serviceStaffInfo');
+                forms.push('partnerInfoes');
+              break;
+              case 1:
+                //forms.push('agentBasicInfo');
+                //forms.push('agentArea');
+              break;
+              case 2: 
+                forms.push('agentCompanyInfo');
+                forms.push('corporateInfo');
+                //forms.push('contractInfo');                
+              break;
+              case 3:
+                forms.push('serviceManager');
+                forms.push('bdManager');
+                break;
+              case 4:
+                //forms.push('agentCommissionRatio');
+                //forms.push('agentCommissionAccount');
+                break;
+              case 5:
+                // forms.push('platformServiceFee');
+                // forms.push('dividingInfo');
+                // forms.push('paymentInfo');
+                break;                
+          }
+
+          let r = 0;
+          for(let i = 0; i < forms.length; i++) {
+              this.$refs[forms[i]].validate((valid)=> {
+                  if(valid) {
+                      r++;
+                  }
+              });
+          }
+
+          if(r == forms.length) {
+            this.active++;
+          }          
       },
 
       prev() {

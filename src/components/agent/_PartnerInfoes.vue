@@ -1,6 +1,6 @@
 <template>
     <div>
-        <partner-info :key="index" v-for="(item, index) in items" :mode="mode" :item="item" @input="handleInput" @close="handleRemove(index)"></partner-info>
+        <partner-info :ref="'pi' + index" :key="index" v-for="(item, index) in items" :mode="mode" :item="item" @input="handleInput" @close="handleRemove(index)"></partner-info>
         <el-button v-show="mode === 'create' || mode === 'edit'" type="primary" class="full-row gap-2" @click="addPartner">+ 添加合伙人</el-button>
     </div>
 </template>
@@ -48,6 +48,18 @@
                         break;
                     }
                 }                
+            },
+            validate(fn) {
+                // this.$refs.form.validate(fn);
+                let n = 0;
+                for(let i = 0; i < this.items.length; i++) {
+                    this.$refs['pi' + i][0].validate((valid)=>{
+                        if(valid){
+                            n++;
+                        }
+                    });
+                }
+                fn(this.items.length == n);
             },
 
             ...mapMutations('PartnerInfo', ['updateItems', 'updateItem', 'removeItem', 'addItem'])

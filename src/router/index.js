@@ -22,7 +22,7 @@ Vue.use(Router);
 let router = new Router({
   routes: [
     {
-      path: '/',
+      path: '/agent/createAgent',
       name: 'CreateAgent',
       component: CreateAgent
     },{
@@ -89,11 +89,11 @@ let router = new Router({
       name:'Record',
       component:Record
     },{
-      path: '/agentdetail/:id',
+      path: '/agent/agentDetail/:id',
       name: 'AgentDetail',
       component: AgentDetail
     },{
-      path: '/editagent/:id',
+      path: '/agent/editAgent/:id',
       name: 'EditAgent',
       component: EditAgent
     }

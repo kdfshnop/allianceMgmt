@@ -6,10 +6,10 @@
             <el-button v-show="mode === 'edit' && status === 'editing'" @click="handleCancel" type="danger" size="mini">取消</el-button>         
             <el-button v-show="mode === 'edit' && status === 'editing'" @click="handleComplete" type="success" size="mini">完成</el-button>                                             
         </div>
-        <el-form :model="item" label-width= "180px">                               
+        <el-form ref="form" :model="item" label-width= "180px">                               
             <el-form-item label="代理区域">    
                 <ul class="region">
-                    <li v-for="(region, index) in innerItem.regions" :key="index">
+                    <li v-for="(region, index) in regions" :key="index">
                         <span v-for="(s,i) in region.label" :key="i">{{s}}</span> <el-button type="text" class="remove" @click="handleRemove(index)" v-show="mode=='create' || mode=='edit' && status=='editing'"><i class="el-icon-error"></i></el-button>
                     </li>
                 </ul>                                        
@@ -31,6 +31,8 @@
 <script>
 import CollapsePanel from '@/components/common/CollapsePanel';
 import Region from '@/components/common/Region';
+import {generateComputed} from './_Utils';
+import {mapMutations} from 'vuex';
 /**
  * 代理区域组件
  * TODO:
@@ -53,33 +55,58 @@ export default {
             }
         };
     },
+    computed: {
+        regions: generateComputed("regions", "AgentArea", "updateItem")
+    },
     methods: {
         handleAddRegion() {                  
             this.visible = true;                 
         },
         handleAddRegionConfirm() {
-            this.innerItem.regions.push({
-                val: this.selectedRegion,
-                label: this.selectedRegion.label
-            });
+            if(this.mode=='create') {
+                let tmp =  this.regions.slice();
+                tmp.push({
+                        val: this.selectedRegion,
+                        label: this.selectedRegion.label
+                    });            
+                this.updateItem({regions: tmp});
+            }else{
+                this.regions.push({
+                    val: this.selectedRegion,
+                    label: this.selectedRegion.label
+                });
+            }
+            
             this.visible = false;
             if(this.$refs.region) {
                 this.$refs.region.clear();       
             }
         },
         handleRemove(index) {
-            this.innerItem.regions.splice(index, 1);
+            if(this.mode == 'edit') {
+                this.regions.splice(index, 1);
+            } else {
+                let tmp = this.regions.splice();
+                tmp.splice(index, 1);
+                this.updateItem({regions: tmp});
+            }
         },
         handleEdit() {
             this.status = 'editing';                
-            this.innerItem = JSON.parse(JSON.stringify(this.$store.state.AgentArea || {}));          
+            this.innerItem = JSON.parse(JSON.stringify(this.$store.state.AgentArea || {regions: []}));          
         },
         handleComplete() {
-            this.status = '';                                
+            this.status = '';  
+            this.updateItem(this.innerItem);             
         },
         handleCancel() {
-            this.status = '';                                     
+            this.status = '';            
         },
+        validate(fn) {
+            this.$refs.form.validate(fn);
+        },
+
+        ...mapMutations('AgentArea', ['updateItem', 'updateRegions'])
     }
 }
 </script>

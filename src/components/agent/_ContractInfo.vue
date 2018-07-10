@@ -6,7 +6,7 @@
             <el-button v-show="mode === 'edit' && status === 'editing'" @click="handleCancel" type="danger" size="mini">取消</el-button>         
             <el-button v-show="mode === 'edit' && status === 'editing'" @click="handleComplete" type="success" size="mini">完成</el-button>                            
         </div>
-        <el-form :model="item" label-width= "180px" v-show="mode === 'create' || mode === 'edit' && status === 'editing'">                                    
+        <el-form ref="form" :model="item" label-width= "180px" v-show="mode === 'create' || mode === 'edit' && status === 'editing'">                                    
             <el-form-item label="上传合同">                
                     <upload v-if="mode === 'create' || mode === 'edit' && status === 'editing'"></upload>
             </el-form-item>            
@@ -86,6 +86,9 @@
             },
             handleCancel() {
                 this.status = '';               
+            },
+            validate(fn) {
+                this.$refs.form.validate(fn);
             },
 
             ...mapMutations("ContractInfo", ['updateItem', 'updateContractFileList', 'updateSealed', 'updateSpecial', 'updatePromiseFileList'])

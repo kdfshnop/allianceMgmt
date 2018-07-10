@@ -7,6 +7,8 @@ export default {
         parent: "",
         agentCity: [],
         status: "",// 代理商状态
+        remark: "",//
+        id: "", 
     },
     mutations: {
         updateAgentType(state, val) {
@@ -24,12 +26,18 @@ export default {
         updateParent(state, val) {
             state.parent = val;
         },
+        updateRemark(state, val) {
+            state.remark = val;
+        },
         updateItem(state, item) {                                    
             state.agentType = item.agentType;
             state.startTime = item.startTime;
             state.endTime = item.endTime;
             state.agentCity = item.agentCity;
             state.parent = item.parent;
+            state.cityName = item.cityName;
+            state.remark = item.remark;
+            state.id = item.id;
         }
     }
 };

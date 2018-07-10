@@ -6,7 +6,7 @@
             <el-button v-show="mode === 'edit' && status === 'editing'" @click="handleCancel" type="danger" size="mini">取消</el-button>         
             <el-button v-show="mode === 'edit' && status === 'editing'" @click="handleComplete" type="success" size="mini">完成</el-button>                                               
         </div>
-        <el-form :model="innerItem" label-width= "180px" v-show="mode === 'create' || mode === 'edit' && status === 'editing'">                                                           
+        <el-form ref="form" :model="this" :rules="rules" label-width= "180px" v-show="mode === 'create' || mode === 'edit' && status === 'editing'">                                                           
             <el-form-item label="和服务经理同一人">
                 <el-switch
                     v-model="same"
@@ -22,7 +22,7 @@
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
-                    <el-form-item label="手机号">                        
+                    <el-form-item label="手机号" prop="mobile">                        
                         <el-input :readonly="same" v-model="mobile"></el-input>
                     </el-form-item>
                 </el-col>
@@ -34,7 +34,7 @@
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
-                    <el-form-item label="邮箱">                        
+                    <el-form-item label="邮箱" prop="email">                        
                         <el-input :readonly="same" v-model="email"></el-input>
                     </el-form-item>
                 </el-col>
@@ -79,6 +79,7 @@
  */
     import CollapsePanel from '@/components/common/CollapsePanel';
     import {mapMutations} from 'vuex';
+    import {Validator} from './_Utils';
     
     // 服务人员信息
     export default {
@@ -98,7 +99,19 @@
                 status: "",                
                 innerItem: {
                     
-                }                
+                },
+                rules: {
+                    mobile: [{
+                        validator: Validator.mobile,
+                        message: "请输入正确的手机号码",
+                        trigger: "blur"
+                    }],
+                    email: [{
+                        type: 'email',
+                        message: '请输入正确的邮箱地址',
+                        trigger: "blur"
+                    }]
+                }         
             };
         },
         computed: {
@@ -216,6 +229,9 @@
             },
             handleCancel() {
                 this.status = '';                              
+            },
+            validate(fn) {
+                this.$refs.form.validate(fn);
             },
 
             ...mapMutations('BDManager', ['updateItem', 'updateName', 'updateWechat', 'updateMobile', 'updateEmail', 'updateSame'])

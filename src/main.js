@@ -6,10 +6,14 @@ import router from './router'
 import axiosWrapper from './plugins/axiosWrapper';
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
+// import 'photoswipe/dist/photoswipe.css';
+// import 'photoswipe/dist/photoswipe.css';
 import store from './store';
+// import VuePreview from '@/components/common/vue-preview/index';
 
 Vue.use(axiosWrapper);
 Vue.use(ElementUI);
+// Vue.use(VuePreview);
 // Vue.use(Vuex);
 
 Vue.config.productionTip = false

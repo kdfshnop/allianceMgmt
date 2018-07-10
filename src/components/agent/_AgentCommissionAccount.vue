@@ -6,7 +6,7 @@
             <el-button v-show="mode === 'edit' && status === 'editing'" @click="handleCancel" type="danger" size="mini">取消</el-button>         
             <el-button v-show="mode === 'edit' && status === 'editing'" @click="handleComplete" type="success" size="mini">完成</el-button>                                     
         </div>
-        <el-form :model="innerItem" label-width= "180px" v-show="mode === 'create' || mode === 'edit' && status === 'editing'">
+        <el-form ref="form" :model="innerItem" label-width= "180px" v-show="mode === 'create' || mode === 'edit' && status === 'editing'">
             <el-row>
                 <el-col :span="12">
                     <el-form-item label="银行名称">
@@ -93,6 +93,9 @@
             },
             handleCancel() {
                 this.status = '';                              
+            },
+            validate(fn) {
+                this.$refs.form.validate(fn);
             },
 
             ...mapMutations('AgentCommissionAccount', ['updateItem', 'updateBankName', 'updateSubbankName', 'updateReceiptAccount', 'updateAccountName'])

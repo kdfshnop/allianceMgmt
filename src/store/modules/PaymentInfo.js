@@ -2,10 +2,10 @@ export default {
     namespaced: true,
     state: {
         paymentStatus: false,
-        type: "",
-        actualPayment: "",
+        type: "",// 付款方式
+        actualPayment: "",// 实际支付
         containPayment: [],// 费用包含
-        number: "",
+        number: "",// 汇款编号
         subbankName: "",
         fileList: [],
         remark: '',
@@ -14,7 +14,7 @@ export default {
         planPaymentDate: "",// 预计支付时间
         brokerName: "", // 对接人姓名
         brokerMobile: "", // 对接人手机
-        promiseFileList: "", // 承诺书文件
+        promiseFileList: [], // 承诺书文件
     },
     mutations: {
         updateStageNumber(state, val) {

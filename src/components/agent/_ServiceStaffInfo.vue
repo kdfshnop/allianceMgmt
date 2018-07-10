@@ -6,7 +6,7 @@
             <el-button v-show="mode === 'edit' && status === 'editing'" @click="handleCancel" type="danger" size="mini">取消</el-button>         
             <el-button v-show="mode === 'edit' && status === 'editing'" @click="handleComplete" type="success" size="mini">完成</el-button>         
         </div>
-        <el-form :model="item" label-width= "180px">
+        <el-form ref="form" :model="item" label-width= "180px">
             <el-row v-show="mode === 'create' || mode === 'edit' && status === 'editing'">
                 <el-col :span="12">
                     <el-form-item label="BD人员姓名">                        
@@ -62,12 +62,15 @@
                         </el-select>
                     </el-form-item>
                 </el-col>
-                <el-col :span="12">
-                    <el-form-item :label="bdInfo.department+' '+bdInfo.title">                        
-                    </el-form-item>
-                    <el-form-item :label="cxInfo.department+' '+cxInfo.title">                        
-                    </el-form-item>
-                    <el-form-item :label="directorInfo.department+' '+directorInfo.title">                        
+                <el-col :span="12">                    
+                    <el-form-item> 
+                            {{bdInfo.department}} - {{bdInfo.title}}                       
+                    </el-form-item>                    
+                    <el-form-item> 
+                            {{cxInfo.department}} - {{cxInfo.title}}                       
+                    </el-form-item>                    
+                    <el-form-item>      
+                            {{directorInfo.department}} - {{directorInfo.title}}
                     </el-form-item>
                 </el-col>
             </el-row>   
@@ -84,11 +87,14 @@
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
-                    <el-form-item :label="bdInfo.department+' '+bdInfo.title">                        
-                    </el-form-item>
-                    <el-form-item :label="cxInfo.department+' '+cxInfo.title">                        
-                    </el-form-item>
-                    <el-form-item :label="directorInfo.department+' '+directorInfo.title">                        
+                    <el-form-item> 
+                            {{bdInfo.department}} - {{bdInfo.title}}                       
+                    </el-form-item>                    
+                    <el-form-item> 
+                            {{cxInfo.department}} - {{cxInfo.title}}                       
+                    </el-form-item>                    
+                    <el-form-item>      
+                            {{directorInfo.department}} - {{directorInfo.title}}
                     </el-form-item>
                 </el-col>
             </el-row>         
@@ -133,19 +139,37 @@
             "directorInfo": generateComputed("directorInfo", "ServiceStaffInfo", "updateDirectorInfo")
         },
         methods: {
-            getBDs(keyword) {                
-                this.$http.get(this.$apiUrl.common.employee).then((data)=>{                    
+            getBDs(keyword) {    
+                // if(keyword === '' || keyword == null) {
+                //     return;
+                // }
+                this.$http.get(this.$apiUrl.common.employee,{
+                    params: {
+                        personType: 2,
+                        name: keyword
+                    }
+                }).then((data)=>{                    
                     this.bds = data.data.data;
                 });
                            
             },
             getCXs(keyword) {
-                this.$http.get(this.$apiUrl.common.employee).then((data)=>{
+                this.$http.get(this.$apiUrl.common.employee,{
+                    params: {
+                        personType: 7,
+                        name: keyword
+                    }
+                }).then((data)=>{
                     this.cxs = data.data.data;
                 });
             },
             getDirectors(keyword) {
-                this.$http.get(this.$apiUrl.common.employee).then((data)=>{
+                this.$http.get(this.$apiUrl.common.employee, {
+                    params: {
+                        personType: 8,
+                        name: keyword
+                    }
+                }).then((data)=>{
                     this.directors = data.data.data;
                 });
             },
@@ -199,6 +223,9 @@
                         this.updateDirectorInfo(this.directorInfo);
                     }
                 }
+            },
+            validate(fn) {
+                this.$refs.form.validate(fn);
             },
 
             ...mapMutations("ServiceStaffInfo", ['updateItem', 'updateBdInfo', 'updateCxInfo', 'updateDirectorInfo'])

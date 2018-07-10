@@ -6,9 +6,9 @@
             <el-button v-show="mode === 'edit' && status === 'editing'" @click="handleCancel" type="danger" size="mini">取消</el-button>         
             <el-button v-show="mode === 'edit' && status === 'editing'" @click="handleComplete" type="success" size="mini">完成</el-button>                            
         </div>
-        <el-form :model="innerItem" label-width= "180px" v-show="mode === 'create' || mode === 'edit' && status === 'editing'">            
+        <el-form ref="form" :model="innerItem" label-width= "180px" v-show="mode === 'create' || mode === 'edit' && status === 'editing'">            
             <el-form-item label="代理商提佣比率">
-                <el-input v-model="ratio">
+                <el-input v-model="ratio" type="number">
                     <template slot="append">%</template>
                 </el-input>
             </el-form-item>
@@ -67,6 +67,9 @@
             },
             handleCancel() {
                 this.status = '';                             
+            },
+            validate(fn) {
+                this.$refs.form.validate(fn);
             },
 
             ...mapMutations('AgentCommissionRatio', ['updateItem', 'updateRatio', 'updateRemark']),

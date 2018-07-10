@@ -7,23 +7,23 @@
             <el-button v-show="mode === 'edit' && status === 'editing'" @click="handleCancel" type="danger" size="mini">取消</el-button>         
             <el-button v-show="mode === 'edit' && status === 'editing'" @click="handleComplete" type="success" size="mini">完成</el-button>                       
             </div>
-            <el-form :model="item" label-width= "180px" v-show="mode === 'create' || mode === 'edit' && status === 'editing'">
+            <el-form ref="form" :model="item" label-width= "180px" v-show="mode === 'create' || mode === 'edit' && status === 'editing'">
                 <el-row>
                     <el-col :span="12" class="service-fee">
                         <el-form-item label="平台服务费">
                             <!-- 此处两个el-input必须紧跟着，否则它们之间会有空格，导致两个不能在同一行内 -->
-                            <el-input v-model="fee">
+                            <el-input v-model="fee" type="number">
                                 <template slot="append">元</template>
-                            </el-input><el-input v-model="month">
+                            </el-input><el-input v-model="month" type="number">
                                 <template slot="append">个月</template>
                             </el-input>
                         </el-form-item>                    
                     </el-col>
                     <el-col :span="12" class="service-fee">
                         <el-form-item label="保证金">
-                            <el-input v-model="prefee">
+                            <el-input v-model="prefee" type="number">
                                 <template slot="append">元</template>
-                            </el-input><el-input v-model="premonth">
+                            </el-input><el-input v-model="premonth" type="number">
                                 <template slot="append">个月</template>
                             </el-input>
                         </el-form-item>                    
@@ -44,7 +44,7 @@
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="分期次数" v-show="paymentType == 2">
-                            <el-input v-model="count">
+                            <el-input v-model="count" type="number">
                                 <template slot="append">期</template>
                             </el-input>
                         </el-form-item>                    
@@ -127,7 +127,10 @@
             },
             handleCancel() {
                 this.status = '';
-            },            
+            },    
+            validate(fn) {
+                this.$refs.form.validate(fn);
+            },        
 
             ...mapMutations('PlatformServiceFee', [
                 'updateItem', 

@@ -6,7 +6,7 @@
             <el-button v-show="mode === 'edit' && status === 'editing'" @click="handleCancel" type="danger" size="mini">取消</el-button>         
             <el-button v-show="mode === 'edit' && status === 'editing'" @click="handleComplete" type="success" size="mini">完成</el-button>                                    
         </div>
-        <el-form :model="item" label-width= "180px" v-show="mode === 'create' || mode === 'edit' && status === 'editing'">
+        <el-form ref="form" :model="item" label-width= "180px" v-show="mode === 'create' || mode === 'edit' && status === 'editing'">
             <el-row>
                 <el-col :span="12">
                     <el-form-item label="代理商类型">
@@ -23,7 +23,10 @@
                          <el-date-picker
                             v-model="startTime"
                             type="date"
-                            placeholder="选择日期">
+                            :value-format="valueFormat"
+                            :format="format"
+                            placeholder="选择日期"
+                            >
                          </el-date-picker>
                     </el-form-item>                                                         
                     <el-form-item label="代理商所属城市">                        
@@ -51,6 +54,8 @@
                         <el-date-picker
                             v-model="endTime"
                             type="date"
+                            :value-format="valueFormat"
+                            :format="format"
                             placeholder="选择日期">
                          </el-date-picker>
                     </el-form-item>
@@ -111,6 +116,8 @@ export default {
             innerItem: {
 
             },
+            valueFormat: "yyyy-MM-dd HH:mm:ss",
+            format: "yyyy-MM-dd",
             /*:remote-method="getAgents"
                             @change="handleParentAgentChange"
                             :loading="parentAgentLoading"*/
@@ -159,6 +166,9 @@ export default {
                 this.parent = '';
             // }
         },
+        validate(fn) {
+            this.$refs.form.validate(fn);
+        },
 
         ...mapMutations("AgentBasicInfo", ['updateItem', 'updateAgentType', 'updateParent', 'updateStartTime', 'updateEndTime', 'updateAgentCity'])
     },
@@ -203,7 +213,8 @@ export default {
                 return this.agentCity.label;
             }
 
-            return '';
+            // 通过详情接口返回的数据有cityName字段，却没有label字段，因为label是在用户选择后前端写入的
+            return [this.$store.state.AgentBasicInfo.cityName || ''];
         },
         remote() {
             return this.agentType == 2;// 非区域代理都可能有上级代理

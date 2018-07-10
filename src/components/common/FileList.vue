@@ -1,6 +1,9 @@
 <template>
     <ul v-if="fileList && fileList.length">
-        <li :key="f.url" v-for="f in fileList"><a :href="f.url">{{f.name}}</a></li>
+        <li :key="f.url" v-for="f in fileList">
+            <img v-if="isImg(f.url)" :src="f.url">
+            <a v-else :href="f.url">{{f.name}}</a>            
+        </li>
     </ul>
 </template>
 <script>
@@ -18,7 +21,33 @@ export default {
         return {
 
         };
-    },    
+    }, 
+    computed: {
+        innerFileList() {
+            let ret = [];
+            if(this.fileList && this.fileList.length) {
+                let imgs = [];
+                let files = [];
+                this.fileList.forEach(f => {
+                    if(this.isImg(f.url)) {
+                        imgs.push(f);
+                    }else{
+                        files.push(f);
+                    }
+                });
+
+                ret = ret.concat(files).concat(imgs);
+            }
+
+            return ret;
+        }
+    },
+    methods: {
+        isImg(src) {
+            let reg = /jpg|png|jpeg|gif/;
+            return reg.test(src);
+        }
+    }  
 }
 </script>
 
