@@ -1,18 +1,25 @@
+<!--
+    @页面名称：代理商首次加盟填写资料后资料审核列表页
+    @作者：豆亚东 (douyadong@lifang.com)
+    @业务逻辑说明：
+        1.
+        2.        
+-->
 <template>
     <el-container>
         <el-main>    
             <bread-crumb :items="breadCrumb"></bread-crumb>
             <div class="tabs">
                 <div class="tab" :class="{wait:wait}" @click="agentTab">
-                    <p class="account">12</p>
+                    <p class="account">{{total.waitTotal}}</p>
                     <p>待审核代理商</p>
                 </div>
                 <div class="tab" :class="{reject:reject}" @click="companyTab">
-                    <p class="account">100</p>
+                    <p class="account">{{total.rejectTotal}}</p>
                     <p>已驳回</p>
                 </div>
                 <div class="tab" :class="{pass:pass}" @click="storeTab">
-                    <p class="account">128</p>
+                    <p class="account">{{total.auditedTotal}}</p>
                     <p>通过</p>
                 </div>
                 <p style="clear:both;"></p>
@@ -38,11 +45,23 @@ export default {
     components:{BreadCrumb,WaitAudit,AuditNoPass,AuditPass},
     data(){
         return {
+            auditType:"1",//1资料审核,2平台服务费审核
             breadCrumb: [{text:'首次加盟审核'},{text: "资料审核"}],
             wait:true,
             reject:false,
             pass:false,
+            total:{}
         }
+    },
+    created(){
+        let self=this;
+        this.$http.post(this.$apiUrl.agent.firstAuditSummary,{auditType:this.auditType})
+            .then(function(data){
+                self.total=data.data.data[0];
+            })
+            .catch(function(err){
+                console.log(err)
+            });
     },
     methods:{
         agentTab(){

@@ -1,16 +1,16 @@
 <template>
     <div>
-        <div class="search-result" >共搜索到 956条数据</div>
-        <el-table :data="searInfoList" border style="width: 100%">
-            <el-table-column prop="name" label="门店/代理商公司名称" align="center" ></el-table-column>
-            <el-table-column prop="submitPeople" label="地区" align="center" ></el-table-column>
-            <el-table-column prop="auditPeople" label="提交人" align="center" ></el-table-column>
+        <div class="search-result" >共搜索到2条数据</div>
+        <el-table :data="waitAuditList" border style="width: 100%">
+            <el-table-column prop="name" label="代理商公司名称" align="center" ></el-table-column>
+            <el-table-column prop="cityName" label="地区" align="center" ></el-table-column>
+            <el-table-column prop="submitterName" label="提交人" align="center" ></el-table-column>
             <el-table-column  label="状态" align="center" >
                 <template slot-scope="scope">
                     <div><span class="circle"></span><span>待审核</span></div>
                 </template>
             </el-table-column>
-            <el-table-column prop="endReason" label="提交时间" align="center"></el-table-column>
+            <el-table-column prop="auditTime" label="提交时间" align="center"></el-table-column>
             <el-table-column prop="endReason" label="操作" align="center">
                 <template slot-scope="scope">
                     <el-button size="mini" @click="audit(scope.$index, scope.row)" type="text">审核</el-button>
@@ -22,7 +22,7 @@
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
                 :current-page="pagination.currentPage"
-                :page-sizes="[10, 2, 3, 400]"
+                :page-sizes="[10, 20, 50, 100,500]"
                 :page-size="pagination.pageSize"
                 layout="total, sizes, prev, pager, next, jumper"
                 :total="pagination.total">
@@ -36,61 +36,55 @@ export default {
     name:'waitAudit',
     data(){
         return {
+            auditType:"1",//1资料审核，2平台服务费审核
+            targetState:"1",//1.待审核，2已驳回，3通过
             // 分页功能
             pagination:{
                 currentPage:1,//默认当前页为1;
                 pageSize:10,//默认显示10条
-                total:400//一共有多少条数据
+                total:10//一共有多少条数据
             },
-            tableData:[
-                {
-                    name:'key',
-                    submitPeople:'wk',
-                    auditPeople:'经纪人',
-                    auditTime:'2018-12-05',
-                    endReason:'不合格'
-                },
-                {
-                    name:'key',
-                    submitPeople:'wk',
-                    auditPeople:'经纪人',
-                    auditTime:'2018-12-05',
-                    endReason:'不合格'
-                },
-                {
-                    name:'key',
-                    submitPeople:'wk',
-                    auditPeople:'经纪人',
-                    auditTime:'2018-12-05',
-                    endReason:'不合格'
-                },
-                {
-                    name:'key',
-                    submitPeople:'wk',
-                    auditPeople:'经纪人',
-                    auditTime:'2018-12-05',
-                    endReason:'不合格'
-                }
-            ]
+            waitAuditList:[]//代理商资料待审核列表;
         }
+    },
+    created(){
+        this.requestList();
     },
     methods:{
         //每页多少条
         handleSizeChange(val) {
             this.pagination.pageSize=val;
+            this.requestList();
         },
         //当前页
         handleCurrentChange(val) {
             this.pagination.currentPage=val;
+            this.requestList();
         },
-        audit(){}
-    },
-    computed:{
-        //分页显示多少条数据
-        searInfoList(){
-            return this.tableData.slice((this.pagination.currentPage-1)*this.pagination.pageSize,this.pagination.currentPage*this.pagination.pageSize); 
+        // 审核跳转到资料审核页;
+        audit(index,row){
+            this.$router.push({name:"MaterialVerify",query:{agencyId:row.id}});
+        },
+        // 待审核列表信息请求公共函数;
+        requestList(){
+            let self=this;
+            let requestInfo={
+                auditType:this.auditType,
+                currentPage:this.pagination.currentPage,
+                pageSize:this.pagination.pageSize,
+                targetState:this.targetState
+            }
+            this.$http.post(this.$apiUrl.agent.firstWaitAuditList,requestInfo)
+                .then(function(data){
+                    self.pagination.total=data.data.data.total;
+                    self.waitAuditList=data.data.data.data;
+                    console.log(123456);
+                })
+                .catch(function(err){
+                    console.log(err);
+                });
         }
-    },
+    }
 }
 </script>
 

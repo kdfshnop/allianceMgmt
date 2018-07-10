@@ -3,13 +3,13 @@
         <el-form :model="form" :rules="rules" ref="form" label-width="110px">
             <el-row>
                 <el-col :span="12">
-                    <el-form-item label="公司名称" prop="name" class="tl">
-                        <el-input v-model="form.name" placeholder="50字以内"></el-input>
+                    <el-form-item label="公司名称" prop="companyName" class="tl">
+                        <el-input v-model="form.companyName" placeholder="50字以内"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
-                    <el-form-item label="公司简称" prop="abbreviation">
-                        <el-input v-model="form.abbreviation" placeholder="50字以内"></el-input>
+                    <el-form-item label="公司简称" prop="companyAbbreviation">
+                        <el-input v-model="form.companyAbbreviation" placeholder="50字以内"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -41,40 +41,27 @@
                     </el-form-item>
                 </el-col>
             </el-row>
-            <el-form-item label="bd" prop="operator"  label-width="40px" class="tl">
-                <el-input v-model="form.operator" placeholder="请选择"></el-input>
+            <el-form-item label="bd" prop="bd"  label-width="40px" class="tl">
+                <el-input v-model="form.bd" placeholder="请选择"></el-input>
             </el-form-item>
             <el-row>
                 <el-col :span="12">
-                    <el-row>
-                        <el-col :span="10">
-                            <el-form-item label="合作时间" prop="corporateStart" class="tl team-time">
-                                <el-date-picker
-                                    format="yyyy-MM-dd"
-                                    v-model="form.corporateStart"
-                                    type="date"
-                                    placeholder="选择日期"
-                                    style="width:150px"
-                                    value-format="yyyy-MM-dd">
-                                </el-date-picker>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="10">
-                            <el-form-item prop="corporateEnd" label="至" class="team-time">
-                                <el-date-picker
-                                    format="yyyy-MM-dd"
-                                    v-model="form.corporateEnd"
-                                    type="date"
-                                    placeholder="选择日期"
-                                    style="width:150px"
-                                    value-format="yyyy-MM-dd">
-                                </el-date-picker>
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
+                    <el-form-item label="合作开始时间" prop="cooperationTime">
+                            <el-date-picker
+                                v-model="form.cooperationTime"
+                                type="daterange"
+                                align="right"
+                                unlink-panels
+                                range-separator="至"
+                                start-placeholder="开始日期"
+                                end-placeholder="结束日期"
+                                value-format="yyyy-MM-dd"
+                                format="yyyy-MM-dd">
+                            </el-date-picker>
+                        </el-form-item>
                 </el-col>
                 <el-col :span="12">
-                    <el-form-item label="法人代表" prop="corporate">
+                    <el-form-item label="法人代表" prop="corporate" >
                         <el-input v-model="form.corporate"></el-input>
                     </el-form-item>
                 </el-col>
@@ -92,12 +79,12 @@
                 </el-col>
             </el-row>
             <el-form-item label="代理商" class="tl" prop="agencyId">
-                <el-select v-model="form.agencyId" placeholder="请选择">
+                <el-select v-model="form.agencyId" placeholder="请选择" @focus="agencyList" filterable>
                     <el-option label="暂无代理商" value="0"></el-option>
                     <el-option
-                        v-for="item in agencyList"
+                        v-for="item in agencyInfoList"
                         :key="item.agencyId"
-                        :label="item.agencyName"
+                        :label="item.agencyCompanyName"
                         :value="item.agencyId">
                     </el-option>
                 </el-select>
@@ -118,8 +105,8 @@
             </el-form-item>
         </el-form>
         <span slot="footer" class="dialog-footer">
-            <el-button @click="submitForm('form')" type="primary">保存</el-button>
-            <el-button @click="resetForm('form')">关闭</el-button>
+            <el-button @click="submitForm" type="primary">保存</el-button>
+            <el-button @click="resetForm">关闭</el-button>
         </span>
     </el-dialog>
 </template>
@@ -132,83 +119,88 @@ export default {
     components:{Region},
     data(){
         return {
-            agencyList:[
-                {
-                    agencyId:'1',
-                    agencyName:'北京代理商'
-                },
-                {
-                    agencyId:"2",
-                    agencyName:'上海代理商'
-                }
-            ],
+            agencyInfoList:[],
             dialogVisible:false,
             startLevel:1,//二级联动城市传参
             endLevel:2,//二级联动城市传参
             form:{
-                abbreviation:'',//公司简称
                 address:'',//地址
                 agencyId:'',//代理商Id
+                bd:'',//bd
                 businessType:'',//房源类型,0为选择，1.新上，2.二手房，3.新房＋二手房
-                cityId:'',//所属城市
-                cityList:[],
+                cityId:'',//所属城市Id
+                cityList:[],//值必须为number
+                companyAbbreviation:'',//中介公司简称
+                companyName:'',//公司名称
                 corporate:'',//法人代表
                 corporatePhone:'',//电话
-                corporateStart:'',//合作开始时间
-                corporateEnd:'',//合作结束时间
+                cooperationEnd:'',//合作结束时间
+                cooperationStart:'',//合作开始时间
+                cooperationTime:[],//合作时间段
                 deposit:'',//保证金
-                name:'',//公司名称
                 organizationCode:'',//组织机构代码
-                operator:'',//操作人
-                resourceKey:'',//上传的资源key
-                state:''//状态1.合作中，2.合作终止 
+                provinceId:'',//省份Id
+                resourceKey:'',//上传的资源key 
             },
             // 必填设置
             rules: {
-                name: [{ required: true, message: '请输入公司名称', trigger: 'blur' }],
-                abbreviation: [{ required: true, message: '请输入公司简称', trigger: 'blur' }],
+                companyName: [{ required: true, message: '请输入公司名称', trigger: 'blur' }],
+                companyAbbreviation: [{ required: true, message: '请输入公司简称', trigger: 'blur' }],
                 cityList: [{ required: true, message: '请输入城市', trigger: 'blur' }],
                 deposit: [{ required: true, message: '请输入保证金', trigger: 'blur' }],
                 organizationCode: [{ required: true, message: '请输入组织机构代码', trigger: 'blur' }],
-                corporateStart: [{ required: true, message: '请输入合作开始时间', trigger: 'blur' }],
-                corporateEnd: [{ required: true, message: '请输入合作结束时间', trigger: 'blur' }]
+                cooperationTime: [{ required: true, message: '请输入合作时间段', trigger: 'blur' }]
             }
         }
     },
     created(){
+        let self=this;
         // 获取代理商列表;
-        this.$http.get(this.$apiUrl.common.agency)
-            .then(function(data){
-                 console.log(data,'代理商列表成功');
-            })
-            .catch(function(err){
-                console.log(err,'代理商接口错误');
-            })
+        this.$http.get(this.$apiUrl.agent.list)
+        .then(function(data){
+            self.agencyInfoList=data.data.data.data;
+            console.log(self.agencyInfoList,123456);
+        })
+        .catch(function(err){
+            console.log(err,'代理商列表失败');
+        });
     },
     methods:{
         open() {
             if(this.title=='编辑公司'){
-                this.form=Object.assign({},this.currentCompanyInfo,{cityList:[]});
+                this.form=Object.assign({},this.currentCompanyInfo,{cityList:[this.currentCompanyInfo.provinceId,this.currentCompanyInfo.cityId]});
             }else{
                 this.form={
-                    abbreviation:'',//公司简称
+                    abbreviation:'',//中介公司简称
                     address:'',//地址
                     agencyId:'',//代理商Id
-                    businessType:'',//房源类型,空为未选择，1.新上，2.二手房，3.新房＋二手房
-                    cityId:'',//所属城市
-                    cityList:[],//城市二级联动所需
+                    bd:'',//bd
+                    businessType:'',//房源类型,0为选择，1.新上，2.二手房，3.新房＋二手房
+                    cityId:'',//所属城市Id
+                    cityList:[],
                     corporate:'',//法人代表
                     corporatePhone:'',//电话
-                    corporateStart:'',//合作开始时间
-                    corporateEnd:'',//合作结束时间
+                    cooperationTime:[],//合作时间段
+                    cooperationEnd:'',//合作结束时间
+                    cooperationStart:'',//合作开始时间
                     deposit:'',//保证金
-                    name:'',//公司名称
+                    name:'',//中介公司名称
                     organizationCode:'',//组织机构代码
-                    operator:'',//操作人
+                    provinceId:'',//省份Id
                     resourceKey:'',//上传的资源key 
                 }
             }
             this.dialogVisible = true;
+        },
+        agencyList(){
+            let self=this;
+            this.$http.get(this.$apiUrl.agent.list)
+            .then(function(data){
+                self.agencyInfoList=data.data.data.data;
+            })
+            .catch(function(err){
+                console.log(err,'代理商列表失败');
+            })
         },
         handleClose(done) {
             this.$confirm('确认关闭？')
@@ -218,23 +210,39 @@ export default {
             })
             .catch(_ => {});
         },
-        submitForm(formName) {
-            console.log(this.form,formName,111)
+        submitForm() {
             this.$refs.form.validate((valid) => {
                 if (valid) {
                     this.dialogVisible=false;
                     alert('提交成功');
                     if(this.title=='编辑公司'){
-                        this.$emit('editSuccess',this.form);
-                    }else{
-                        this.$http.put('/company/single',this.form)
+                        this.form.cooperationStart=this.form.cooperationTime[0];
+                        this.form.cooperationEnd=this.form.cooperationTime[1];
+                        this.$http.post(this.$apiUrl.company.add,realForm)
                             .then(function(data){
                                 console.log(data);
                             })
                             .catch(function(error){
                                 console.log(error)
                             });
-                        this.$emit('addSuccess',this.form);
+                        this.$emit('editSuccess',this.form);
+                    }else{
+                        if(this.form.cityList.length){
+                            this.form.provinceId=this.form.cityList[0];
+                            this.form.cityId=this.form.cityList[1];
+                        };
+                        this.form.cooperationStart=this.form.cooperationTime[0];
+                        this.form.cooperationEnd=this.form.cooperationTime[1];
+                        let realForm=Object.assign({},this.form);
+                        delete realForm.cityList;
+                        this.$http.put(this.$apiUrl.company.add,realForm)
+                            .then(function(data){
+                                console.log(data);
+                            })
+                            .catch(function(error){
+                                console.log(error)
+                            });
+                        this.$emit('addSuccess',realForm);
                     };
                     // 此处代码需要加在请求成功之后;
                     // this.$refs[formName].resetFields();
@@ -244,8 +252,8 @@ export default {
                 }
             });
         },
-        resetForm(formName) {
-            this.$refs[formName].resetFields();
+        resetForm() {
+            this.$refs.form.resetFields();
             this.dialogVisible=false;
         },
         //   上传附件的方法;

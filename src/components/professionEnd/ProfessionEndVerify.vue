@@ -1,3 +1,10 @@
+<!--
+    @页面名称：代理商、公司、门店终止合作是否通过页
+    @作者：豆亚东 (douyadong@lifang.com)
+    @业务逻辑说明：
+        1.代理商、公司、门店终止合作是否通过;
+        2.        
+-->
 <template>
     <el-container>
         <el-main>    
@@ -38,10 +45,10 @@
                 </el-table-column>
             </el-table> 
             <el-dialog :title="title" :visible.sync="dialogVisible" width="30%">
-                <textarea name="" id="" style="width:100%;" rows="10" placeholder="请添加备注" v-model="textarea"></textarea>
+                <textarea name="" id="" style="width:100%;" rows="10" placeholder="请添加备注" v-model="remark"></textarea>
                 <span slot="footer" class="dialog-footer">
                     <el-button @click="dialogVisible = false">取 消</el-button>
-                    <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+                    <el-button type="primary" @click="dialogVisible = false,submit()">确 定</el-button>
                 </span>
             </el-dialog>
         </el-main>
@@ -56,13 +63,33 @@ export default {
     components:{BreadCrumb},
     data(){
         return {
+            auditType:'2',//终止合作
             breadCrumb: [{text:'业务审核'},{text: "终止合作"},{text:'审核'}],
             historyRecords:[],// 历史审核记录
             searInfoList:[],
             dialogVisible:false,
-            textarea:'',
-            title:''
+            remark:'',
+            title:'',
+            id:this.$route.query.id
         }
+    },
+    created(){
+        // 终止合作原因;
+        this.$http.get(this.$apiUrl.professionAudit.detailContract+"?id="+this.id)
+            .then(function(data){
+                console.log('编辑详情')
+            })
+            .catch(function(err){
+                console.log(err);
+            });
+        // 历史审核记录
+        this.$http.get(this.$apiUrl.professionAudit.historyAudit+"?id="+this.id)
+            .then(function(data){
+                console.log('历史审核记录');
+            })
+            .catch(function(err){
+                console.log(err);
+            });
     },
     methods:{
         handleReject(){
@@ -75,6 +102,32 @@ export default {
         },
         handleClose(){
             history.back();
+        },
+        submit(){
+            let form={
+                targetId:this.id,
+                auditType:this.auditType,
+                remark:this.remark
+            };
+            if(this.title=='驳回'){
+                this.$http.post(this.$apiUrl.professionAudit.reject,form)
+                .then(function(data){
+                    console.log('驳回');
+                    this.remark="";
+                })
+                .catch(function(err){
+                    console.log(err);
+                })
+            }else{
+                this.$http.post(this.$apiUrl.professionAudit.pass,form)
+                .then(function(data){
+                    console.log('通过');
+                    this.remark="";
+                })
+                .catch(function(err){
+                    console.log(err);
+                })
+            }  
         }
     }
 }

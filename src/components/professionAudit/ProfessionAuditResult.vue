@@ -1,18 +1,25 @@
+<!--
+    @页面名称：代理商业务编辑审核
+    @作者：豆亚东 (douyadong@lifang.com)
+    @业务逻辑说明：
+        1.代理商审核通过后，再次编辑之后仍需要审核即流转到该页面
+        2.        
+-->
 <template>
     <el-container>
         <el-main>    
             <bread-crumb :items="breadCrumb"></bread-crumb>
             <div class="tabs">
                 <div class="tab" :class="{wait:wait}" @click="agentTab">
-                    <p class="account">12</p>
+                    <p class="account">{{total.waitTotal}}</p>
                     <p>待审核代理商</p>
                 </div>
                 <div class="tab" :class="{reject:reject}" @click="companyTab">
-                    <p class="account">100</p>
+                    <p class="account">{{total.rejectTotal}}</p>
                     <p>已驳回</p>
                 </div>
                 <div class="tab" :class="{pass:pass}" @click="storeTab">
-                    <p class="account">128</p>
+                    <p class="account">{{total.auditedTotal}}</p>
                     <p>通过</p>
                 </div>
                 <p style="clear:both;"></p>
@@ -42,7 +49,19 @@ export default {
             wait:true,
             reject:false,
             pass:false,
+            total:{}
         }
+    },
+    created(){
+        let self=this;
+        this.$http.post(this.$apiUrl.professionAudit.summary,{auditType:"1"})
+            .then(function(data){
+                self.total=data.data.data[0];
+                console.log('summary');
+            })
+            .catch(function(err){
+                console.log(err);
+            })
     },
     methods:{
         agentTab(){

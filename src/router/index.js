@@ -12,10 +12,13 @@ import ProfessionAuditResult from '@/components/professionAudit/ProfessionAuditR
 import ProfessionEndResult from '@/components/professionEnd/ProfessionEndResult';
 import ProfessionAuditVerify from '@/components/professionAudit/ProfessionAuditVerify';
 import ProfessionEndVerify from '@/components/professionEnd/ProfessionEndVerify';
-import AgentEnd from '@/components/agentEnd/AgentEnd';
+import AgentManagement from '@/components/agentManagement/AgentManagement';
 import Record from '@/components/record/Record';
 import AgentDetail from '@/components/agent/AgentDetail';
 import EditAgent from '@/components/agent/EditAgent';
+import FollowUp from '@/components/followUp/FollowUp';
+import AddFollowUp from '@/components/followUp/AddFollowUp';
+import FollowUpDetaile from '@/components/followUp/FollowUpDetail';
 
 Vue.use(Router);
 
@@ -35,57 +38,57 @@ let router = new Router({
       component: MaterialVerify
     },
     {
-      path: '/CompanyManagement',
+      path: '/companyManagement',
       name: 'CompanyManagement',
       component: CompanyManagement
     },
     {
-      path: '/StoreManagement',
+      path: '/storeManagement',
       name: 'StoreManagement',
       component: StoreManagement
     },
     {
-      path:'/TeamEnd',
+      path:'/teamEnd',
       name:'TeamEnd',
       component:TeamEnd
     },
     {
-      path:'/MaterialAuditResult',
+      path:'/materialAuditResult',
       name:'MaterialAuditResult',
       component:MaterialAuditResult
     },
     {
-      path:'/ServiceFeeAuditResult',
+      path:'/serviceFeeAuditResult',
       name:'ServiceFeeAuditResult',
       component:ServiceFeeAuditResult
     },
     {
-      path:'/ProfessionAuditResult',
+      path:'/professionAuditResult',
       name:'ProfessionAuditResult',
       component:ProfessionAuditResult
     },
     {
-      path:'/ProfessionEndResult',
+      path:'/professionEndResult',
       name:'ProfessionEndResult',
       component:ProfessionEndResult
     },
     {
-      path:'/ProfessionAuditVerify',
+      path:'/professionAuditVerify',
       name:'ProfessionAuditVerify',
       component:ProfessionAuditVerify
     },
     {
-      path:'/ProfessionEndVerify',
+      path:'/professionEndVerify',
       name:'ProfessionEndVerify',
       component:ProfessionEndVerify
     },
     {
-      path:'/AgentEnd',
-      name:'AgentEnd',
-      component:AgentEnd
+      path:'/agentManagement',
+      name:'AgentManagement',
+      component:AgentManagement
     },
     {
-      path:'/Record',
+      path:'/record',
       name:'Record',
       component:Record
     },{
@@ -96,6 +99,18 @@ let router = new Router({
       path: '/agent/editAgent/:id',
       name: 'EditAgent',
       component: EditAgent
+    },{
+      path:'/followUp',
+      name:'FollowUp',
+      component:FollowUp
+    },{
+      path:'/addFollowUp',
+      name:'AddFollowUp',
+      component:AddFollowUp
+    },{
+      path:'/followUpDetail',
+      name:'FollowUpDetail',
+      component:FollowUpDetaile
     }
   ]
 });
