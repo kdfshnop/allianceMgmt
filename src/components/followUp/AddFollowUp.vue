@@ -11,7 +11,7 @@
             <bread-crumb :items="breadCrumb"></bread-crumb>
             <div class="gap-2">
                 <div>跟进信息：</div>
-                <el-input type="textarea" v-model="remark" rows="10" placeholder="请输入跟进信息"></el-input>
+                <el-input type="textarea" v-model="message" rows="10" placeholder="请输入跟进信息"></el-input>
                 <el-upload
                     class="upload-demo gap-2"
                     action="https://jsonplaceholder.typicode.com/posts/"
@@ -39,20 +39,25 @@ export default {
     components:{BreadCrumb},
     data(){
         return {
+            agencyId:this.$route.query.agencyId,
             breadCrumb: [{text:'加盟管理'},{text: "代理商"},{text:'跟进'},{text:'添加跟进'}],
-            remark:'',
+            message:'',
             fileKey:'',//上传文件key
         }
     },
     methods:{
         submit(){
+            let self=this;
             let form={
-                remark:this.remark,
+                agencyId:this.agencyId,
+                message:this.message,
                 fileKey:this.fileKey
-            }
+            };
             this.$http.put(this.$apiUrl.agent.followUp,form)
                 .then(function(data){
+                    self.message="";
                     alert('已提交');
+                    self.$router.push({name:"FollowUp",query:{agencyId:self.agencyId}});
                 })
                 .catch(function(err){
                     console.log(err)

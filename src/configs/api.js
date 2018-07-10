@@ -1,6 +1,6 @@
 export default {
     baseUrl: {
-        dev: "http://rap2api.taobao.org/app/mock/17025",
+        dev: "http://10.0.90.105:8080",
         test: "",
         sim: "",
         prod: ""

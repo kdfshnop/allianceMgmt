@@ -43,8 +43,7 @@ export default {
         let self=this;
         this.$http.post(this.$apiUrl.agent.followUp,{agencyId:this.agencyId})
             .then(function(data){
-                self.apiData=data.data.data.data;
-                console.log(data.data.data.data,'列表成功');
+                self.apiData=data.data.data;
             })
             .catch(function(err){
                 console.log(err,'列表失败');

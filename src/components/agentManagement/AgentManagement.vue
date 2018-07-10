@@ -77,7 +77,7 @@
                                 </el-form-item>
                             </el-col>
                         </el-row>
-                        <el-form-item label="合作标签" prop="agencyTag">
+                        <el-form-item label="合作标签" prop="agencyTag" v-if="form.agencyState==0||form.agencyState==3">
                             <el-select v-model="form.agencyTag" filterable>
                                 <el-option label="全部" value="0"></el-option>
                                 <el-option label="正常合作" value="1"></el-option>
@@ -103,22 +103,22 @@
             <el-table :data="agencyInfo.data" border style="width: 100%">
                 <el-table-column prop="agencyCompanyName" label="代理商公司名称" align="center" ></el-table-column>
                 <el-table-column prop="cityName" label="城市" align="center"></el-table-column>
-                <el-table-column prop="agencyTypeName" label="代理商类型" align="center" ></el-table-column>
-                <el-table-column prop="regionTotal" label="代理区域数量" align="center" ></el-table-column>
+                <el-table-column prop="agencyTypeName" label="代理商类型" align="center"></el-table-column>
+                <el-table-column prop="regionTotal" label="代理区域数量" align="center"></el-table-column>
                 <el-table-column prop="storeTotal" label="门店数量" align="center"></el-table-column>
-                <el-table-column prop="tagsName" label="合作状态" align="center"></el-table-column>
+                <el-table-column prop="agencyStateName" label="合作状态" align="center"></el-table-column>
                 <el-table-column prop="startTime" label="合作开始" align="center"></el-table-column>
                 <el-table-column prop="endTime" label="合作结束" align="center"></el-table-column>
                 <el-table-column label="操作" width="300px" align="center">
                     <template slot-scope="scope">
-                        <el-button size="mini" @click="detail(scope.$index, scope.row)" v-if="scope.row.agencyType!=2" type="text">详情|</el-button>
-                        <el-tooltip placement="right" effect="light" v-if="scope.row.agencyType!=2">
+                        <el-button size="mini" @click="detail(scope.$index, scope.row)" v-if="scope.row.agencyState!=2" type="text">详情|</el-button>
+                        <el-tooltip placement="right" effect="light" v-if="scope.row.agencyState!=2">
                             <el-button type="text" size="mini">更多</el-button>
-                            <div slot="content" @click="edit(scope.$index,scope.row)">编辑</div>
-                            <div slot="content" class="cz" @click="followUp(scope.$index,scope.row)" >跟进</div>
-                            <div slot="content" class="cz" @click="endJoin(scope.$index,scope.row)">终止合作</div>
+                            <div slot="content" @click="edit(scope.$index,scope.row)" v-if="scope.row.agencyState!=1">编辑</div>
+                            <div slot="content" class="cz" @click="followUp(scope.$index,scope.row)">跟进</div>
+                            <div slot="content" class="cz" @click="endJoin(scope.$index,scope.row)" v-if="scope.row.agencyState==4">终止合作</div>
                         </el-tooltip>
-                        <el-button v-if="false" size="mini" @click="reSubmit(scope.$index, scope.row)" type="text">重新提交</el-button>
+                        <el-button v-if="scope.row.agencyState==2" size="mini" @click="reSubmit(scope.$index, scope.row)" type="text">重新提交</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -174,18 +174,18 @@ export default {
             title:'',//判断是编辑公司还是添加公司
             // 表单查询信息
             form: {
-                agencyName:'',//代理商公司名称
+                agencyName:null,//代理商公司名称
                 agencyState:'0',//合作状态
                 agencyTag:'0',//合作标签
                 agencyType:'0',//代理商类型
-                cityId:'',//代理商所属城市
+                cityId:null,//代理商所属城市
                 cityList:[],//二级联动城市
-                cooperationTime:[],//合作时间段
+                cooperationTime:null,//合作时间段
                 currentPage:1,//页码默认为1
                 pageSize:10,//页面量默认为10
-                searchDate:'',//到期日期
-                searchDay:'',//即将到期天数
-                searchType:'',//到期查询方式
+                searchDate:null,//到期日期
+                searchDay:null,//即将到期天数
+                searchType:null,//到期查询方式
             },
             breadCrumb: [{text:'加盟管理'},{text: "代理商管理"}],
         }
@@ -232,7 +232,9 @@ export default {
             this.$router.push({name:'AgentDetail',params:{id:row.agencyId}});
         },
         // 重新提交
-        reSubmit(){},
+        reSubmit(index,row){
+            this.$router.push({name:'EditAgent',params:{id:row.agencyId}});
+        },
         // 重置表单
         reset(){
             this.$refs.form.resetFields();
@@ -271,6 +273,11 @@ export default {
             if(this.form.cityList.length){
                 this.form.cityId=this.form.cityList[1];
             };
+            // 如果合作状态不是0或者3，则合作标签为null;
+            let isTag=this.form.agencyState==0||this.form.agencyState==3;
+            if(!isTag){
+                this.form.agencyTag="0";
+            };
             //因为data中form有不必要的请求参数,因此予以删除;
             let realForm=Object.assign({},this.form);
             delete realForm.cityList;
@@ -279,34 +286,18 @@ export default {
             this.$http.post(this.$apiUrl.agent.list,realForm)
                 .then(function(data){
                     self.agencyInfo=data.data.data;
-                    console.log(data.data.data,'代理商列表信息success');
                 })
                 .catch(function(err){
                     console.log(err,'代理商列表接口错误');
                 });
             // 获取该页面summary信息;
-            let summary={
-                agencyTag:realForm.agencyTag,
-                agencyName:realForm.agencyName,
-                agencyState:realForm.agencyState,
-                agencyType:realForm.agencyType,
-                cityId:realForm.cityId,
-                endTime:realForm.endTime,
-                startTime:realForm.startTime
-            };
-            this.$http.post(this.$apiUrl.agent.summary)
+            this.$http.post(this.$apiUrl.agent.summary,realForm)
                 .then(function(data){
                     self.summary=data.data.data;
                 })
                 .catch(function(err){
                     console.log(err);
-                })
-        }
-    },
-    computed:{
-        //分页显示多少条数据
-        searchInfoList(){
-            return this.agencyInfo.data.slice((this.form.currentPage-1)*this.form.pageSize,this.form.currentPage*this.form.pageSize);
+                });
         }
     }
 }
