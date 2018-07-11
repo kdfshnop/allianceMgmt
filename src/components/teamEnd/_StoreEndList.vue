@@ -11,7 +11,7 @@
         <el-table :data="searInfoList" border style="width: 100%">
             <el-table-column prop="name" :label="label" align="center" >
                 <template slot-scope="scope">
-                    <el-button size="mini" @click="detail(scope.$index, scope.row)" type="text">审核代理商或公司或门店名称</el-button>
+                    <el-button size="mini" @click="detail(scope.$index, scope.row)" type="text">门店名称</el-button>
                 </template>
             </el-table-column>
             <el-table-column prop="submitPeople" label="提交人" align="center" ></el-table-column>

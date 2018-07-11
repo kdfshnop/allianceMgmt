@@ -27,7 +27,7 @@
                                 <el-option label="已到期" value="4"></el-option>
                             </el-select>
                         </el-form-item>
-                        <el-form-item label="合作开始时间" prop="cooperationTime">
+                        <el-form-item label="合作时间" prop="cooperationTime">
                             <el-date-picker
                                 v-model="form.cooperationTime"
                                 type="daterange"
@@ -163,14 +163,15 @@ export default {
         return {
             agencyInfo:{},//代理商信息
             agencySotre:'',//该代理商旗下有多少家门店
-            summary:{},//summary信息
-            startLevel:1,//二级联动城市传参
-            endLevel:2,//二级联动城市传参
-            firstDialogVisible: false,//第一个终止合作弹出框
-            secondDialogVisible:false,//第二个终止合作弹出框
-            remark:'',//终止合作原因
+            breadCrumb: [{text:'加盟管理'},{text: "代理商管理"}],//面包屑
             companyInfoIndex:'',//操作代理商公司时该公司处于所有列表的位置
             currentCompanyInfo:'',//当前编辑的代理商公司信息
+            endLevel:2,//二级联动城市传参
+            firstDialogVisible: false,//第一个终止合作弹出框
+            remark:'',//终止合作原因
+            secondDialogVisible:false,//第二个终止合作弹出框
+            startLevel:1,//二级联动城市传参
+            summary:{},//summary信息
             title:'',//判断是编辑公司还是添加公司
             // 表单查询信息
             form: {
@@ -186,8 +187,7 @@ export default {
                 searchDate:null,//到期日期
                 searchDay:null,//即将到期天数
                 searchType:null,//到期查询方式
-            },
-            breadCrumb: [{text:'加盟管理'},{text: "代理商管理"}],
+            }  
         }
     },
     created(){
@@ -240,7 +240,7 @@ export default {
             this.$refs.form.resetFields();
         },
         //根据表单信息搜索
-        search(val){
+        search(){
             this.requestList();
         },
         //每页多少条
@@ -251,7 +251,7 @@ export default {
             }
         },
         //当前页
-        handleCurrentChange(val) {
+        handleCurrentChange() {
             if(val!=this.form.currentPage){
                 this.form.currentPage=val;
                 this.requestList();

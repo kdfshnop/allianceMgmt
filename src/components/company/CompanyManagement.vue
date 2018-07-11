@@ -18,9 +18,9 @@
                         <el-form-item label="公司所属城市" prop="cityList">
                             <region v-model="form.cityList" :startLevel="startLevel" :endLevel="endLevel"></region>
                         </el-form-item>
-                        <el-form-item label="合作时间" prop="cooperationStart">
+                        <el-form-item label="合作时间" prop="cooperationTime">
                             <el-date-picker
-                                v-model="form.cooperationStart"
+                                v-model="form.cooperationTime"
                                 type="daterange"
                                 align="right"
                                 unlink-panels
@@ -33,7 +33,7 @@
                         </el-form-item>
                         <el-form-item label="业务" prop="businessType">
                             <el-select v-model="form.businessType" filterable>
-                                <el-option label="新房和二手房" value="3"></el-option>
+                                <el-option label="全部" value="3"></el-option>
                                 <el-option label="新房" value="1"></el-option>
                                 <el-option label="二手房" value="2"></el-option>
                             </el-select>
@@ -121,7 +121,7 @@
                     :page-sizes="[10, 20, 50, 100,500]"
                     :page-size="form.pageSize"
                     layout="total, sizes, prev, pager, next, jumper"
-                    :total="total">
+                    :total="summary.companyTotal">
                 </el-pagination>
             </div>
             <el-dialog title="终止公司合作" :visible.sync="firstDialogVisible" width="30%" >
@@ -140,9 +140,9 @@
                 </span>
             </el-dialog>
             <!--编辑公司组件-->
-            <editor-company ref="editor" :currentCompanyInfo="currentCompanyInfo" :title="title" @editSuccess='editSuccess' @addSuccess='addSuccess'></editor-company>
+            <editor-company ref="editor" :companyId="companyId" :title="title" @editSuccess='editSuccess' @addSuccess='addSuccess'></editor-company>
             <!--分佣账号组件-->
-            <commission ref="commission" :currentCompanyInfo="currentCompanyInfo" ></commission>
+            <commission ref="commission" :companyId="companyId"></commission>
         </el-main>
     </el-container> 
 </template>
@@ -158,39 +158,38 @@ export default {
     components:{EditorCompany,Commission,BreadCrumb,Region},
     data () {
         return {
-            startLevel:1,//二级联动城市传参
-            endLevel:2,//二级联动城市传参
-            firstDialogVisible: false,//第一个终止合作弹出框
-            secondDialogVisible:false,//第二个终止合作弹出框
-            remark:'',//终止合作原因
-            summary:{},//summary信息
+            breadCrumb: [{text:'加盟管理'},{text: "公司管理"}],//面包屑
+            companyId:'',//公司Id;
             companyInfoList:[],//公司列表信息
             companyInfoIndex:'',//操作公司时该公司处于所有列表的位置
             currentCompanyInfo:'',//当前编辑的公司信息
+            endLevel:2,//二级联动城市传参
+            firstDialogVisible: false,//第一个终止合作弹出框
+            remark:'',//终止合作原因
+            startLevel:1,//二级联动城市传参
+            secondDialogVisible:false,//第二个终止合作弹出框
+            summary:{},//summary信息
             title:'',//判断是编辑公司还是添加公司
-            total:400,//根据查询信息查询到的信息总数;
-            currentPage:1,//默认当前页为1
-            pageSize:10,//默认显示10条信息
             // 表单查询信息
             form:{
-                agency:'',//代理商名称
-                businessType:'',//公司业务类型,空为未选择，1.新房，2.二手房，3.新房＋二手房
-                cityId:'',//所属城市Id
+                agency:null,//代理商名称
+                businessType:'3',//公司业务类型,空为未选择，1.新房，2.二手房，3.新房＋二手房
+                cityId:null,//所属城市Id
                 cityList:[],//城市二级联动所需
-                cooperationStart:[],//合作时间段
-                name:'',//公司名称
-                searchDate:'',//到期日期
-                searchDay:'',//即将到期天数 
-                searchType:'',//到期查询方式
-                storeAddress:'',//门店地址
-                storeName:''//门店名称
-            },
-            breadCrumb: [{text:'加盟管理'},{text: "公司管理"}],//面包屑
+                cooperationTime:null,//合作时间段形式为数组
+                currentPage:1,//页码默认为1
+                pageSize:10,//页面量默认为10
+                name:null,//公司名称
+                searchDate:null,//到期日期
+                searchDay:null,//即将到期天数 
+                searchType:null,//到期查询方式
+                storeAddress:null,//门店地址
+                storeName:null//门店名称
+            }
         }
     },
     created(){
         this.requestList();
-        this.requestSummary();
     },
     methods:{
         // 子组件添加公司成功之后，传递给父组件的值;
@@ -198,12 +197,6 @@ export default {
             // 第一种再次发送请求，同时表单查询重置;
             this.$refs.form.resetFields();
             this.requestList();
-
-            //第二种
-            // this.tableData.unshift(addInfo);
-            // this.currentPage=1;
-            // this.pageSize=10;
-            // this.total++;
         },
         resetForm(formName) {
             this.$refs.form.resetFields();
@@ -211,17 +204,16 @@ export default {
         //根据表单信息搜索
         search(){
             this.requestList();
-            this.requestSummary();
         },
         //每页多少条
         handleSizeChange(val) {
-            this.pageSize=val;
+            this.form.pageSize=val;
             // 状态改变发送请求
             this.requestList();
         },
         //当前页
         handleCurrentChange(val) {
-            this.currentPage=val;
+            this.form.currentPage=val;
             //状态改变发送请求
             this.requestList();
         },
@@ -235,11 +227,10 @@ export default {
         },
         //编辑
         editorCompany(index, row){
-            console.log(row,'编辑信息')
             //操作公司时，该公司所处所有信息列表的位置;
-            this.companyInfoIndex=(this.currentPage-1)*this.pageSize+index;
+            this.companyInfoIndex=(this.form.currentPage-1)*this.form.pageSize+index;
             // 当前编辑的公司信息;
-            this.currentCompanyInfo=row;
+            this.companyId=row.companyId;
             this.title='编辑公司';
             // 调用子组件方法，显示对话框,用setTimeout是为了可以加载添加公司组件;
             setTimeout(()=>{
@@ -278,9 +269,10 @@ export default {
             if(this.form.cityList.length){
                 this.form.cityId=this.form.cityList[1];
             };
-            let realForm=Object.assign({},this.form,{currentPage:this.currentPage,pageSize:this.pageSize});
+            let realForm=Object.assign({},this.form);
             delete realForm.cityList;//删除表单中的cityList选项，因为提交数据时不需要该参数
             delete realForm.searchType;//同上
+            // 获取信息列表;
             this.$http.post(this.$apiUrl.company.list,realForm)
                 .then(function(data){
                     self.companyInfoList=data.data.data.data;
@@ -288,31 +280,15 @@ export default {
                 })
                 .catch(function(err){
                     console.log(err,'失败');
-                })
-        },
-        // summary信息请求
-        requestSummary(){
-            let self=this;
-            // 判断是否选择了城市;
-            if(this.form.cityList.length){
-                this.form.cityId=this.form.cityList[1];
-            };
-            let formSummary=Object.assign({},this.form);
-            delete formSummary.cityList;
-            delete formSummary.searchType;
-            this.$http.post(this.$apiUrl.company.summary,formSummary)
+                });
+            // 获取summary;
+            this.$http.post(this.$apiUrl.company.summary,realForm)
                 .then(function(data){
                     self.summary=data.data.data;
                 })
                 .catch(function(err){
                     console.log(err);
                 });
-        }
-    },
-    computed:{
-        //分页显示多少条数据
-        searInfoList(){
-            return this.tableData.slice((this.currentPage-1)*this.pageSize,this.currentPage*this.pageSize);
         }
     }
 }

@@ -1,47 +1,22 @@
 <template lang="html">
     <el-table
-        :data="tableData5"
-        :row-class-name="setClassName"
+        :data="listInfo"
+        border
         style="width: 100%">
         <el-table-column type="expand">
-            <template slot-scope="props" >
+            <template slot-scope="props">
                 <el-form label-position="left" inline class="demo-table-expand">
-                    <el-form-item label="商品名称">
-                        <span>{{ props.row.name }}</span>
-                    </el-form-item>
-                    <el-form-item label="所属店铺">
-                        <span>{{ props.row.shop }}</span>
-                    </el-form-item>
-                    <el-form-item label="商品 ID">
-                        <span>{{ props.row.id }}</span>
-                    </el-form-item>
-                    <el-form-item label="店铺 ID">
-                        <span>{{ props.row.shopId }}</span>
-                    </el-form-item>
-                    <el-form-item label="商品分类">
-                        <span>{{ props.row.category }}</span>
-                    </el-form-item>
-                    <el-form-item label="店铺地址">
-                        <span>{{ props.row.address }}</span>
-                    </el-form-item>
-                    <el-form-item label="商品描述">
-                        <span>{{ props.row.desc }}</span>
+                    <el-form-item :label="item.title" v-for="item in props.row.detail" :key="item.title">
+                        <span>{{ item.pre}}-->{{item.now}}</span>
                     </el-form-item>
                 </el-form>
             </template>
         </el-table-column>
-        <el-table-column
-            label="商品 ID"
-            prop="id">
-        </el-table-column>
-        <el-table-column
-            label="商品名称"
-            prop="name">
-        </el-table-column>
-        <el-table-column
-            label="描述"
-            prop="desc">
-        </el-table-column>
+        <el-table-column align="center" label="操作类型" prop="operatortype"></el-table-column>
+        <el-table-column align="center" label="操作人" prop="operator"></el-table-column>
+        <el-table-column align="center" label="执行结果" prop="result"></el-table-column>
+        <el-table-column align="center" label="操作时间" prop="operatetime"></el-table-column>
+        <el-table-column align="center" label="备注" prop="remark"></el-table-column>
     </el-table>
 </template>
 
@@ -49,62 +24,91 @@
 export default {
     data() {
         return {
-            tableData5: [{
-                id: '12987122',
-                name: '好滋好味鸡蛋仔',
-                category: '江浙小吃、小吃零食',
-                desc: '荷兰优质淡奶，奶香浓而不腻',
-                address: '上海市普陀区真北路',
-                shop: '王小虎夫妻店',
-                shopId: '10333',
-                canExpand:true
-            }, {
-                id: '12987123',
-                name: '好滋好味鸡蛋仔',
-                category: '江浙小吃、小吃零食',
-                desc: '荷兰优质淡奶，奶香浓而不腻',
-                address: '上海市普陀区真北路',
-                shop: '王小虎夫妻店',
-                shopId: '10333',
-                canExpand:true
-                
-            }, {
-                id: '12987125',
-                name: '好滋好味鸡蛋仔',
-                category: '江浙小吃、小吃零食',
-                desc: '荷兰优质淡奶，奶香浓而不腻',
-                address: '上海市普陀区真北路',
-                shop: '王小虎夫妻店',
-                shopId: '10333',
-                canExpand:false
-            }, {
-                id: '12987126',
-                name: '好滋好味鸡蛋仔',
-                category: '江浙小吃、小吃零食',
-                desc: '荷兰优质淡奶，奶香浓而不腻',
-                address: '上海市普陀区真北路',
-                shop: '王小虎夫妻店',
-                shopId: '10333',
-                canExpand:false,
-                expand:true
-            }],
-            // 获取row的key值
-            getRowKeys(row) {
-                return row.id;
-            },
-            // 要展开的行，数值的元素是row的key值
-            expands: []
+            listInfo:[],
         }
     },
-    methods:{
-        setClassName({row, index}){
-        // 通过自己的逻辑返回一个class或者空
-        return row.expand ? 'expand' : '';
+    created(){
+        let self=this;
+        this.$http.get(this.$apiUrl.agent.record+"/1")
+        .then(function(data){
+            self.listInfo=data.data.data;
+            self.listInfo=[
+                {
+                    "id": 1,
+                    "agencyid": 1,
+                    "optype": "测试",
+                    "operator": "刘哥",
+                    "operatortype": "编辑资料",
+                    "result": "成功",
+                    "operatetime": "2018-07-03 13:54:06",
+                    "remark": "审核不通过,资料填写过于简单",
+                    "detail": [
+                        {
+                            "title": "名字",
+                            "pre": "小刘",
+                            "now": "小豆"
+                        },
+                        {
+                            "title":'上传资料',
+                            "pre":'xxx.jpg',
+                            "now":"yyy.png"
+                        },
+                        {
+                            "title":'门店',
+                            "pre":'上海',
+                            "now":"商丘"
+                        },
+                        {
+                            "title":'佣金',
+                            "pre":'100',
+                            "now":"10000"
+                        }
+                    ]
+                },
+                {
+                    "id": 1,
+                    "agencyid": 1,
+                    "optype": "测试",
+                    "operator": "刘哥",
+                    "operatortype": "编辑资料",
+                    "result": "成功",
+                    "operatetime": "2018-07-03 13:54:06",
+                    "remark": "审核不通过,资料填写过于简单",
+                    // "detail": [
+                    //     {
+                    //         "title": "名字",
+                    //         "pre": "小刘",
+                    //         "now": "小豆"
+                    //     },
+                    //     {
+                    //         "title":'上传资料',
+                    //         "pre":'xxx.jpg',
+                    //         "now":"yyy.png"
+                    //     },
+                    //     {
+                    //         "title":'门店',
+                    //         "pre":'上海',
+                    //         "now":"商丘"
+                    //     },
+                    //     {
+                    //         "title":'佣金',
+                    //         "pre":'100',
+                    //         "now":"10000"
+                    //     }
+                    // ]
+                }
+            ];
+            console.log(self.listInfo,'成功');
+        })
+        .catch(function(err){
+            console.log(err,'错误');
+        });
     },
+    methods:{
+        
     },
     mounted() {
-        // 在这里你想初始化的时候展开哪一行都可以了
-        this.expands.push(this.tableData5[1].id);
+        
     }
 }
 </script>
@@ -121,8 +125,5 @@ export default {
     margin-right: 0;
     margin-bottom: 0;
     width: 50%;
-}
-.expand .el-table__expand-column .cell {
-    display: none;
 }
 </style>

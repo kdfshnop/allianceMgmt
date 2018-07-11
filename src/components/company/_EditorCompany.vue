@@ -3,13 +3,13 @@
         <el-form :model="form" :rules="rules" ref="form" label-width="110px">
             <el-row>
                 <el-col :span="12">
-                    <el-form-item label="公司名称" prop="companyName" class="tl">
-                        <el-input v-model="form.companyName" placeholder="50字以内"></el-input>
+                    <el-form-item label="公司名称" prop="name" class="tl">
+                        <el-input v-model="form.name" placeholder="50字以内"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
-                    <el-form-item label="公司简称" prop="companyAbbreviation">
-                        <el-input v-model="form.companyAbbreviation" placeholder="50字以内"></el-input>
+                    <el-form-item label="公司简称" prop="abbreviation">
+                        <el-input v-model="form.abbreviation" placeholder="50字以内"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -34,15 +34,15 @@
                 <el-col :span="12">
                     <el-form-item prop="businessType" label="业务" placeholder="请选择">
                         <el-select v-model="form.businessType" filterable>
-                                <el-option label="新房和二手房" value="3"></el-option>
-                                <el-option label="新房" value="1"></el-option>
-                                <el-option label="二手房" value="2"></el-option>
+                                <el-option label="新房和二手房" :value="3"></el-option>
+                                <el-option label="新房" :value="1"></el-option>
+                                <el-option label="二手房" :value="2"></el-option>
                             </el-select>
                     </el-form-item>
                 </el-col>
             </el-row>
-            <el-form-item label="bd" prop="bd"  label-width="40px" class="tl">
-                <el-input v-model="form.bd" placeholder="请选择"></el-input>
+            <el-form-item label="bd" prop="bdName"  label-width="40px" class="tl">
+                <el-input v-model="form.bdName" placeholder="请选择"></el-input>
             </el-form-item>
             <el-row>
                 <el-col :span="12">
@@ -80,7 +80,7 @@
             </el-row>
             <el-form-item label="代理商" class="tl" prop="agencyId">
                 <el-select v-model="form.agencyId" placeholder="请选择" @focus="agencyList" filterable>
-                    <el-option label="暂无代理商" value="0"></el-option>
+                    <el-option label="暂无代理商" :value="0"></el-option>
                     <el-option
                         v-for="item in agencyInfoList"
                         :key="item.agencyId"
@@ -115,7 +115,7 @@
 import Region from '@/components/common/Region'
 export default {
     name:'editorCompany',
-    props:['currentCompanyInfo','title'],
+    props:['companyId','title'],
     components:{Region},
     data(){
         return {
@@ -124,28 +124,27 @@ export default {
             startLevel:1,//二级联动城市传参
             endLevel:2,//二级联动城市传参
             form:{
+                abbreviation:'',//公司简称;
                 address:'',//地址
                 agencyId:'',//代理商Id
-                bd:'',//bd
+                bdName:'',//bd名字
                 businessType:'',//房源类型,0为选择，1.新上，2.二手房，3.新房＋二手房
                 cityId:'',//所属城市Id
                 cityList:[],//值必须为number
-                companyAbbreviation:'',//中介公司简称
-                companyName:'',//公司名称
                 corporate:'',//法人代表
                 corporatePhone:'',//电话
-                cooperationEnd:'',//合作结束时间
-                cooperationStart:'',//合作开始时间
                 cooperationTime:[],//合作时间段
                 deposit:'',//保证金
+                comapnyId:'',//公司Id;
+                name:"",//公司名称;
                 organizationCode:'',//组织机构代码
                 provinceId:'',//省份Id
                 resourceKey:'',//上传的资源key 
             },
             // 必填设置
             rules: {
-                companyName: [{ required: true, message: '请输入公司名称', trigger: 'blur' }],
-                companyAbbreviation: [{ required: true, message: '请输入公司简称', trigger: 'blur' }],
+                name: [{ required: true, message: '请输入公司名称', trigger: 'blur' }],
+                abbreviation: [{ required: true, message: '请输入公司简称', trigger: 'blur' }],
                 cityList: [{ required: true, message: '请输入城市', trigger: 'blur' }],
                 deposit: [{ required: true, message: '请输入保证金', trigger: 'blur' }],
                 organizationCode: [{ required: true, message: '请输入组织机构代码', trigger: 'blur' }],
@@ -155,11 +154,10 @@ export default {
     },
     created(){
         let self=this;
-        // 获取代理商列表;
+        //获取代理商列表;
         this.$http.get(this.$apiUrl.agent.list)
         .then(function(data){
-            self.agencyInfoList=data.data.data.data;
-            console.log(self.agencyInfoList,123456);
+            self.agencyInfoList=data.data.data;
         })
         .catch(function(err){
             console.log(err,'代理商列表失败');
@@ -167,24 +165,34 @@ export default {
     },
     methods:{
         open() {
+            let self=this;
             if(this.title=='编辑公司'){
-                this.form=Object.assign({},this.currentCompanyInfo,{cityList:[this.currentCompanyInfo.provinceId,this.currentCompanyInfo.cityId]});
+                // 获取公司详情;
+                this.$http.get(this.$apiUrl.company.detail+"?companyId="+this.companyId)
+                    .then(function(data){
+                        self.form=data.data.data;
+                        self.form.cityList=[self.form.provinceId,self.form.cityId];
+                        self.form.cooperationTime=[self.form.cooperationStart,self.form.cooperationEnd];
+                        console.log(self.form,'公司详情');
+                })
+                .catch(function(err){
+                    console.log(err);
+                });
             }else{
                 this.form={
-                    abbreviation:'',//中介公司简称
+                    abbreviation:'',//公司简称;
                     address:'',//地址
-                    agencyId:'',//代理商Id
-                    bd:'',//bd
+                    agencyId:'',//代理商Id;
+                    bdName:'',//bd名字
                     businessType:'',//房源类型,0为选择，1.新上，2.二手房，3.新房＋二手房
                     cityId:'',//所属城市Id
-                    cityList:[],
+                    cityList:[],//值必须为number
                     corporate:'',//法人代表
                     corporatePhone:'',//电话
                     cooperationTime:[],//合作时间段
-                    cooperationEnd:'',//合作结束时间
-                    cooperationStart:'',//合作开始时间
                     deposit:'',//保证金
-                    name:'',//中介公司名称
+                    companyId:'',//公司id;
+                    name:"",//公司名称;
                     organizationCode:'',//组织机构代码
                     provinceId:'',//省份Id
                     resourceKey:'',//上传的资源key 
@@ -196,7 +204,7 @@ export default {
             let self=this;
             this.$http.get(this.$apiUrl.agent.list)
             .then(function(data){
-                self.agencyInfoList=data.data.data.data;
+                self.agencyInfoList=data.data.data;
             })
             .catch(function(err){
                 console.log(err,'代理商列表失败');
@@ -211,8 +219,8 @@ export default {
             .catch(_ => {});
         },
         submitForm() {
-            this.$refs.form.validate((valid) => {
-                if (valid) {
+             this.$refs.form.validate((valid) => {
+               if (valid) {
                     this.dialogVisible=false;
                     alert('提交成功');
                     if(this.title=='编辑公司'){
@@ -237,6 +245,7 @@ export default {
                         delete realForm.cityList;
                         this.$http.put(this.$apiUrl.company.add,realForm)
                             .then(function(data){
+                                alert(12)
                                 console.log(data);
                             })
                             .catch(function(error){
@@ -264,7 +273,7 @@ export default {
             console.log(file);
         },
         handleExceed(files, fileList) {
-            this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
+            // this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
         },
         beforeRemove(file, fileList) {
             return this.$confirm(`确定移除 ${ file.name }？`);
