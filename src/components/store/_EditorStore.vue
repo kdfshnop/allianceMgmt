@@ -156,7 +156,7 @@ export default {
                             this.form.districtId=this.form.areaLinkage[1];
                             this.form.townId=this.form.areaLinkage[2];
                         };
-                        this.$http.post(this.$apiUrl.store.add,this.form)
+                        this.$http.put(this.$apiUrl.store.add,this.form)
                             .then(function(data){
                                 console.log(data,'添加门店success');
                             })
