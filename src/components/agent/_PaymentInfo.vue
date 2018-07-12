@@ -112,7 +112,7 @@
                         {{paymentType}}                        
                     </el-form-item>    
                     <el-form-item label="预计支付时间" v-show="!paymentStatus">
-                        {{planPaymentDate}}                        
+                        {{getDateStr(planPaymentDate)}}                        
                     </el-form-item>                
                 </el-col>
             </el-row>  
@@ -177,7 +177,7 @@
     import CollapsePanel from '@/components/common/CollapsePanel';
     import Upload from '@/components/common/Upload';
     import FileList from '@/components/common/FileList';
-    import {generateComputed} from './_Utils';
+    import {generateComputed, getDateStr} from './_Utils';
     import {mapMutations} from 'vuex';
     // 服务人员信息
     export default {
@@ -224,6 +224,7 @@
             validate(fn) {
                 this.$refs.form.validate(fn);
             },
+            getDateStr: getDateStr,
 
 
             ...mapMutations('PaymentInfo', ['updateItem', 
@@ -257,8 +258,7 @@
             planPaymentDate: generateComputed('planPaymentDate', 'PaymentInfo', "updatePlanPaymentDate"),
             brokerName: generateComputed('brokerName', 'PaymentInfo', "updateBrokerName"),
             brokerMobile: generateComputed('brokerMobile', 'PaymentInfo', "updateBrokerMobile"),
-            promiseFileList: generateComputed('promiseFileList', 'PaymentInfo', "updatePromiseFileList"),
-
+            promiseFileList: generateComputed('promiseFileList', 'PaymentInfo', "updatePromiseFileList"),            
 
             paymentType: function(){
                 let tmp = this.types.filter((v)=>{return v.value == this.type});

@@ -38,12 +38,12 @@
                 <el-row :key="index" v-for="(d, index) in dividingInfo">
                     <el-col :span="12">
                         <el-form-item :label="'第' + (+index+1) + '期'">
-                            {{getDateStr(d.fee)}}
+                            {{getDateStr(d.date)}}
                         </el-form-item>                    
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="前支付平台服务费">
-                            {{d.amount}}元                  
+                            {{d.fee}}元                  
                         </el-form-item>                    
                     </el-col>
                 </el-row>                                                

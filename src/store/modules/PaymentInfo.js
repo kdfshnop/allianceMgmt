@@ -15,6 +15,8 @@ export default {
         brokerName: "", // 对接人姓名
         brokerMobile: "", // 对接人手机
         promiseFileList: [], // 承诺书文件
+        id: "",
+        brokerId: "",
     },
     mutations: {
         updateStageNumber(state, val) {
@@ -56,6 +58,12 @@ export default {
         updateRemark(state, remark) {
             state.remark = remark;
         },
+        updateId(state, val) {
+            state.id = val;
+        },
+        updateBrokerId(state, val) {
+            state.brokerId = val;
+        },
         updateItem(state, item) {                                                
             state.actualPayment = item.actualPayment;
             state.paymentStatus = item.paymentStatus;
@@ -67,10 +75,12 @@ export default {
             state.remark = item.remark;
                         
             state.stageNumber = item.stageNumber;
-            state.planPaymentDate = item.planPaymentDate;
+            state.planPaymentDate = item.planPaymentDate || "";
             state.brokerName = item.brokerName;
             state.brokerMobile = item.brokerMobile;
             state.promiseFileList = item.promiseFileList;
+            state.id = item.id;
+            state.brokerId = item.brokerId;
         }
     }
 };

@@ -9,7 +9,8 @@ export default {
         idCardFrontFileList: [],
         idCardBackFileList: [],
         scoreFileList: [],
-        remark: ""
+        remark: "",
+        id: ""
     },
     mutations: {
         updateName(state, name) {
@@ -39,6 +40,9 @@ export default {
         updateRemark(state, val){
             state.remark = val;
         },
+        updateId(state, val) {
+            state.id = val;
+        },
         updateItem(state, item) {                                    
             state.name = item.name;
             state.mobile = item.mobile;
@@ -49,6 +53,7 @@ export default {
             state.idCardBackFileList = item.idCardBackFileList;
             state.scoreFileList = item.scoreFileList;
             state.remark = item.remark;
+            state.id = item.id;
         }
     }
 };

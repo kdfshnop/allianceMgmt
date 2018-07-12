@@ -78,7 +78,7 @@ export default {
     created() {
         // 获取指定代理商的详情
         let agentId = this.$route.params.id;
-        let agentState = this.$route.params.state || 0;
+        let agentState = this.$route.query.state || 0;
         // this.$http.get(this.$apiUrl.agent.detail,{
         //     params: {
         //         agencyId: agentId,

@@ -5,7 +5,8 @@ export default {
         mobile: "",
         wechat: "",
         email: "",
-        same: ""
+        same: "",
+        id: "",
     },
     mutations: {
         updateName(state, name) {
@@ -23,6 +24,9 @@ export default {
         updateSame(state, same) {
             state.same = same;
         },
+        updateId(state, val){
+            state.id = val;
+        },
         updateItem(state, item) {                        
             // Object.assign(state, item);
             state.name = item.name;
@@ -30,6 +34,7 @@ export default {
             state.wechat = item.wechat;
             state.email = item.email;
             state.same = item.same;
+            state.id = item.id;
         }
     }
 };

@@ -8,18 +8,15 @@ export default {
         prod: ""
     },
     platformServiceFeeVerify: {// 平台服务费审核
-        historyRecords: "",// 历史记录
-        approve: "",// 通过
-        reject: "",// 拒绝
-        detail: "",// 详情
+        historyRecords: "/agency/audit/history",// 历史记录
+        approve: "/first/audit/adopt",// 通过
+        reject: "/first/audit/reject",// 拒绝        
     },
     materialVerify: {// 资料审核
-        historyRecords: "",// 历史记录
-        approve: "/agency/auditing",// 通过 POST {agencyId}?remark
-        reject: "/agency/reject",// 拒绝 POST {agencyId}?remark
-        detail: ""// 详情
-    },
-    test: "",    
+        historyRecords: "/agency/audit/history",// 历史记录
+        approve: "/first/audit/adopt",// 通过 POST {agencyId}?remark
+        reject: "/first/audit/reject",// 拒绝 POST {agencyId}?remark        
+    },    
     upload: "/resource",
     common: {
         employee: "/base/wkzf/person",// 员工接口，诸如BD人员、彩霞人员和一对一指导人员

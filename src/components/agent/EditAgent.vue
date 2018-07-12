@@ -25,6 +25,7 @@
                 </el-tab-pane>
                 <el-tab-pane label="平台服务费" name="sixth">
                     <platform-service-fee :mode="mode"></platform-service-fee>
+                    <dividing-info :mode="mode"></dividing-info>
                     <payment-info :mode="mode"></payment-info>
                 </el-tab-pane>
             </el-tabs>
@@ -89,7 +90,7 @@ export default {
         getDetail() {
             // 获取指定代理商的详情
             let agentId = this.$route.params.id;
-            let agentState = this.$route.params.agentState || 0;
+            let agentState = this.$route.query.state || 0;
 
             this.$store.dispatch({
                 type: 'getAgent',

@@ -127,7 +127,7 @@
                 {{address}}
             </el-form-item> 
             <el-form-item label="上传营业执照" v-show="signed">                
-                    <file-list></file-list>
+                    <file-list :fileList="numberFileList"></file-list>
             </el-form-item>  
 
             <!-- 下面是未注册显示的 -->
