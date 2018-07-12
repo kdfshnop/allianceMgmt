@@ -126,7 +126,8 @@ export default new Vuex.Store({
                 let contract = {
                     special: agency.additional,
                     contractFileList: [],
-                    promiseFileList: []
+                    promiseFileList: [],
+                    sealed: false
                     // TODO: sealed要根据资源中的字段获取
                 };
 

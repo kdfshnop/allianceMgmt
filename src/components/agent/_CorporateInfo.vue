@@ -32,13 +32,13 @@
             </el-row>
                         
             <el-form-item label="上传身份证正面照">                
-                    <upload v-if="mode === 'create' || mode === 'edit' && status === 'editing'"></upload>
+                    <upload :fileList.sync="idCardFrontFileList" v-if="mode === 'create' || mode === 'edit' && status === 'editing'"></upload>
             </el-form-item>
             <el-form-item label="上传身份证反面照">                
-                    <upload v-if="mode === 'create' || mode === 'edit' && status === 'editing'"></upload>
+                    <upload :fileList.sync="idCardBackFileList" v-if="mode === 'create' || mode === 'edit' && status === 'editing'"></upload>
             </el-form-item>
             <el-form-item label="上传芝麻信用截图">                
-                    <upload v-if="mode === 'create' || mode === 'edit' && status === 'editing'"></upload>
+                    <upload :fileList.sync="scoreFileList" v-if="mode === 'create' || mode === 'edit' && status === 'editing'"></upload>
             </el-form-item>
             <el-form-item label="备注信息">                
                 <el-input type="textarea" v-model="remark"></el-input>                   
@@ -71,13 +71,13 @@
             </el-row>
                         
             <el-form-item label="上传身份证正面照">                                    
-                    <file-list></file-list>
+                    <file-list :fileList="idCardFrontFileList"></file-list>
             </el-form-item>
             <el-form-item label="上传身份证反面照">                
-                    <file-list></file-list>
+                    <file-list :fileList="idCardBackFileList"></file-list>
             </el-form-item>
             <el-form-item label="上传芝麻信用截图">                
-                    <file-list></file-list>
+                    <file-list :fileList="scoreFileList"></file-list>
             </el-form-item>
             <el-form-item label="备注信息">                
                 {{remark}}
