@@ -44,12 +44,12 @@ export default {
         record:"agency/operateLog"//日志
     },
     company:{//公司
-        add:"company/single",//添加公司 put
+        add:"company/single",//添加公司 put,编辑公司post
         commission:'company/commission',//分佣账号设置 post
-        edit:"agency/company",//编辑公司 post
         list:"company/list",//公司列表 post为查询,get获取所有
         summary:"company/summary",//公司汇总 post
-        detail:"company/single"//公司详情及分佣账号详情get
+        detail:"company/single",//公司详情及分佣账号详情get
+        terminate:"company/terminate"//公司终止合作
     },
     professionAudit:{
         auditList:"audit/list",//业务审核列表post

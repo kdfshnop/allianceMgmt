@@ -21,7 +21,7 @@
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="保证金" prop="deposit">
-                        <el-input v-model="form.deposit"></el-input>
+                        <el-input v-model.number="form.deposit"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -146,7 +146,7 @@ export default {
                 name: [{ required: true, message: '请输入公司名称', trigger: 'blur' }],
                 abbreviation: [{ required: true, message: '请输入公司简称', trigger: 'blur' }],
                 cityList: [{ required: true, message: '请输入城市', trigger: 'blur' }],
-                deposit: [{ required: true, message: '请输入保证金', trigger: 'blur' }],
+                deposit: [{ required: true, message: '请输入保证金', trigger: 'blur' },{ type: 'number', message: '保证金必须为数字值'}],
                 organizationCode: [{ required: true, message: '请输入组织机构代码', trigger: 'blur' }],
                 cooperationTime: [{ required: true, message: '请输入合作时间段', trigger: 'blur' }]
             }
@@ -172,8 +172,6 @@ export default {
                     .then(function(data){
                         self.form=data.data.data;
                         self.form.cityList=[self.form.provinceId,self.form.cityId];
-                        self.form.cooperationTime=[self.form.cooperationStart,self.form.cooperationEnd];
-                        console.log(self.form,'公司详情');
                 })
                 .catch(function(err){
                     console.log(err);
@@ -219,6 +217,7 @@ export default {
             .catch(_ => {});
         },
         submitForm() {
+             let self=this;
              this.$refs.form.validate((valid) => {
                if (valid) {
                     this.dialogVisible=false;
@@ -226,14 +225,18 @@ export default {
                     if(this.title=='编辑公司'){
                         this.form.cooperationStart=this.form.cooperationTime[0];
                         this.form.cooperationEnd=this.form.cooperationTime[1];
+                        let realForm=Object.assign({},this.form);
+                        realForm.cityId=this.form.cityList[1];
+                        console.log(realForm,'修改城市')
+                        // delete realForm.cityList;
                         this.$http.post(this.$apiUrl.company.add,realForm)
                             .then(function(data){
                                 console.log(data);
+                                self.$emit('editSuccess',self.form);
                             })
                             .catch(function(error){
                                 console.log(error)
                             });
-                        this.$emit('editSuccess',this.form);
                     }else{
                         if(this.form.cityList.length){
                             this.form.provinceId=this.form.cityList[0];

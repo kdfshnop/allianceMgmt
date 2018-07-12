@@ -101,7 +101,7 @@
                 <el-table-column prop="agencyName" label="代理商公司" align="center"></el-table-column>
                 <el-table-column prop="cooperationStart" label="有效期始" align="center"></el-table-column>
                 <el-table-column prop="cooperationEnd" label="有效期止" align="center"></el-table-column>
-                <el-table-column prop="bd" label="bd" align="center"></el-table-column>
+                <el-table-column prop="bdName" label="bd" align="center"></el-table-column>
                 <el-table-column prop="createTime" label="创建时间" align="center"></el-table-column>
                 <el-table-column prop="creater" label="创建人" align="center"></el-table-column>
                 <el-table-column prop="name" label="操作" width="300px" align="center">
@@ -111,7 +111,7 @@
                         <el-button size="mini"  type="text" @click="handleEnd(scope.$index, scope.row)">终止合作</el-button>
                     </template>
                 </el-table-column>
-                <el-table-column prop="storeAccount" label="门店" align="center"></el-table-column>
+                <el-table-column prop="storeNum" label="门店" align="center"></el-table-column>
             </el-table>
             <div class="pagination">
                 <el-pagination
@@ -135,8 +135,8 @@
             <el-dialog title="终止公司合作" :visible.sync="secondDialogVisible" width="30%" >
                 <textarea name="" id="" rows="10" placeholder="请添加终止合作原因" v-model="remark" style="width:100%;"></textarea>
                 <span slot="footer" class="dialog-footer">
-                    <el-button @click="secondDialogVisible = false,continueJoin()">取 消</el-button>
-                    <el-button type="primary" @click="secondDialogVisible = false,endJoin()" >确 定</el-button>
+                    <el-button @click="continueJoin">取 消</el-button>
+                    <el-button type="primary" @click="endJoin" >确 定</el-button>
                 </span>
             </el-dialog>
             <!--编辑公司组件-->
@@ -240,7 +240,10 @@ export default {
         // 子组件编辑成功之后，传递给父组件的值;
         editSuccess(editInfo){
             // 替换原有已经被编辑的数据;
-            this.companyInfoList.splice(this.companyInfoIndex,1,editInfo);
+            console.log(this.companyInfoIndex,editInfo,123456)
+            // this.companyInfoList.splice(this.companyInfoIndex,1,editInfo);
+            this.requestList();
+            console.log(123);
         },
         //分佣账号设置 
         bankAccount(index, row){
@@ -250,16 +253,23 @@ export default {
         //终止合作,第一次弹框
         handleEnd(index,row){
             this.firstDialogVisible = true,
-            this.currentCompanyInfo=row;
+            this.companyId=row.companyId;
             this.remark='';
         },
         //确定终止合作,第二次弹框
         endJoin(){
-            // 公司id;
-            //将该公司终止合作原因提交，该公司终止合作信息将进入终止合作列表;
+            this.secondDialogVisible = false;
+            this.$http.post(this.$apiUrl.company.terminate+"/"+this.companyId+"?remark="+this.remark)
+                .then(function(data){
+                    console.log(data,'终止成功');
+                })
+                .catch(function(err){
+                    console.log(err);
+                });
         },
         //点击二次对话框取消按钮，继续合作
         continueJoin(){
+            this.secondDialogVisible = false;
             this.remark='';
         },
         // 列表信息请求公共函数
