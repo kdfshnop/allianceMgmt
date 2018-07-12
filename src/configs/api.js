@@ -57,9 +57,9 @@ export default {
         summary:"audit/summary"//汇总
     },
     store:{//门店
-        add:"sotre/single",//添加门店 put
+        add:"store/single",//添加门店 put,门店详情get
         edit:"agency/store",//编辑门店 post
         list:"store/list",//门店列表 post
-        summary:"store/summary"//门店汇总 get
+        summary:"store/summary"//门店汇总 post
     }
 };

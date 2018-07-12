@@ -12,18 +12,9 @@
             <div class="gap-2">
                 <div>跟进信息：</div>
                 <el-input type="textarea" v-model="message" rows="10" placeholder="请输入跟进信息"></el-input>
-                <el-upload
-                    class="upload-demo gap-2"
-                    action="https://jsonplaceholder.typicode.com/posts/"
-                    :on-preview="handlePreview"
-                    :on-remove="handleRemove"
-                    :before-remove="beforeRemove"
-                    multiple
-                    :limit="3"
-                    :on-exceed="handleExceed">
-                    <el-button size="small" type="primary">资料上传</el-button>
-                    <div slot="tip" class="el-upload__tip">(上传附件的格式后缀名为txt,doc,docx,xls,xlsx,ppt,pptx,pdf,jpg,jpeg,png,gif,rar,zip)</div>
-                </el-upload>
+                <div class="gap-2">
+                    <upload :fileList.sync='file' :limit="1"></upload>
+                </div>
             </div>
             <div style="text-align:center;margin-top:40px;">
                 <el-button type="primary" @click="submit">提交</el-button>
@@ -34,26 +25,48 @@
 
 <script>
 import BreadCrumb from '@/components/common/BreadCrumb';
+import Upload from '@/components/common/Upload';
 export default {
     name:'AddFollowUp',
-    components:{BreadCrumb},
+    components:{BreadCrumb,Upload},
     data(){
         return {
             agencyId:this.$route.query.agencyId,
             breadCrumb: [{text:'加盟管理'},{text: "代理商"},{text:'跟进'},{text:'添加跟进'}],
             message:'',
-            fileKey:'',//上传文件key
+            file:[],
+            form:{},//提交的数据
+            resource:{
+                fileName:'',//上传文件的名
+                owner:'',//公司Id
+                resourceKey:'',//上传文件的key
+            },//上传所需字段
+            resourceKey:'',//上传的资源key;
         }
     },
     methods:{
         submit(){
             let self=this;
-            let form={
-                agencyId:this.agencyId,
-                message:this.message,
-                fileKey:this.fileKey
+            console.log(this.message,2222222)
+            console.log(this.file.length,1234555555)
+            if(this.file.length){
+                this.form={
+                    agencyId:this.agencyId,
+                    message:this.message,
+                    resource:{
+                        fileName:this.file[0].fileName,//上传文件的名
+                        resourceKey:this.file[0].resourceKey,//上传文件的key
+                    },
+                    resourceKey:this.file[0].resourceKey
+                };
+            }else{
+                this.form={
+                    agencyId:this.agencyId,
+                    message:this.message
+                }
             };
-            this.$http.put(this.$apiUrl.agent.followUp,form)
+            if(this.message){
+                this.$http.put(this.$apiUrl.agent.followUp,this.form)
                 .then(function(data){
                     self.message="";
                     alert('已提交');
@@ -62,20 +75,10 @@ export default {
                 .catch(function(err){
                     console.log(err)
                 })
-        },
-        //   上传附件的方法;
-        handleRemove(file, fileList) {
-            console.log(file, fileList);
-        },
-        handlePreview(file) {
-            console.log(file);
-        },
-        handleExceed(files, fileList) {
-            this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
-        },
-        beforeRemove(file, fileList) {
-            return this.$confirm(`确定移除 ${ file.name }？`);
-        } 
+            }else{
+                alert('请填写信息');
+            }      
+        }
     }
 }
 </script>

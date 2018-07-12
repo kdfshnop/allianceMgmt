@@ -33,35 +33,9 @@
                         <el-form-item label="门店名称" prop="storeName">
                             <el-input v-model="form.storeName"></el-input>
                         </el-form-item>
-                        <!--<el-row>
-                            <el-col :span="5">
-                                <el-form-item label="创建时间" prop="cooperationStart">
-                                    <el-date-picker
-                                        format="yyyy-MM-dd"
-                                        v-model="form.cooperationStart"
-                                        type="date"
-                                        placeholder="选择日期"
-                                        style="width:150px"
-                                        value-format="yyyy-MM-dd">
-                                    </el-date-picker>
-                                </el-form-item>
-                            </el-col>
-                            <el-col :span="19">
-                                <el-form-item prop="cooperationEnd" label="至">
-                                    <el-date-picker
-                                        format="yyyy-MM-dd"
-                                        v-model="form.cooperationEnd"
-                                        type="date"
-                                        placeholder="选择日期"
-                                        style="width:150px"
-                                        value-format="yyyy-MM-dd">
-                                    </el-date-picker>
-                                </el-form-item>
-                            </el-col>
-                        </el-row>-->
-                        <el-form-item label="创建时间" prop="corporateStart">
+                        <el-form-item label="创建时间" prop="cooperationTime">
                             <el-date-picker
-                                v-model="form.corporateStart"
+                                v-model="form.cooperationTime"
                                 type="daterange"
                                 align="right"
                                 unlink-panels
@@ -86,17 +60,17 @@
                     <el-button type="primary" @click="search">搜索</el-button>
                 </el-col>
             </el-row>
-            <div class="search-result">共搜索到 956家门店，56个经纪人，900家无代理商</div>
-            <el-table :data="searInfoList" border style="width: 100%">
-                <el-table-column prop="date" label="门店id" align="center" ></el-table-column>
-                <el-table-column prop="name" label="门店名称" align="center" ></el-table-column>
-                <el-table-column prop="address" label="门店类型" align="center" ></el-table-column>
-                <el-table-column prop="address" label="经纪人数量" align="center" ></el-table-column>
-                <el-table-column prop="address" label="门店所属代理商" align="center"></el-table-column>
-                <el-table-column prop="name" label="门店所属公司" align="center"></el-table-column>
-                <el-table-column prop="name" label="门店所属城市" align="center"></el-table-column>
-                <el-table-column prop="name" label="创建时间" align="center"></el-table-column>
-                <el-table-column prop="name" label="操作" width="300px" align="center">
+            <div class="search-result">共搜索到 {{summary.storeTotal}}家门店，{{summary.agentTotal}}个经纪人，{{summary.hASTotal}}家有代理商，{{summary.nASTotal}}家无代理商</div>
+            <el-table :data="storeInfo.data" border style="width: 100%">
+                <el-table-column prop="storeId" label="门店id" align="center" ></el-table-column>
+                <el-table-column prop="storeName" label="门店名称" align="center" ></el-table-column>
+                <el-table-column prop="storeTypeName" label="门店类型" align="center" ></el-table-column>
+                <el-table-column prop="agentCount" label="经纪人数量" align="center" ></el-table-column>
+                <el-table-column prop="agencyName" label="门店所属代理商" align="center"></el-table-column>
+                <el-table-column prop="companyName" label="门店所属公司" align="center"></el-table-column>
+                <el-table-column prop="cityName" label="门店所属城市" align="center"></el-table-column>
+                <el-table-column prop="createTime" label="创建时间" align="center"></el-table-column>
+                <el-table-column label="操作" width="300px" align="center">
                     <template slot-scope="scope">
                         <el-button size="mini" @click="editStore(scope.$index, scope.row)" type="text">编辑|</el-button>
                         <el-button size="mini" @click="qrCode(scope.$index, scope.row)" type="text">二维码|</el-button>
@@ -108,11 +82,11 @@
                 <el-pagination
                     @size-change="handleSizeChange"
                     @current-change="handleCurrentChange"
-                    :current-page="pagination.currentPage"
-                    :page-sizes="[10, 2, 3, 400]"
-                    :page-size="pagination.pageSize"
+                    :current-page="form.currentPage"
+                    :page-sizes="[10, 20, 50, 100,500]"
+                    :page-size="form.pageSize"
                     layout="total, sizes, prev, pager, next, jumper"
-                    :total="pagination.total">
+                    :total="storeInfo.total">
                 </el-pagination>
             </div>
             <!--二维码对话框-->
@@ -137,7 +111,7 @@
                 </span>
             </el-dialog>
             <!--编辑添加门店组件-->
-            <editor-store ref="editor"  :title="title" @editSuccess='editSuccess' @addSuccess='addSuccess' :currentStoreInfo="currentStoreInfo"></editor-store>
+            <editor-store ref="editor"  :title="title" :storeId="storeId" @editSuccess='editSuccess' @addSuccess='addSuccess' :currentStoreInfo="currentStoreInfo"></editor-store>
         </el-main>
     </el-container> 
 </template>
@@ -148,101 +122,69 @@ import EditorStore from '@/components/store/_EditorStore';
 import Region from '@/components/common/Region';
 
 export default {
-  name: 'StoreManagement',
-  components:{BreadCrumb,EditorStore,Region},
-  data () {
-    return {
-        startLevel:1,//二级联动城市传参
-        endLevel:2,//二级联动城市传参
-        qrCodeShow:false,
-        firstDialogVisible: false,//第一个终止合作弹出框
-        secondDialogVisible:false,//第二个终止合作弹出框
-        textarea:'',//终止合作原因
-        companyInfoIndex:'',//操作门店时该门店处于所有列表的位置
-        currentStoreInfo:'',//当前编辑的门店信息
-        title:'',//判断是编辑门店还是添加门店
-        // 表单查询信息
-        form: {
-            agency:'',//门店所属代理商
-            cityId:'',//门店所属城市Id
-            cityList:[],//城市二级联动所需
-            companyName:'',//门店所属公司
-            cooperationStart:'',//创建开始时间
-            cooperationEnd:'',//创建结束时间
-            storeName: '',//门店名称
-            storeType:'0',//门店类型
-        },
-        // 分页功能
-        pagination:{
-            currentPage:1,//默认当前页为1;
-            pageSize:10,//默认显示10条
-            total:400//一共有多少条数据
-        },
-        breadCrumb: [{text:'加盟管理'},{text: "门店管理"}],
-        city:['北京','上海','广州','深圳'],
-        tableData: [{
-          date: '2016-05-02',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }, {
-          date: '2016-05-04',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1517 弄'
-        }, {
-          date: '2016-05-01',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1519 弄'
-        }, {
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1516 弄'
-        }]
-    }
-  },
+    name: 'StoreManagement',
+    components:{BreadCrumb,EditorStore,Region},
+    data () {
+        return {
+            breadCrumb: [{text:'加盟管理'},{text: "门店管理"}],
+            startLevel:1,//二级联动城市传参
+            endLevel:2,//二级联动城市传参
+            qrCodeShow:false,
+            firstDialogVisible: false,//第一个终止合作弹出框
+            secondDialogVisible:false,//第二个终止合作弹出框
+            textarea:'',//终止合作原因
+            companyInfoIndex:'',//操作门店时该门店处于所有列表的位置
+            currentStoreInfo:'',//当前编辑的门店信息
+            storeInfo:{},//门店列表
+            storeId:'',//门店Id;
+            summary:{},//summary
+            title:'',//判断是编辑门店还是添加门店
+            // 表单查询信息
+            form: {
+                agency:null,//门店所属代理商
+                cityId:null,//门店所属城市Id
+                cityList:[],//城市二级联动所需
+                companyName:null,//门店所属公司
+                cooperationTime:null,//创建时间段;
+                cooperationStart:null,//创建开始时间
+                cooperationEnd:null,//创建结束时间
+                currentPage:1,//页码默认为1
+                pageSize:10,//页面量默认为10
+                storeName: null,//门店名称
+                storeType:'0',//门店类型
+            }  
+        }
+    },
+    created(){
+        this.requestList();
+    },
     methods:{
         // 子组件添加公司成功之后，传递给父组件的值;
         addSuccess(addInfo){
-            // 第一种再次发送请求，同时表单查询重置;
-
-            //第二种
-            this.tableData.unshift(addInfo);
-            this.pagination.currentPage=1;
-            this.pagination.pageSize=10;
-            this.pagination.total++;
+            this.$refs.form.resetFields();
+            this.requestList();
         },
         // 子组件编辑成功之后，传递给父组件的值;
         editSuccess(editInfo){
             // 替换原有已经被编辑的数据;
-            this.tableData.splice(this.companyInfoIndex,1,editInfo);
+            this.requestList();
         },
         resetForm(formName) {
             this.$refs.form.resetFields();
         },
-        //重置表单信息   
-        reset(){
-            this.form= {
-                agent:'',//代理商
-                business:'全部',//业务
-                city:'',//门店所属城市
-                companyName:'',//公司名称
-                timeStart:'',//创建开始时间
-                timeEnd:'',//创建结束时间
-                storeName: '',//门店名称
-                storeAddress:'',//门店地址
-                timeOver:''//到期查询
-            }
-        },
         //根据表单信息搜索
         search(){
-            console.log(this.form,222222222);
+            this.requestList();
         },
         //每页多少条
         handleSizeChange(val) {
-            this.pagination.pageSize=val;
+            this.form.pageSize=val;
+            this.requestList();
         },
         //当前页
         handleCurrentChange(val) {
-            this.pagination.currentPage=val;
+            this.form.currentPage=val;
+            this.requestList();
         },
         // 添加公司
         addStore(){
@@ -254,10 +196,8 @@ export default {
         },
         //编辑
         editStore(index, row){
-            //操作门店时，该门店所处所有信息列表的位置;
-            this.companyInfoIndex=(this.pagination.currentPage-1)*this.pagination.pageSize+index;
             // 当前编辑的门店信息;
-            this.currentStoreInfo=row; 
+            this.storeId=row.storeId; 
             this.title='编辑门店';
             // 调用子组件方法，显示对话框,用setTimeout是为了可以加载添加公司组件;
             setTimeout(()=>{
@@ -266,7 +206,7 @@ export default {
         },
         //二维码
         qrCode(index, row){
-            this.currentStoreInfo=row;
+            this.storeId=row.storeId;
             this.qrCodeShow=true;
         },
         //终止合作,第一次弹框
@@ -287,12 +227,32 @@ export default {
         continueJoin(){
             this.secondDialogVisible=false;
             this.textarea='';
-        }
-    },
-    computed:{
-        //分页显示多少条数据
-        searInfoList(){
-            return this.tableData.slice((this.pagination.currentPage-1)*this.pagination.pageSize,this.pagination.currentPage*this.pagination.pageSize);
+        },
+        // 门店列表请求公共函数;
+        requestList(){
+            let self=this;
+            // 判断是否选择了省市;
+            if(this.form.cityList.length){
+                this.form.cityId=this.form.cityList[1];
+            };
+            // 获取代理商列表信息;
+            this.$http.post(this.$apiUrl.store.list,this.form)
+                .then(function(data){
+                    self.storeInfo=data.data.data;
+                    console.log(self.storeInfo,'门店列表');
+                })
+                .catch(function(err){
+                    console.log(err);
+                });
+            // 获取该页面summary信息;
+            this.$http.post(this.$apiUrl.store.summary,this.form)
+                .then(function(data){
+                    self.summary=data.data.data
+                    console.log(self.summary,'summary');
+                })
+                .catch(function(err){
+                    console.log(err);
+                })
         }
     }
 }

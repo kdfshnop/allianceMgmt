@@ -9,7 +9,7 @@
     <div>
         <div class="search-result">共搜索到 956条数据</div>
         <el-table :data="searInfoList" border style="width: 100%">
-            <el-table-column prop="name" :label="label" align="center" >
+            <el-table-column prop="name" label="门店名称" align="center" >
                 <template slot-scope="scope">
                     <el-button size="mini" @click="detail(scope.$index, scope.row)" type="text">门店名称</el-button>
                 </template>
@@ -20,17 +20,17 @@
             <el-table-column prop="endReason" label="终止合作原因" align="center"></el-table-column>
         </el-table>
         <div class="block">
-                <el-pagination
-                    @size-change="handleSizeChange"
-                    @current-change="handleCurrentChange"
-                    :current-page="pagination.currentPage"
-                    :page-sizes="[10, 2, 3, 400]"
-                    :page-size="pagination.pageSize"
-                    layout="total, sizes, prev, pager, next, jumper"
-                    :total="pagination.total">
-                </el-pagination>
-            </div>
-  </div>
+            <el-pagination
+                @size-change="handleSizeChange"
+                @current-change="handleCurrentChange"
+                :current-page="pagination.currentPage"
+                :page-sizes="[10, 20, 50, 100,500]"
+                :page-size="pagination.pageSize"
+                layout="total, sizes, prev, pager, next, jumper"
+                :total="pagination.total">
+            </el-pagination>
+        </div>
+    </div>
 </template>
 
 <script>

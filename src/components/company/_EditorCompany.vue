@@ -90,7 +90,7 @@
                 </el-select>
             </el-form-item>
             <el-form-item  class="tl upload">
-                <upload :fileList.sync='form.file'></upload> 
+                <upload :fileList.sync='form.file' :limit="1" v-if="dialogVisible"></upload> 
             </el-form-item>
         </el-form>
         <span slot="footer" class="dialog-footer">
@@ -130,6 +130,11 @@ export default {
                 name:"",//公司名称;
                 organizationCode:'',//组织机构代码
                 provinceId:'',//省份Id
+                resource:{
+                    fileName:'',//上传文件的名
+                    owner:'',//公司Id
+                    resourceKey:'',//上传文件的key
+                },//上传所需字段
                 resourceKey:'',//上传的资源key 
             },
             // 必填设置
@@ -144,15 +149,8 @@ export default {
         }
     },
     created(){
-        let self=this;
         //获取代理商列表;
-        this.$http.get(this.$apiUrl.agent.list)
-        .then(function(data){
-            self.agencyInfoList=data.data.data;
-        })
-        .catch(function(err){
-            console.log(err,'代理商列表失败');
-        });
+        this.agencyList();
     },
     methods:{
         open() {
@@ -161,8 +159,14 @@ export default {
                 // 获取公司详情;
                 this.$http.get(this.$apiUrl.company.detail+"?companyId="+this.companyId)
                     .then(function(data){
+                        if(data.data.data.file) {
+                            data.data.data.file = [data.data.data.file];
+                        }else{
+                            data.data.data.file = [];
+                        }
                         self.form=data.data.data;
                         self.form.cityList=[self.form.provinceId,self.form.cityId];
+                        self.dialogVisible = true;
                 })
                 .catch(function(err){
                     console.log(err);
@@ -179,15 +183,22 @@ export default {
                     corporate:'',//法人代表
                     corporatePhone:'',//电话
                     cooperationTime:[],//合作时间段
-                    deposit:'',//保证金
                     companyId:'',//公司id;
+                    deposit:'',//保证金
+                    file:[],//上传资料
                     name:"",//公司名称;
                     organizationCode:'',//组织机构代码
                     provinceId:'',//省份Id
+                    resource:{
+                        fileName:'',//上传文件的名
+                        owner:'',//公司Id
+                        resourceKey:'',//上传文件的key
+                    },//上传所需字段
                     resourceKey:'',//上传的资源key 
-                }
+                };
+                this.dialogVisible = true;
             }
-            this.dialogVisible = true;
+            
         },
         agencyList(){
             let self=this;
@@ -208,9 +219,9 @@ export default {
             .catch(_ => {});
         },
         submitForm() {
-             let self=this;
-             this.$refs.form.validate((valid) => {
-               if (valid) {
+            let self=this;
+            this.$refs.form.validate((valid) => {
+                if (valid) {
                     this.dialogVisible=false;
                     alert('提交成功');
                     if(this.title=='编辑公司'){
@@ -218,11 +229,16 @@ export default {
                         this.form.cooperationEnd=this.form.cooperationTime[1];
                         let realForm=Object.assign({},this.form);
                         realForm.cityId=this.form.cityList[1];
-                        console.log(realForm,'修改城市')
-                        // delete realForm.cityList;
+                        if(this.form.file.length){
+                            realForm.resourceKey=this.form.file[0].resourceKey;
+                            realForm.resource={
+                                fileName:realForm.file[0].fileName,//上传文件的名
+                                owner:realForm.companyId,//公司Id
+                                resourceKey:realForm.file[0].resourceKey,//上传文件的key
+                            };
+                        };
                         this.$http.post(this.$apiUrl.company.add,realForm)
                             .then(function(data){
-                                console.log(data);
                                 self.$emit('editSuccess',self.form);
                             })
                             .catch(function(error){
@@ -236,10 +252,17 @@ export default {
                         this.form.cooperationStart=this.form.cooperationTime[0];
                         this.form.cooperationEnd=this.form.cooperationTime[1];
                         let realForm=Object.assign({},this.form);
+                        if(this.form.file.length){
+                            realForm.resourceKey=this.form.file[0].resourceKey;
+                            realForm.resource={
+                                fileName:realForm.file[0].fileName,//上传文件的名
+                                owner:realForm.companyId,//公司Id
+                                resourceKey:realForm.file[0].resourceKey,//上传文件的key
+                            };
+                        };
                         delete realForm.cityList;
                         this.$http.put(this.$apiUrl.company.add,realForm)
                             .then(function(data){
-                                alert(12)
                                 console.log(data);
                             })
                             .catch(function(error){
@@ -247,9 +270,9 @@ export default {
                             });
                         this.$emit('addSuccess',realForm);
                     };
-                    // 此处代码需要加在请求成功之后;
-                    // this.$refs[formName].resetFields();
-                } else {
+                        // 此处代码需要加在请求成功之后;
+                        // this.$refs[formName].resetFields();
+                }else {
                     alert('请填写必填信息')
                     return false;
                 }

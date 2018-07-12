@@ -239,15 +239,12 @@ export default {
         },
         // 子组件编辑成功之后，传递给父组件的值;
         editSuccess(editInfo){
-            // 替换原有已经被编辑的数据;
-            console.log(this.companyInfoIndex,editInfo,123456)
             // this.companyInfoList.splice(this.companyInfoIndex,1,editInfo);
             this.requestList();
-            console.log(123);
         },
         //分佣账号设置 
         bankAccount(index, row){
-            this.currentCompanyInfo=row;
+            this.companyId=row.comapnyId;
             this.$refs.commission.open();
         },
         //终止合作,第一次弹框

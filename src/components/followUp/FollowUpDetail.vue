@@ -11,20 +11,8 @@
           <bread-crumb :items="breadCrumb"></bread-crumb>
           <div class="gap-2">
                 <div>跟进信息：</div>
-                <!--<el-input type="textarea" v-model="remark" rows="10" placeholder="请输入跟进信息"></el-input>-->
                 <div style="padding-left:75px;">{{message}}</div>
-                <el-upload
-                    class="upload-demo gap-2"
-                    action="https://jsonplaceholder.typicode.com/posts/"
-                    :on-preview="handlePreview"
-                    :on-remove="handleRemove"
-                    :before-remove="beforeRemove"
-                    multiple
-                    :limit="3"
-                    :on-exceed="handleExceed">
-                    <el-button size="small" type="primary">资料上传</el-button>
-                    <div slot="tip" class="el-upload__tip">(上传附件的格式后缀名为txt,doc,docx,xls,xlsx,ppt,pptx,pdf,jpg,jpeg,png,gif,rar,zip)</div>
-                </el-upload>
+                <div class="gap-2" v-if="fileName">上传资料：{{fileName}}</div>
             </div>
             <div style="text-align:center;margin-top:40px;">
                 <el-button type="primary" @click="back">返回</el-button>
@@ -42,6 +30,7 @@ export default {
         return {
             breadCrumb: [{text:'加盟管理'},{text: "代理商"},{text:'跟进'},{text:'跟进详情'}],
             message:'',
+            fileName:'',//文件名
             id:this.$route.query.id
         }
     },
@@ -49,6 +38,7 @@ export default {
         let self=this;
         this.$http.get(this.$apiUrl.agent.followUp+"?id="+this.id)
             .then(function(data){
+                self.fileName=data.data.data.resource.fileName;
                 self.message=data.data.data.message;
             })
             .catch(function(err){
