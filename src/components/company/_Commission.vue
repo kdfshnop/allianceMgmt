@@ -3,25 +3,25 @@
         <el-form :model="form" :rules="rules"  ref="form" label-width="110px" class="demo-form">
             <el-row>
                 <el-col :span="12">
-                    <el-form-item label="开户银行类型" prop="bankType" class="tl">
-                        <el-input v-model="form.bankType"></el-input>
+                    <el-form-item label="开户银行类型" prop="openBankType" class="tl">
+                        <el-input v-model="form.openBankType"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
-                    <el-form-item label="开户支行" prop="subBranch">
-                        <el-input v-model="form.subBranch"></el-input>
+                    <el-form-item label="开户支行" prop="openBankBranch">
+                        <el-input v-model="form.openBankBranch"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
             <el-row>
                 <el-col :span="12">
-                    <el-form-item label="账户名" prop="name" class="tl">
-                        <el-input v-model="form.name"></el-input>
+                    <el-form-item label="账户名" prop="accountName" class="tl">
+                        <el-input v-model="form.accountName"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
-                    <el-form-item label="银行账号" prop="account">
-                        <el-input v-model="form.account"></el-input>
+                    <el-form-item label="银行账号" prop="bankAccount">
+                        <el-input v-model="form.bankAccount"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -36,35 +36,42 @@
 <script>
 export default {
     name:'commission',
-    props:['currentCompanyInfo'],
+    props:['companyId'],
     data(){
         return {
             dialogVisible:false,
             form:{
-                account:'',//银行账户
-                bankType:'',//开户银行类型 
-                name: '',//账户名
-                subBranch: '',//开户支行 
+                bankAccount:'',//银行账户
+                openBankType:'',//开户银行类型 
+                accountName: '',//账户名
+                openBankBranch: '',//开户支行 
             },
             rules: {
-                bankType:[{ required: true, message: '请输入开户银行类型', trigger: 'blur' }],
-                subBranch: [{ required: true, message: '请输入开户支行', trigger: 'blur' }],
-                name: [{ required: true, message: '请输入账户名', trigger: 'blur' },],
-                account:[{ required: true, message: '请输入银行账号', trigger: 'blur' }]
+                openBankType:[{ required: true, message: '请输入开户银行类型', trigger: 'blur' }],
+                openBankBranch: [{ required: true, message: '请输入开户支行', trigger: 'blur' }],
+                accountName: [{ required: true, message: '请输入账户名', trigger: 'blur' },],
+                bankAccount:[{ required: true, message: '请输入银行账号', trigger: 'blur' }]
             }
         }
     },
     methods:{
         submitForm() {
+            let self=this;
             this.$refs.form.validate((valid) => {
                 if (valid) {
+                    let realForm={};
+                    realForm.bankAccount=this.form.bankAccount;
+                    realForm.openBankType=this.form.openBankType;
+                    realForm.accountName=this.form.accountName;
+                    realForm.openBankBranch=this.form.openBankBranch;
+                    realForm.companyId=this.companyId;
                     this.dialogVisible=false;
-                    alert('提交成功');
                     // 获取输入的表单信息,以及该公司的标识如公司Id;
-                    this.form.companyId=this.currentCompanyInfo.companyId||'';
-                    this.$http.post(this.$apiUrl.company.commission,this.form)
+                    this.$http.post(this.$apiUrl.company.commission,realForm)
                         .then(function(data){
+                            alert('提交成功');
                             console.log(data,'成功');
+                            self.$refs.form.resetFields();
                         })
                         .catch(function(err){
                             console.log(err,'失败');
@@ -96,6 +103,17 @@ export default {
         // 调用子组件方法;
         open(){
             this.dialogVisible=true;
+            console.log(this.companyId,123456678899)
+            // 获取公司详情;
+            let self=this;
+            this.$http.get(this.$apiUrl.company.detail+"?companyId="+this.companyId)
+                .then(function(data){
+                    self.form=data.data.data;
+                    console.log(self.form,'公司详情');
+                })
+                .catch(function(err){
+                    console.log(err);
+                });
         }
     }
 }
