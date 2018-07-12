@@ -9,7 +9,7 @@
         :on-change="handleChange"
         :before-upload="beforeUpload"        
         :multiple="multiple"
-        :limit="3"
+        :limit="limit || 10"
         :on-exceed="handleExceed"
         :file-list="fl"
         multiple
@@ -21,13 +21,11 @@
 <script>
 /**
  * 封装上传组件，把一些通用的属性隐藏掉，比如上传接口
- * TODO:
- *  1. xxxx
  */
 import Vue from 'vue';
 export default {
     name: "upload",
-    props: ['fileList', 'btnText', 'tipText', 'mode', 'status', 'multiple'],// mode暂时没用到,status会是editing和空
+    props: ['fileList', 'btnText', 'tipText', 'mode', 'status', 'multiple', 'limit'],// mode暂时没用到,status会是editing和空
     data() {
         return {
             url: Vue.apiUrl.getFullUrl(Vue.apiUrl.upload),            
@@ -62,20 +60,15 @@ export default {
         handleChange() {
 
         },
-        handleSuccess(data, data2) {
-            // TODO: 上传接口需要返回文件的名字和文件的地址            
+        handleSuccess(data, data2) {                      
             this.innerFileList.push({
-                // name: data.name,
-                // url: data.url,
-                uid: data2.uid,
-                // key: data.key
+                uid: data2.uid,                
                 ...data.data
             });
             this.$emit('update:fileList', this.innerFileList);
         },
         beforeUpload(data) {
-            this.name = data.name;
-            //console.log('beforeUpload；', data);
+            this.name = data.name;            
         }
     }
 }
