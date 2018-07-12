@@ -90,18 +90,7 @@
                 </el-select>
             </el-form-item>
             <el-form-item  class="tl upload">
-                <el-upload
-                class="upload-demo"
-                action="https://jsonplaceholder.typicode.com/posts/"
-                :on-preview="handlePreview"
-                :on-remove="handleRemove"
-                :before-remove="beforeRemove"
-                multiple
-                :limit="3"
-                :on-exceed="handleExceed">
-                    <el-button size="small" type="primary">上传附件</el-button>
-                    <div slot="tip" class="el-upload__tip">(上传附件的格式后缀名为txt,doc,docx,xls,xlsx,ppt,pptx,pdf,jpg,jpeg,png,gif,rar,zip)</div>
-                </el-upload>
+                <upload :fileList.sync='form.file'></upload> 
             </el-form-item>
         </el-form>
         <span slot="footer" class="dialog-footer">
@@ -112,11 +101,12 @@
 </template>
 
 <script>
-import Region from '@/components/common/Region'
+import Region from '@/components/common/Region';
+import Upload from '@/components/common/Upload';
 export default {
     name:'editorCompany',
     props:['companyId','title'],
-    components:{Region},
+    components:{Region,Upload},
     data(){
         return {
             agencyInfoList:[],
@@ -134,8 +124,9 @@ export default {
                 corporate:'',//法人代表
                 corporatePhone:'',//电话
                 cooperationTime:[],//合作时间段
-                deposit:'',//保证金
                 comapnyId:'',//公司Id;
+                deposit:'',//保证金
+                file:[],//上传资料
                 name:"",//公司名称;
                 organizationCode:'',//组织机构代码
                 provinceId:'',//省份Id
@@ -267,20 +258,7 @@ export default {
         resetForm() {
             this.$refs.form.resetFields();
             this.dialogVisible=false;
-        },
-        //   上传附件的方法;
-        handleRemove(file, fileList) {
-            console.log(file, fileList);
-        },
-        handlePreview(file) {
-            console.log(file);
-        },
-        handleExceed(files, fileList) {
-            // this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
-        },
-        beforeRemove(file, fileList) {
-            return this.$confirm(`确定移除 ${ file.name }？`);
-        } 
+        }
     }
 }
 </script>
