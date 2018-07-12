@@ -185,7 +185,7 @@
                 },
                 set(val) {
                     if(this.mode == 'edit' && this.status == 'editing') {// 编辑
-                        this.innerItem.name = wechat;
+                        this.innerItem.wechat = val;
                     }else{
                         this.updateWechat(val);
                     }

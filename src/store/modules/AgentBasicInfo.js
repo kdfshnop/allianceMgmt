@@ -31,8 +31,8 @@ export default {
         },
         updateItem(state, item) {                                    
             state.agentType = item.agentType;
-            state.startTime = item.startTime;
-            state.endTime = item.endTime;
+            state.startTime = item.startTime || "";
+            state.endTime = item.endTime || "";
             state.agentCity = item.agentCity;
             state.parent = item.parent;
             state.cityName = item.cityName;

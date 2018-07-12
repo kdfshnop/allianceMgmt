@@ -98,7 +98,8 @@ export default new Vuex.Store({
                     address: c&&c.address,
                     numberFileList: [],
                     idCardFrontFileList: [],// 身份证正面照
-                    idCardBackFileList: []// 身份证背面照
+                    idCardBackFileList: [],// 身份证背面照
+                    id: c&&c.id
                     // 代理商负责追踪人信息放到了agencyPersons里面
                 };
 
@@ -159,7 +160,7 @@ export default new Vuex.Store({
                 let p = data.data.data.payments;
                 if(p && p[0]){
                     paymentInfo = {
-                        paymentStatus: p[0].status == 1,
+                        paymentStatus: p[0].stageNumber > 0,
                         type: p[0].payMethod,
                         actualPayment: p[0].amount,
                         containPayment: p[0].costType,
@@ -167,7 +168,10 @@ export default new Vuex.Store({
                         subbankName: p[0].expendBank,
                         remark: p[0].remark,
                         stageNumber: p[0].stageNumber,
-                        planPaymentDate: p[0].planPayTime
+                        planPaymentDate: p[0].planPayTime,
+                        promiseFileList: [],
+                        fileList: [],
+                        id: p[0].id
                     };  
                 } 
 
@@ -228,7 +232,8 @@ export default new Vuex.Store({
                                 partners.push({                        
                                     agentId: p.agencyId,
                                     background: p.background,
-                                    createTime: p.createTime,                        
+                                    createTime: p.createTime,                
+                                    id: p.id,
                                     credit: p.credit,// 芝麻信用分数
                                     email: p.email,// 邮箱
                                     id: p.id,
@@ -241,18 +246,20 @@ export default new Vuex.Store({
                                 });
                             break;
                             case 5:
+                                corporate.id = p.id;
                                 corporate.name = p.name;
                                 corporate.mobile = p.mobile;
                                 corporate.idCard = p.idCode;
                                 corporate.email = p.email;
-                                corporate.srocre = p.credit;
-                                corporate.remark = p.remark;                    
+                                corporate.score = p.credit;
+                                corporate.remark = p.remark;   
                             break;
                             case 6:
                                 company.tracerName = p.name;
                                 company.mobile = p.mobile;
                                 company.email = p.email;
                                 company.idCard = p.idCode;
+                                company.tracerId = p.id;
                             break;
                             case 7:
                                 // serviceManager.agentId = p.agencyId;
@@ -274,7 +281,8 @@ export default new Vuex.Store({
                             break;
                             case 9:
                                 paymentInfo.brokerName = p.name;
-                                paymentInfo.brokerMobile = p.mobile;     paymentInfo.remark = p.remark;    
+                                paymentInfo.brokerMobile = p.mobile;     paymentInfo.remark = p.remark;
+                                paymentInfo.brokerId = p.id;    
                             break;                            
                             case 10:
 
@@ -284,35 +292,15 @@ export default new Vuex.Store({
                             break;
                         }
                     });
-                }
-                
-                // let agencyStages = obj.agencyStages;// 分期付款信息  
-                // if(agencyStages && agencyStages.length) {
-                //     agencyStages.forEach(a => {
-                //         state.DividingInfo.dividingInfo.push({
-                //             agentId: a.agencyId,
-                //             fee: a.amount,
-                //             // costType: '' // 不知道怎么传
-                //             createTime: a.createTime,
-                //             // director: ''
-                //             id: a.id,                
-                //             date: a.planPayTime,
-                //             stageNumber: a.stageNumber,
-                //             // stageState: ''
-                //             // status: ''
-                //             updateTime: a.updateTime
-                //         });
-                //     });
-                // }    
+                }                
                 
                 let resources = data.data.data.resources;
-                if(resources && resources.length) {
-                    let x = {
-                        key: r.resourcesKey,
-                        fileName: r.fineName,
-                        url: r.url
-                    };
+                if(resources && resources.length) {                    
                     resources.forEach(r => {
+                        let x = {                            
+                            url: r.url,
+                            ...r
+                        };
                         // 标识 1 营业执照，2身份证, 3 信用截图，4 合同，5 承诺书，6 汇款凭证，7 承诺支付书
                         switch(r.flag) {
                             case 1:

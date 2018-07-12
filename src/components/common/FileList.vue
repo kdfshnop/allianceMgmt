@@ -1,8 +1,8 @@
 <template>
     <ul v-if="fileList && fileList.length">
         <li :key="f.url" v-for="f in fileList">
-            <img v-if="isImg(f.url)" :src="f.url">
-            <a v-else :href="f.url">{{f.name}}</a>            
+            <a :href="f.url" :download="f.fileName" v-if="isImg(f.url)"><img :src="f.url"></a>
+            <a :download="f.fileName" target="_blank" v-else :href="f.url">{{f.fileName}}</a>            
         </li>
     </ul>
 </template>
@@ -51,7 +51,15 @@ export default {
 }
 </script>
 
-<style>
-
+<style scoped>
+img {
+    width: 200px;
+}
+ul {
+    list-style: none;
+}
+a {
+    text-decoration: none;
+}
 </style>
 

@@ -78,11 +78,11 @@
         methods: {
             handleEdit() {
                 this.status = 'editing';                
-                this.innerItem = JSON.parse(JSON.stringify(this.innerItem || {}));          
+                this.innerItem = JSON.parse(JSON.stringify(this.$store.state.ContractInfo || {}));          
             },
             handleComplete() {
                 this.status = '';
-                this.$store.commit('updateItem', this.innerItem);                                
+                this.updateItem(this.innerItem);                                
             },
             handleCancel() {
                 this.status = '';               

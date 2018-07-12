@@ -4,7 +4,8 @@ export default {
         name: "",
         mobile: "",
         wechat: "",
-        email: ""
+        email: "",
+        id: ""
     },
     mutations: {
         updateName(state, name) {
@@ -19,12 +20,16 @@ export default {
         updateEmail(state, email) {
             state.email = email;
         },
+        updateId(state, val){
+            state.id = val;
+        },
         updateItem(state, item) {                        
             // Object.assign(state, item);
             state.name = item.name;
             state.mobile = item.mobile;
             state.wechat = item.wechat;
             state.email = item.email;
+            state.id = item.id;
         }
     }
 };

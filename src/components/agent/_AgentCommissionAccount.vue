@@ -1,5 +1,5 @@
 <template>
-    <CollapsePanel class="gap-2" :expand="expand">    
+    <CollapsePanel class="gap-2" :expand="expand" v-show="visible">    
         <div align-left slot="header" class="clearfix">
             <span style="margin-right: 30px">分佣账号</span> <span v-show="mode=='view'" style="margin-left: -20px;font-size: 14px; color: #4e4e4e;">(代理商接受返佣的银行账户)</span>  
             <el-button v-show="mode === 'edit' && status !== 'editing'" @click="handleEdit" type="primary" size="mini">编辑</el-button>         
@@ -60,7 +60,7 @@
     import {mapMutations} from 'vuex';
     // 服务人员信息
     export default {
-        name: "corporateInfo",
+        name: "agentCommissionAccount",
         components: {CollapsePanel},
         props: {
             item: Object,
@@ -81,6 +81,9 @@
             "subbankName": generateComputed("subbankName", "AgentCommissionAccount", "updateSubbankName"),
             "accountName": generateComputed("accountName", "AgentCommissionAccount", "updateAccountName"),
             "receiptAccount": generateComputed("receiptAccount", "AgentCommissionAccount", "updateReceiptAccount"),
+            visible: function(){
+                return this.$store.state.AgentCompanyInfo.signed;
+            },
         },
         methods: {
             handleEdit() {
@@ -97,6 +100,7 @@
             validate(fn) {
                 this.$refs.form.validate(fn);
             },
+            
 
             ...mapMutations('AgentCommissionAccount', ['updateItem', 'updateBankName', 'updateSubbankName', 'updateReceiptAccount', 'updateAccountName'])
         },

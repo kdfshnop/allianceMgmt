@@ -94,23 +94,38 @@ export default {
     },
     methods: {
         handleApprove() {// 同意
-            this.$confirm('是否通过该审核？', '提示', {
+            this.$prompt('', '通过', {
                 confirmButtonText: '确定',
-                cancelButtonText: '取消',
-                type: 'warning'
-            }).then(() => {                
-                // TODO: 调用审核通过接口
-                // this.$http.post(this.$apiUrl.platformServiceFeeVerify.approve).then(()=>{
-                //     this.$message({
-                //         type: 'success',
-                //         message: '通过成功!'
-                //     });
-                // }).catch(()=>{
-                //     this.$message({
-                //         type: 'error',
-                //         message: '通过失败!'
-                //     });
-                // });
+                cancelButtonText: '取消', 
+                inputType: "textarea",  
+                inputPlaceholder: "备注", 
+                customClass: 'dialog-pass',   
+                inputValidator: function(val){
+                    if(val.length > 500) {
+                        return "最多输入500个字符";
+                    }
+                    return true;
+                } 
+                // type: "error"          
+                // iconClass: "el-icon-error"
+            }).then(({value}) => {                                
+                this.$http.post(this.$apiUrl.platformServiceFeeVerify.approve,{
+                    targetId: +this.$route.params.id,
+                    targetType: 1,
+                    remark: value,
+                    auditType: 2
+                }).then(()=>{
+                    this.$message({
+                        type: 'success',
+                        message: '通过成功!'
+                    });
+                }).catch((e)=>{
+                    console.log(e);
+                    this.$message({
+                        type: 'error',
+                        message: e.message || '通过失败!'
+                    });
+                });
             })
         },
         handleClose(){// 返回前一页
@@ -121,62 +136,50 @@ export default {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消', 
                 inputType: "textarea",  
-                inputPlaceholder: "请输入拒绝理由",   
+                inputPlaceholder: "请输入拒绝理由", 
+                customClass: 'dialog-reject', 
+                inputValidator: function(val){
+                    if(val.length > 500) {
+                        return "最多输入500个字符";
+                    }
+                    return true;
+                }   
                 // type: "error"          
                 // iconClass: "el-icon-error"
-            }).then(({ value }) => {  
-                // TODO: 接口调试              
-                // this.$http.post(this.$apiUrl.platformServiceFeeVerify.reject).then(()=>{
-                //     this.$message({
-                //         type: 'success',
-                //         message: '拒绝成功'
-                //     });
-                // }).catch(()=>{
-                //     this.$message({
-                //         type: 'error',
-                //         message: '拒绝失败'
-                //     });
-                // });;
+            }).then(({ value }) => {                                
+                this.$http.post(this.$apiUrl.platformServiceFeeVerify.reject,{
+                    targetId: +this.$route.params.id,
+                    targetType: 1,
+                    remark: value,
+                    auditType: 2
+                }).then(()=>{
+                    this.$message({
+                        type: 'success',
+                        message: '拒绝成功'
+                    });
+                }).catch((e)=>{
+                    this.$message({
+                        type: 'error',
+                        message: '拒绝失败'
+                    });
+                });
             });
         },
         refresh() {
-            // TODO: 详情接口获取详情信息
-            // this.$http.get(this.$apiUrl.platformServiceFee.detail).then((data)=>{
-            //     // 赋值
-            // });
+            this.$store.dispatch({
+                type: "getAgent",
+                agentId: this.$route.params.id,
+                agentState: this.$route.query.state || 0                
+            });
 
-            // TODO: 查询历史审核记录
-            // this.$http.get(this.$apiUrl.platformServiceFee.historyRecords).then((data)=>{
-            //     this.historyRecords = data.data;
-            // });
-            // TODO: 此处是模拟，等接口通了就干掉
-            setTimeout(()=>{
-                this.historyRecords = [{
-                    commitDate: "2015-03-06",
-                    verifyDate: "2016-03-05",
-                    verifyStatus: "通过",
-                    rejectReason: "",
-                    verifyPerson: "张三"
-                },{
-                    commitDate: "2015-03-06",
-                    verifyDate: "2016-03-05",
-                    verifyStatus: "通过",
-                    rejectReason: "",
-                    verifyPerson: "张三"
-                },{
-                    commitDate: "2015-03-06",
-                    verifyDate: "2016-03-05",
-                    verifyStatus: "通过",
-                    rejectReason: "",
-                    verifyPerson: "张三"
-                },{
-                    commitDate: "2015-03-06",
-                    verifyDate: "2016-03-05",
-                    verifyStatus: "通过",
-                    rejectReason: "",
-                    verifyPerson: "张三"
-                }];
-            }, 1000);
+            this.$http.post(this.$apiUrl.materialVerify.historyRecords,{
+                params: {
+                    targetId: this.$route.params.id,
+                    targetType: 1 
+                }
+            }).then((data)=>{
+                this.historyRecords = data.data.data;
+            });            
         }
     },
     created() {
@@ -185,7 +188,18 @@ export default {
 }
 </script>
 <style>
+.dialog-reject .el-message-box__header .el-message-box__title{    
+    color: red;    
+}
 
+.dialog-pass textarea {
+    height: 100px;
+}
+
+
+.dialog-reject textarea {
+    height: 100px;
+}
 </style>
 
 

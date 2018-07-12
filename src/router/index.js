@@ -29,11 +29,11 @@ let router = new Router({
       name: 'CreateAgent',
       component: CreateAgent
     },{
-      path: '/platformservicefeeverify',
+      path: '/platformservicefeeverify/:id',
       name: 'PlatformServiceFeeVerify',
       component: PlatformServiceFeeVerify
     },{
-      path: "/materialverify",
+      path: "/materialverify/:id",
       name: "MaterialVerify",
       component: MaterialVerify
     },

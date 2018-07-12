@@ -107,33 +107,52 @@ export default {
     },
     methods: {
         refresh() {
-            // TODO: 调用接口获取详情
-            // this.$http.get(this.$apiUrl.materialVerify.detail).then(((data)=>{
-
-            // });
-            // TODO: 获取历史审核记录
-            // this.$http.get(this.$apiUrl.materialVerify.historyRecords).then((data)=>{
-
-            // });
+            this.$store.dispatch({
+                type: "getAgent",
+                agentId: this.$route.params.id,
+                agentState: this.$route.query.state || 0                
+            });
+            
+            this.$http.post(this.$apiUrl.materialVerify.historyRecords,{
+                params: {
+                    targetId: this.$route.params.id,
+                    targetType: 1 
+                }
+            }).then((data)=>{
+                this.historyRecords = data.data.data;
+            });
         },
         handleApprove() {// 同意
-            this.$confirm('是否通过该审核？', '提示', {
+            this.$prompt('', '通过', {
                 confirmButtonText: '确定',
-                cancelButtonText: '取消',
-                type: 'warning'
-            }).then(() => {                
-                // TODO: 调用审核通过接口
-                // this.$http.post(this.$apiUrl.materialVerify.approve).then(()=>{
-                //     this.$message({
-                //         type: 'success',
-                //         message: '通过成功!'
-                //     });
-                // }).catch(()=>{
-                //     this.$message({
-                //         type: 'error',
-                //         message: '通过失败!'
-                //     });
-                // });
+                cancelButtonText: '取消', 
+                inputType: "textarea",  
+                inputPlaceholder: "备注", 
+                customClass: 'dialog-pass',   
+                inputValidator: function(val){
+                    if(val.length > 500) {
+                        return "最多输入500个字符";
+                    }
+                    return true;
+                } 
+            }).then(({value}) => {                                
+                this.$http.post(this.$apiUrl.materialVerify.approve,{
+                    targetId: +this.$route.params.id,
+                    targetType: 1,
+                    remark: value,
+                    auditType: 1
+                }).then(()=>{
+                    this.$message({
+                        type: 'success',
+                        message: '通过成功!'
+                    });
+                }).catch((e)=>{
+                    console.log(e);
+                    this.$message({
+                        type: 'error',
+                        message: e.message || '通过失败!'
+                    });
+                });
             })
         },
         handleClose(){// 返回前一页
@@ -144,22 +163,31 @@ export default {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消', 
                 inputType: "textarea",  
-                inputPlaceholder: "请输入拒绝理由",   
-                // type: "error"          
-                // iconClass: "el-icon-error"
-            }).then(({ value }) => {  
-                // TODO: 接口调试              
-                // this.$http.post(this.$apiUrl.materialVerify.reject).then(()=>{
-                //     this.$message({
-                //         type: 'success',
-                //         message: '拒绝成功'
-                //     });
-                // }).catch(()=>{
-                //     this.$message({
-                //         type: 'error',
-                //         message: '拒绝失败'
-                //     });
-                // });;
+                inputPlaceholder: "请输入拒绝理由", 
+                customClass: 'dialog-reject', 
+                inputValidator: function(val){
+                    if(val.length > 500) {
+                        return "最多输入500个字符";
+                    }
+                    return true;
+                }   
+            }).then(({ value }) => {                                
+                this.$http.post(this.$apiUrl.materialVerify.reject,{
+                    targetId: +this.$route.params.id,
+                    targetType: 1,
+                    remark: value,
+                    auditType: 1
+                }).then(()=>{
+                    this.$message({
+                        type: 'success',
+                        message: '拒绝成功'
+                    });
+                }).catch((e)=>{
+                    this.$message({
+                        type: 'error',
+                        message: '拒绝失败'
+                    });
+                });
             });
         },
     },
@@ -170,5 +198,16 @@ export default {
 }
 </script>
 <style>
+.dialog-reject .el-message-box__header .el-message-box__title{    
+    color: red;    
+}
 
+.dialog-pass textarea {
+    height: 100px;
+}
+
+
+.dialog-reject textarea {
+    height: 100px;
+}
 </style>

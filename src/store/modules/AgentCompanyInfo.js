@@ -15,7 +15,9 @@ export default {
         idCard: '',// 身份证
         remark: '',// 备注
         idCardFrontFileList: [],// 身份证正面照
-        idCardBackFileList: []// 身份证背面照
+        idCardBackFileList: [],// 身份证背面照
+        id: "",
+        tracerId: "",
     },
     mutations: {
         updateSigned(state, signed) {
@@ -63,6 +65,12 @@ export default {
         updateIdCardFrontFileList(state, idCardFrontFileList) {
             state.idCardFrontFileList = idCardFrontFileList;
         },
+        updateId(state, val) {
+            state.id = val;
+        },
+        updateTracerId(state, val){
+            state.tracerId = val;
+        },
         updateItem(state, item) {                                          
             state.name = item.name;
             state.shortName = item.shortName;
@@ -78,7 +86,9 @@ export default {
             state.remark = item.remark;
             state.idCardFrontFileList = item.idCardFrontFileList;
             state.idCardBackFileList = item.idCardBackFileList;  
-            state.signed = item.signed;          
+            state.signed = item.signed;    
+            state.id = item.id;     
+            state.tracerId = item.tracerId; 
         }
     }
 };

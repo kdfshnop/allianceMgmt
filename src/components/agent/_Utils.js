@@ -49,6 +49,26 @@ export function safeGet(obj, path, defalutVal = null) {
     return ret === '' ? defalutVal : ret;
 }
 
+// 创建后端接口需要的资源对象
+function makeResource(obj, params) {
+    let ret = {
+        createTime: obj.createTime,
+        description: obj.description,
+        fileName: obj.fileName,
+        flag: obj.flag,
+        id: obj.id,
+        owner: obj.owner,        
+        ownerType: obj.ownerType,
+        resourceKey: obj.resourceKey,
+        tags: obj.tags,
+        updateTime: obj.updateTime
+    };
+
+    ret = Object.assign(ret, params);
+    
+    return ret;
+}
+
 export function generateParam(state) {
     // 从state中获取数据，生成共接口使用的参数对象，专门给创建和编辑代理商接口用的
 
@@ -107,7 +127,8 @@ export function generateParam(state) {
           remark: safeGet(partner, 'remark'), //partner.remark, //备注
           backgroundRemark: partner.background == 5 && safeGet(partner, 'backgroundRemark') || null,// 背景选择其他可以手动输入
           //wechat: '',//微信，合伙人不需要
-          personType: 4// 合伙人                
+          personType: 4,// 合伙人                
+          id: safeGet(partner, 'id')
       });
     });
    
@@ -126,7 +147,8 @@ export function generateParam(state) {
           //remark: partner.remark, //备注,服务经理不需要
           //backgroundRemark: partner.background == 5 && partner.backgroundRemark || '',// 背景选择其他可以手动输入
           wechat: safeGet(state, "ServiceManager.wechat"),//微信
-          personType: 7// 服务经理    
+          personType: 7,// 服务经理    
+          id: safe(state, "ServiceManager.id")
       });
     } else {
         agencyPersons.push({
@@ -142,9 +164,10 @@ export function generateParam(state) {
           //remark: partner.remark, //备注,bd经理不需要
           //backgroundRemark: partner.background == 5 && partner.backgroundRemark || '',// 背景选择其他可以手动输入
           wechat: safeGet(state, "BDManager.wechat"),//微信
-          personType: 8// bd经理    
+          personType: 8,// bd经理  
+          id: safeGet(state, "BDManager.id"),  
       });
-    }
+    }   
     
     // 服务经理
     agencyPersons.push({
@@ -160,7 +183,8 @@ export function generateParam(state) {
           //remark: partner.remark, //备注,服务经理不需要
           //backgroundRemark: partner.background == 5 && partner.backgroundRemark || '',// 背景选择其他可以手动输入
           wechat: safeGet(state, "ServiceManager.wechat"),//微信
-          personType: 7// 服务经理    
+          personType: 7,// 服务经理    
+          id: safeGet(state, "ServiceManager.id")
     });
 
     // 追踪人
@@ -171,10 +195,22 @@ export function generateParam(state) {
             mobile: safeGet(state, "AgentCompanyInfo.mobile"),// 手机号
             name: safeGet(state, "AgentCompanyInfo.tracerName"), //姓名            
             personType: 6,// 服务经理  
-            remark: safeGet(state, "AgentCompanyInfo.remark")
+            remark: safeGet(state, "AgentCompanyInfo.remark"),
+            id: safeGet(state, "AgentCompanyInfo.tracerId")
         });
 
         agency.planRegisteTime = safeGet(state, "AgentCompanyInfo.finishDate")
+    }else{// 法人
+        agencyPersons.push({            
+            credit: safeGet(state, "CorporateInfo.score"),
+            email: safeGet(state, "CorporateInfo.email"),// 邮箱            
+            idCode: safeGet(state, "CorporateInfo.idCard"),// 身份证
+            mobile: safeGet(state, "CorporateInfo.mobile"),// 手机号
+            name: safeGet(state, "CorporateInfo.name"), //姓名
+            remark: safeGet(state, "CorporateInfo.remark"), // 备注   
+            personType: 5,
+            id: safeGet(state, "CorporateInfo.id"),  
+        });
     }
 
     // 对接人，未支付时
@@ -185,30 +221,38 @@ export function generateParam(state) {
             mobile: safeGet(state, "PaymentInfo.brokerMobile"),// 手机号
             name: safeGet(state, "PaymentInfo.brokerName"), //姓名            
             personType: 9,// 服务经理  
-            remark: safeGet(state, "PaymentInfo.remark")
+            remark: safeGet(state, "PaymentInfo.remark"),
+            id: safeGet(state, "PaymentInfo.brokerId")
         });
+
+        payments.push({
+            id: safeGet(state, "PaymentInfo.id"),
+            planPayTime: safeGet(state, "PaymentInfo.planPaymentDate"),
+            stageNumber: 0
+          });
     }else{// 已支付
         // 支付记录
-    payments.push({
-        //   agencyId: 
-        amount: safeGet(state, "PaymentInfo.actualPayment"),
-        // auditor: 
-        costType: safeGet(state, "PaymentInfo.containPayment").reduce(function(t,v,i,a){ return t += v}, 0),//款项类型 1.服务费 2.保证金 3.服务费+保证金 4. 佣金
-        // createTime
-        // expendAccount: //出款账号
-        expendBank: safeGet(state, "PaymentInfo.subbankName"), //出款银行
-        // id:
-        // operator:
-        payMethod: safeGet(state, "PaymentInfo.type"), //支付方式 1.汇款 2. 支付宝 3.其他
-        paymentNumber: safeGet(state, "PaymentInfo.number"), //支付单号
-  
-        // receiveAccount:
-        // receiveBank
-        remark: safeGet(state, "PaymentInfo.remark"),//
-        stageNumber: safeGet(state, "PaymentInfo.stageNumber"),// prd中是下拉框，下拉框怎么初始化？？
-        // status
-        // updateTime
-      });
+        payments.push({
+            id: safeGet(state, "PaymentInfo.id"),
+            //   agencyId: 
+            amount: safeGet(state, "PaymentInfo.actualPayment"),
+            // auditor: 
+            costType: safeGet(state, "PaymentInfo.containPayment").reduce(function(t,v,i,a){ return t += v}, 0),//款项类型 1.服务费 2.保证金 3.服务费+保证金 4. 佣金
+            // createTime
+            // expendAccount: //出款账号
+            expendBank: safeGet(state, "PaymentInfo.subbankName"), //出款银行
+            // id:
+            // operator:
+            payMethod: safeGet(state, "PaymentInfo.type"), //支付方式 1.汇款 2. 支付宝 3.其他
+            paymentNumber: safeGet(state, "PaymentInfo.number"), //支付单号
+    
+            // receiveAccount:
+            // receiveBank
+            remark: safeGet(state, "PaymentInfo.remark"),//
+            stageNumber: safeGet(state, "PaymentInfo.stageNumber"),// prd中是下拉框，下拉框怎么初始化？？
+            // status
+            // updateTime
+        });
     }
 
 
@@ -222,7 +266,8 @@ export function generateParam(state) {
             //operator: ''
             regionId: r.val[r.val.length - 1] || null,// 根据level不同传递不同的意义的值，在创建接口中可以，但是在详情接口中不行
             provinceId: r.val[0],
-            cityId: r.val[1],            
+            cityId: r.val[1], 
+            id: r.id           
             //status: '' // 
           //   updateTime: ''
         });
@@ -239,6 +284,7 @@ export function generateParam(state) {
           // id: ''
           planPayTime: d.date,// 预定支付时间
           stageNumber: i + 1,
+          id: d.id,
           // stageState: ''
           // status: ''
           // updateTime: 
@@ -264,7 +310,8 @@ export function generateParam(state) {
         openBankType: safeGet(state, "AgentCommissionAccount.bankName"),
         openBankBranch: safeGet(state, "AgentCommissionAccount.subbankName"),
         accountName: safeGet(state, "AgentCommissionAccount.accountName"),
-        bankAccount: safeGet(state, "AgentCommissionAccount.receiptAccount")
+        bankAccount: safeGet(state, "AgentCommissionAccount.receiptAccount"),
+        id: safeGet(state, "AgentCompanyInfo.id"),
       //   status: 
       //   updateTime
     };
@@ -284,159 +331,79 @@ export function generateParam(state) {
 
     // 上传文件资源
     // 1. 营业执照
-    safeGet(state, "AgentCompanyInfo.numberFileList").forEach((f)=>{
-        resources.push({
-          //   createTime
-          // description
-          flag: 1,
-          // id
-          // owner
-          ownerType: 2, // 所有者类型 1 代理商，2 公司，3 法人，4 代理商负责跟踪人，5 代理商对接人
-          resourcesKey: f.key,
-          // status
-          // tags: ""
-          // updateTime
-        });
+    safeGet(state, "AgentCompanyInfo.numberFileList").forEach((f)=>{ 
+        resources.push(makeResource(f,{
+            flag: 1,
+            ownerType: 2
+        }));        
     });
 
     // 2. 身份证 需要正反面区分flag不够用？？ 而且好多个人的身份证，根本区分不出来
     // 未注册公司时，身份证正面照
     safeGet(state, "AgentCompanyInfo.idCardFrontFileList").forEach((f)=>{
-        resources.push({
-          //   createTime
-          // description
-          flag: 2,
-          // id
-          // owner
-          ownerType: 2,
-          resourcesKey: f.key,
-          // status
-          tags: "21",
-          // updateTime
-        });
+        resources.push(makeResource(f,{
+            flag: 2,
+            ownerType: 2,
+            tags: "21",
+        }));         
     });
     // 未注册公司时，身份证反面照
     safeGet(state, "AgentCompanyInfo.idCardBackFileList").forEach((f)=>{
-        resources.push({
-          //   createTime
-          // description
-          flag: 2,
-          // id
-          // owner
-          ownerType: 2,
-          resourcesKey: f.key,
-          // status
-          tags: "22",
-          // updateTime
-        });
+        resources.push(makeResource(f,{
+            flag: 2,
+            ownerType: 2,
+            tags: "22",
+        }));        
     });
     // 法人身份证正面照
     safeGet(state, "CorporateInfo.idCardBackFileList").forEach((f)=>{
-        resources.push({
-          //   createTime
-          // description
-          flag: 2,
-          // id
-          // owner
-          ownerType: 3,
-          resourcesKey: f.key,
-          // status
-          tags: "21",
-          // updateTime
-        });
+        resources.push(makeResource(f,{
+            flag: 2,
+            ownerType: 3,
+            tags: "21",
+        }));        
     });
     // 法人身份证反面照
     safeGet(state, "CorporateInfo.idCardBackFileList").forEach((f)=>{
-        resources.push({
-          //   createTime
-          // description
-          flag: 2,
-          // id
-          // owner
-          ownerType: 3,
-          resourcesKey: f.key,
-          // status
-          tags: "22",
-          // updateTime
-        });
+        resources.push(makeResource(f,{
+            flag: 2,
+            ownerType: 3,
+            tags: "22",
+        }));       
     });
 
     // 3. 信用截图
     safeGet(state, "CorporateInfo.scoreFileList").forEach((f)=>{
-        resources.push({
-          //   createTime
-          // description
-          flag: 3,
-          // id
-          // owner
-          ownerType: 3,
-          resourcesKey: f.key,
-          // status
-          // tags
-          // updateTime
-        });
+        resources.push(makeResource(f,{
+            flag: 3,
+            ownerType: 3,            
+        }));        
     });
 
     // 4. 合同
     safeGet(state, "ContractInfo.contractFileList").forEach((f)=>{
-        resources.push({
-          //   createTime
-          // description
-          flag: 4,
-          // id
-          // owner
-          // ownerType
-          resourcesKey: f.key,
-          // status
-          // tags
-          // updateTime
-        });
+        resources.push(makeResource(f,{
+            flag: 4,            
+        }));        
     });
     // 5. 承诺书
     safeGet(state, "ContractInfo.promiseFileList").forEach((f)=>{
-        resources.push({
-          //   createTime
-          // description
-          flag: 5,
-          // id
-          // owner
-          // ownerType
-          resourcesKey: f.key,
-          // status
-          // tags
-          // updateTime
-        });
+        resources.push(makeResource(f,{
+            flag: 5
+        }));        
     });
 
     // 6. 汇款凭证
     safeGet(state, "PaymentInfo.fileList").forEach((f)=>{
-        resources.push({
-          //   createTime
-          // description
-          flag: 6,
-          // id
-          // owner
-          // ownerType
-          resourcesKey: f.key,
-          // status
-          // tags
-          // updateTime
-        });
+        resources.push(makeResource(f,{
+            flag: 6
+        }));        
     });
     // 7. 承诺支持书
     safeGet(state, "PaymentInfo.promiseFileList").forEach((f)=>{
-        resources.push({
-          //   createTime
-          // description
-          flag: 7,
-          // id
-          // owner
-          // ownerType
-          resourcesKey: f.key,
-          // status
-          // tags
-          // updateTime
-        });
+        resources.push(makeResource(f,{
+            flag: 7
+        }));        
     });
 
     // 8. 附件，没见过这个类型在prd中
@@ -447,6 +414,7 @@ export function generateParam(state) {
     param.agencyStages = agencyStages;
     param.company = company;// 这个内容跟agency中好多重复，不知道是不是不需要传递的？？
     param.resources = resources;
+    param.payments = payments;
 
     return param;
 }

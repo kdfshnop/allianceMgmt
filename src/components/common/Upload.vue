@@ -30,14 +30,14 @@ export default {
     props: ['fileList', 'btnText', 'tipText', 'mode', 'status', 'multiple'],// mode暂时没用到,status会是editing和空
     data() {
         return {
-            url: Vue.apiUrl.getFullUrl(Vue.apiUrl.upload),
-            // url: this.$apiUrl.upload,
+            url: Vue.apiUrl.getFullUrl(Vue.apiUrl.upload),            
             innerFileList: this.fileList && this.fileList.slice() || [],
-            fl: this.fileList && this.fileList.slice() || [],
+            fl: (this.fileList && this.fileList.slice() || []).map(f=>{
+                let tmp = Object.assign({}, f);
+                tmp.name = tmp.fileName;
+                return tmp;
+            }),
             name: ""
-            // headers: {
-            //     'Content-Type': 'multipart/form-data'
-            // }
         };
     },
     methods: {

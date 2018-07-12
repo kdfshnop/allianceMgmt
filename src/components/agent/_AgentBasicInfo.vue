@@ -124,13 +124,13 @@ export default {
             parentAgentLoading: false,            
             agentTypes: [{
                 label: "请选择",
-                value: "0"
+                value: 0
             },{
                 label: "城市代理商（一级代理商）",
-                value: "1"
+                value: 1
             },{
                 label: "区代理商（二级代理商）",
-                value: "2"
+                value: 2
             }],
             // parentAgents: [],
             remoteAgents: [{agencyId: '', agencyCompanyName: "请选择"}, {agencyId: 0, agencyCompanyName: "无上级代理商"}]
