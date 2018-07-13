@@ -57,9 +57,15 @@ export default {
         summary:"audit/summary"//汇总
     },
     store:{//门店
-        add:"store/single",//添加门店 put,门店详情get
+        add:"store/single",//添加门店 put,门店详情get,编辑门店post
         edit:"agency/store",//编辑门店 post
         list:"store/list",//门店列表 post
-        summary:"store/summary"//门店汇总 post
+        summary:"store/summary",//门店汇总 post
+        terminate:"store/terminate",//终止合作post
+        qrcode:"store/qrcode"//门店二维码;get
+    },
+    teamEnd:{//已经被审核过的终止合作;
+        summary:"base/terminated",//get 切换tab总数汇总;
+        tabList:"base/terminated/list",//get 后跟type,1代理商，2公司，3门店;
     }
 };

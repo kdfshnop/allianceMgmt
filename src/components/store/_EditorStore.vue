@@ -6,8 +6,8 @@
             </el-form-item>
             <el-form-item label="门店类型" prop="storeType">
                 <el-select v-model="form.storeType" filterable placeholder="请选择加盟或直营">
-                        <el-option label="代理商直营门店" value="1"></el-option>
-                        <el-option label="加盟门店" value="2"></el-option>
+                        <el-option label="代理商直营门店" :value="1"></el-option>
+                        <el-option label="加盟门店" :value="2"></el-option>
                 </el-select>
             </el-form-item>
             <el-form-item label="代理商公司名称" prop="agencyId" v-if="form.storeType==1" >
@@ -133,6 +133,7 @@ export default {
         },
         submitForm() {
             console.log(this.form,111)
+            let self=this;
             this.$refs.form.validate((valid) => {
                 if (valid) {
                     this.dialogVisible=false;
@@ -143,9 +144,9 @@ export default {
                             this.form.districtId=this.form.areaLinkage[1];
                             this.form.townId=this.form.areaLinkage[2];
                         };
-                        this.$http.post(this.$apiUrl.store.edit,this.form)
+                        this.$http.post(this.$apiUrl.store.add,this.form)
                             .then(function(data){
-                                this.$emit('editSuccess',this.form);
+                                self.$emit('editSuccess',self.form);
                             })
                             .catch(function(err){
                                 console.log(err)
@@ -159,11 +160,12 @@ export default {
                         this.$http.put(this.$apiUrl.store.add,this.form)
                             .then(function(data){
                                 console.log(data,'添加门店success');
+                                self.$emit('addSuccess',self.form);
                             })
                             .catch(function(err){
                                 console.log(err,'添加门店err')
                             });
-                        this.$emit('addSuccess',this.form);
+                        
                     };
                     // 此处代码需要加在请求成功之后;
                     // this.$refs[formName].resetFields();

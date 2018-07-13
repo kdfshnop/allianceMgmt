@@ -11,15 +11,15 @@
             <bread-crumb :items="breadCrumb"></bread-crumb>
             <div class="tabs">
                 <div class="tab" :class="{agent:agent}" @click="agentTab">
-                    <p class="account">12</p>
+                    <p class="account">{{endTotal.terminatedAgency}}</p>
                     <p>代理商</p>
                 </div>
                 <div class="tab" :class="{company:company}" @click="companyTab">
-                    <p class="account">100</p>
+                    <p class="account">{{endTotal.terminatedCompany}}</p>
                     <p>公司</p>
                 </div>
                 <div class="tab" :class="{store:store}" @click="storeTab">
-                    <p class="account">128</p>
+                    <p class="account">{{endTotal.terminatedStore}}</p>
                     <p>门店</p>
                 </div>
                 <p style="clear:both;"></p>
@@ -49,6 +49,7 @@ export default {
             agent:true,
             company:false,
             store:false,
+            endTotal:{},//代理商，门店，公司终止合作汇总;
             label:'代理商民称',
             // 分页功能
             pagination:{
@@ -87,6 +88,16 @@ export default {
                 }
             ]
         }
+    },
+    created(){
+        let self=this;
+        this.$http.get(this.$apiUrl.teamEnd.summary)
+            .then(function(data){
+                self.endTotal=data.data.data;
+            })
+            .catch(function(err){
+                console.log(err);
+            });
     },
     computed:{
         //分页显示多少条数据
