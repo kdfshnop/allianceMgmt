@@ -43,40 +43,6 @@ export default {
                 total:400//一共有多少条数据
             },
             waitAuditList:[],//列表信息
-            tableData:[
-                {
-                    agencyId:"0",
-                    name:'key',
-                    submitPeople:'wk',
-                    auditPeople:'经纪人',
-                    auditTime:'2018-12-05',
-                    endReason:'不合格'
-                },
-                {
-                    agencyId:"1",
-                    name:'key',
-                    submitPeople:'wk',
-                    auditPeople:'经纪人',
-                    auditTime:'2018-12-05',
-                    endReason:'不合格'
-                },
-                {
-                    agencyId:"2",
-                    name:'key',
-                    submitPeople:'wk',
-                    auditPeople:'经纪人',
-                    auditTime:'2018-12-05',
-                    endReason:'不合格'
-                },
-                {
-                    agencyId:"3",
-                    name:'key',
-                    submitPeople:'wk',
-                    auditPeople:'经纪人',
-                    auditTime:'2018-12-05',
-                    endReason:'不合格'
-                }
-            ]
         }
     },
     created(){
@@ -94,7 +60,8 @@ export default {
             this.requestList();
         },
         audit(index,row){
-            this.$router.push({name:'ProfessionAuditVerify',query:{id:row.id}});
+            // 审核暂时不处理;
+            // this.$router.push({name:'ProfessionAuditVerify',query:{id:row.id}});
         },
          // 待审核列表信息请求公共函数;
         requestList(){

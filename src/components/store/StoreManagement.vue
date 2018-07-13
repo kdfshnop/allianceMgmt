@@ -92,7 +92,7 @@
             <!--二维码对话框-->
                 <el-dialog title="门店二维码" :visible.sync="qrCodeShow" width="30%" >
                     <div style="text-align:center;">
-                        <img :src="qrCodeInfo.resourceKey" alt="">
+                        <img :src="qrCodeInfo.url" alt="">
                     </div>
                 </el-dialog>
             <!--终止合作对话框-->

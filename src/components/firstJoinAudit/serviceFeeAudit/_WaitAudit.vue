@@ -7,7 +7,7 @@
             <el-table-column prop="submitterName" label="提交人" align="center" ></el-table-column>
             <el-table-column  label="状态" align="center" >
                 <template slot-scope="scope">
-                    <div><span class="circle"></span><span>待审核</span></div>
+                    <div><span class="circle"></span><span>{{scope.row.auditTypeName}}</span></div>
                 </template>
             </el-table-column>
             <el-table-column prop="auditTime" label="提交时间" align="center"></el-table-column>
@@ -36,11 +36,13 @@ export default {
     name:'waitAudit',
     data(){
         return {
+            auditType:"2",//1资料审核，2平台服务费审核
+            targetState:"1",//1.待审核，2已驳回，3通过
             // 分页功能
             pagination:{
                 currentPage:1,//默认当前页为1;
                 pageSize:10,//默认显示10条
-                total:400//一共有多少条数据
+                total:10//一共有多少条数据
             },
             waitAuditList:[],//代理商服务费待审核列表
         }
@@ -60,16 +62,16 @@ export default {
             this.requestList();
         },
         audit(index,row){
-            this.$router.push({name:"PlatformServiceFeeVerify",query:{agencyId:row.id}});
+            this.$router.push({name:"PlatformServiceFeeVerify",params:{id:row.id}});
         },
         // 待审核列表信息请求公共函数;
         requestList(){
             let self=this;
             let requestInfo={
-                auditType:"2",//1资料审核，2平台服务费审核
+                auditType:this.auditType,//1资料审核，2平台服务费审核
                 currentPage:this.pagination.currentPage,
                 pageSize:this.pagination.pageSize,
-                targetState:"1"//1待审核,2.已驳回，3通过
+                targetState:this.targetState//1待审核,2.已驳回，3通过
             }
             this.$http.post(this.$apiUrl.agent.firstWaitAuditList,requestInfo)
                 .then(function(data){
