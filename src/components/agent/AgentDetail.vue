@@ -28,6 +28,9 @@
             <dividing-info></dividing-info>            
             <payment-info></payment-info>
         </el-tab-pane>
+        <el-tab-pane label="日志" name="seventh">
+          <record :agencyId="agentId"></record>  
+        </el-tab-pane>
     </el-tabs>
     </el-main>
       </el-container>
@@ -50,6 +53,7 @@ import DividingInfo from './_DividingInfo';
 import PaymentInfo from './_PaymentInfo';
 import Region from '@/components/common/Region';
 import {initStore} from './_Utils'; 
+import Record from '@/components/record/Record';
 export default {
     name: "",
      components: {
@@ -68,26 +72,20 @@ export default {
       PlatformServiceFee,
       PaymentInfo,
       DividingInfo,
-      Region
+      Region,
+      Record
     },
     data() {
         return {
-            activeName: "first"
+            activeName: "first",
+            agentId: this.$route.params.id
         };
     } ,
     created() {
         // 获取指定代理商的详情
-        let agentId = this.$route.params.id;
-        let agentState = this.$route.query.state || 0;
-        // this.$http.get(this.$apiUrl.agent.detail,{
-        //     params: {
-        //         agencyId: agentId,
-        //         agencyState: agentState
-        //     }
-        // }).then((data)=>{
-        //     // initStore(this.$store, data.data);
-        //     console.log(data);
-        // });
+        // let agentId = this.$route.params.id;
+        let agentId = this.agentId;
+        let agentState = this.$route.query.state || 0;        
         this.$store.dispatch({
             type: 'getAgent',
             agentId: agentId,

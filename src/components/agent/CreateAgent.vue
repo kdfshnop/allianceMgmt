@@ -177,9 +177,8 @@ export default {
             type: 'warning'
         }).then(() => {
             this.$http.put(this.$apiUrl.agent.create, param).then((data)=>{
-                // TODO: 成功则跳转到下一页 this.active++;
-                this.active++;
-                console.log(data);
+                // 成功则跳转到下一页 this.active++;
+                this.active++;                
             });
         }).catch(() => {
                      
@@ -189,7 +188,7 @@ export default {
         alert("关闭");
     }      
   },
-  created() {
+  created() {      
   }
 }
 </script>
