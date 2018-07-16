@@ -22,6 +22,8 @@
 
 <script>
 export default {
+    name:"record",
+    prop:['agencyId'],
     data() {
         return {
             listInfo:[],
@@ -29,75 +31,9 @@ export default {
     },
     created(){
         let self=this;
-        this.$http.get(this.$apiUrl.agent.record+"/1")
+        this.$http.get(this.$apiUrl.agent.record+"/"+this.agencyId)
         .then(function(data){
             self.listInfo=data.data.data;
-            self.listInfo=[
-                {
-                    "id": 1,
-                    "agencyid": 1,
-                    "optype": "测试",
-                    "operator": "刘哥",
-                    "operatortype": "编辑资料",
-                    "result": "成功",
-                    "operatetime": "2018-07-03 13:54:06",
-                    "remark": "审核不通过,资料填写过于简单",
-                    "detail": [
-                        {
-                            "title": "名字",
-                            "pre": "小刘",
-                            "now": "小豆"
-                        },
-                        {
-                            "title":'上传资料',
-                            "pre":'xxx.jpg',
-                            "now":"yyy.png"
-                        },
-                        {
-                            "title":'门店',
-                            "pre":'上海',
-                            "now":"商丘"
-                        },
-                        {
-                            "title":'佣金',
-                            "pre":'100',
-                            "now":"10000"
-                        }
-                    ]
-                },
-                {
-                    "id": 1,
-                    "agencyid": 1,
-                    "optype": "测试",
-                    "operator": "刘哥",
-                    "operatortype": "编辑资料",
-                    "result": "成功",
-                    "operatetime": "2018-07-03 13:54:06",
-                    "remark": "审核不通过,资料填写过于简单",
-                    // "detail": [
-                    //     {
-                    //         "title": "名字",
-                    //         "pre": "小刘",
-                    //         "now": "小豆"
-                    //     },
-                    //     {
-                    //         "title":'上传资料',
-                    //         "pre":'xxx.jpg',
-                    //         "now":"yyy.png"
-                    //     },
-                    //     {
-                    //         "title":'门店',
-                    //         "pre":'上海',
-                    //         "now":"商丘"
-                    //     },
-                    //     {
-                    //         "title":'佣金',
-                    //         "pre":'100',
-                    //         "now":"10000"
-                    //     }
-                    // ]
-                }
-            ];
             console.log(self.listInfo,'成功');
         })
         .catch(function(err){
