@@ -49,17 +49,27 @@ export default {
         terminate:"company/terminate"//公司终止合作
     },
     professionAudit:{
-        auditList:"audit/list",//业务审核列表post
-        detailContract:"audit/edit/detail",//编辑详情新旧对比get
+        auditList:"business/audit/list",//业务审核列表post
+        detailContract:"business/audit/edit/detail",//编辑详情新旧对比get
         historyAudit:"audit/history",//历史审核记录get
-        pass:"audit/adopt",//审核通过post
-        reject:"audit/reject",//审核驳回post
-        summary:"audit/summary"//汇总
+        pass:"business/audit/adopt",//审核通过post
+        reject:"business/audit/reject",//审核驳回post
+        summary:"business/audit/summary"//汇总
+    },
+    professionEnd:{//业务审核-终止合作
+        summary:"base/terminate/auditstate",//get
+        list:"base/terminate/auditstate"//post
     },
     store:{//门店
-        add:"store/single",//添加门店 put,门店详情get
+        add:"store/single",//添加门店 put,门店详情get,编辑门店post
         edit:"agency/store",//编辑门店 post
         list:"store/list",//门店列表 post
-        summary:"store/summary"//门店汇总 post
+        summary:"store/summary",//门店汇总 post
+        terminate:"store/terminate",//终止合作post
+        qrcode:"store/qrcode"//门店二维码;get
+    },
+    teamEnd:{//已经被审核过的终止合作;
+        summary:"base/terminated",//get 切换tab总数汇总;
+        tabList:"base/terminated/list",//get 后跟type,1代理商，2公司，3门店;
     }
 };

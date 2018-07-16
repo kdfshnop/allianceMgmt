@@ -12,7 +12,7 @@
             <div class="tabs">
                 <div class="tab" :class="{wait:wait}" @click="agentTab">
                     <p class="account">{{total.waitTotal}}</p>
-                    <p>待审核代理商</p>
+                    <p>待审核</p>
                 </div>
                 <div class="tab" :class="{reject:reject}" @click="companyTab">
                     <p class="account">{{total.rejectTotal}}</p>
@@ -54,7 +54,7 @@ export default {
     },
     created(){
         let self=this;
-        this.$http.post(this.$apiUrl.professionAudit.summary,{auditType:"2"})
+        this.$http.post(this.$apiUrl.professionEnd.summary)
             .then(function(data){
                 self.total=data.data.data[0];
                 console.log('summary');

@@ -57,7 +57,6 @@ export default {
         this.$http.post(this.$apiUrl.professionAudit.summary,{auditType:"1"})
             .then(function(data){
                 self.total=data.data.data[0];
-                console.log('summary');
             })
             .catch(function(err){
                 console.log(err);

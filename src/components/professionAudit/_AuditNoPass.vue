@@ -3,8 +3,15 @@
         <el-form ref="form" :model="form" label-width="180px" class="gap-2">
             <el-row >
                 <el-col :span="12">
-                    <el-form-item label="提交人" prop="submitName">
-                        <el-input v-model="form.city"></el-input>
+                    <el-form-item label="提交人" prop="submitterId">
+                        <el-select v-model="form.submitterId" placeholder="请选择" @focus="requestSubmitList" filterable>
+                            <el-option
+                                v-for="item in submitPeopleList"
+                                :key="item.id"
+                                :label="item.name"
+                                :value="item.id">
+                            </el-option>
+                        </el-select>
                     </el-form-item>
                     <el-form-item label="审核时间" prop="auditTime">
                         <el-date-picker
@@ -21,11 +28,18 @@
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
-                    <el-form-item label="审核人" prop="auditName">
-                        <el-input v-model="form.auditName"></el-input>
+                    <el-form-item label="审核人" prop="auditorId">
+                        <el-select v-model="form.auditorId" placeholder="请选择" @focus="requestSubmitList" filterable>
+                            <el-option
+                                v-for="item in submitPeopleList"
+                                :key="item.id"
+                                :label="item.name"
+                                :value="item.id">
+                            </el-option>
+                        </el-select>
                     </el-form-item>
-                    <el-form-item label="代理商" prop="agencyName">
-                        <el-input v-model="form.agencyName"></el-input>
+                    <el-form-item label="代理商" prop="targetName">
+                        <el-input v-model="form.targetName"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -44,8 +58,8 @@
             <el-table-column prop="typeName" label="类型" align="center" ></el-table-column>
             <el-table-column prop="submitterName" label="提交人" align="center" ></el-table-column>
             <el-table-column prop="auditorName" label="审核人" align="center"></el-table-column>
-            <el-table-column prop="auditTime" label="驳回时间" align="center"></el-table-column>
-            <el-table-column prop="auditRemark" label="驳回原因" align="center"></el-table-column>
+            <el-table-column prop="auditTime" label="审核时间" align="center"></el-table-column>
+            <el-table-column prop="auditRemark" label="备注" align="center"></el-table-column>
         </el-table>
         <div class="block">
             <el-pagination
@@ -72,48 +86,21 @@ export default {
                 pageSize:10,//默认显示10条
                 total:400//一共有多少条数据
             },
-            passAuditList:[],
+            passAuditList:[],//通过审核的数据
+            submitPeopleList:[],//提交人审核人列表;
             // 表单查询信息
             form: {
-                auditType:"1",//业务审核
+                auditorId:'',//审核人Id;
+                auditType:"1",//编辑审核
                 auditName:'',//审核人
                 auditTime:[],//审核时间
-                agencyName:'',//代理商名称
+                targetName:'',//代理商名称
                 currentPage:1,//页码默认为1
                 pageSize:10,//页面量默认为10
+                submitterId:'',//提交人Id
                 submitName:'',//提交人
                 targetState:'2',//已驳回
-            },
-            tableData:[
-                {
-                    name:'key',
-                    submitPeople:'wk',
-                    auditPeople:'经纪人',
-                    auditTime:'2018-12-05',
-                    endReason:'不合格'
-                },
-                {
-                    name:'key',
-                    submitPeople:'wk',
-                    auditPeople:'经纪人',
-                    auditTime:'2018-12-05',
-                    endReason:'不合格'
-                },
-                {
-                    name:'key',
-                    submitPeople:'wk',
-                    auditPeople:'经纪人',
-                    auditTime:'2018-12-05',
-                    endReason:'不合格'
-                },
-                {
-                    name:'key',
-                    submitPeople:'wk',
-                    auditPeople:'经纪人',
-                    auditTime:'2018-12-05',
-                    endReason:'不合格'
-                }
-            ]
+            }
         }
     },
     created(){
@@ -148,14 +135,19 @@ export default {
                 .catch(function(err){
                     console.log(err,'失败');
                 });
+        },
+        // 获取提交人列表;
+        requestSubmitList(){
+            let self=this;
+            this.$http.get(this.$apiUrl.common.employee+"?personType=9")
+                .then(function(data){
+                    self.submitPeopleList=data.data.data;
+                })
+                .catch(function(err){
+                    console.log(err);
+                })
         }
-    },
-    computed:{
-        //分页显示多少条数据
-        searInfoList(){
-            return this.tableData.slice((this.pagination.currentPage-1)*this.pagination.pageSize,this.pagination.currentPage*this.pagination.pageSize); 
-        }
-    },
+    }
 }
 </script>
 

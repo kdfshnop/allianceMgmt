@@ -196,6 +196,8 @@ export default {
         addSuccess(addInfo){
             // 第一种再次发送请求，同时表单查询重置;
             this.$refs.form.resetFields();
+            this.form.pageSize=10;
+            this.form.currentPage=1;
             this.requestList();
         },
         resetForm(formName) {

@@ -1,13 +1,13 @@
 <template>
     <div>
-        <div class="search-result" >共搜索到2条数据</div>
+        <div class="search-result" >共搜索到{{pagination.total}}条数据</div>
         <el-table :data="waitAuditList" border style="width: 100%">
             <el-table-column prop="name" label="代理商公司名称" align="center" ></el-table-column>
             <el-table-column prop="cityName" label="地区" align="center" ></el-table-column>
             <el-table-column prop="submitterName" label="提交人" align="center" ></el-table-column>
             <el-table-column  label="状态" align="center" >
                 <template slot-scope="scope">
-                    <div><span class="circle"></span><span>待审核</span></div>
+                    <div><span class="circle"></span><span>{{scope.row.auditTypeName}}</span></div>
                 </template>
             </el-table-column>
             <el-table-column prop="auditTime" label="提交时间" align="center"></el-table-column>
@@ -63,7 +63,7 @@ export default {
         },
         // 审核跳转到资料审核页;
         audit(index,row){
-            this.$router.push({name:"MaterialVerify",query:{agencyId:row.id}});
+            this.$router.push({name:"MaterialVerify",params:{id:row.id}});
         },
         // 待审核列表信息请求公共函数;
         requestList(){
@@ -78,7 +78,7 @@ export default {
                 .then(function(data){
                     self.pagination.total=data.data.data.total;
                     self.waitAuditList=data.data.data.data;
-                    console.log(123456);
+                    console.log(data,123456);
                 })
                 .catch(function(err){
                     console.log(err);

@@ -92,7 +92,7 @@
             <!--二维码对话框-->
                 <el-dialog title="门店二维码" :visible.sync="qrCodeShow" width="30%" >
                     <div style="text-align:center;">
-                        <img src="https://img.wkzf.com/62de69406bd64f7796203f2f1d6d86d6.CL" alt="">
+                        <img :src="qrCodeInfo.url" alt="">
                     </div>
                 </el-dialog>
             <!--终止合作对话框-->
@@ -104,7 +104,7 @@
                 </span>
             </el-dialog>
             <el-dialog title="终止公司合作" :visible.sync="secondDialogVisible" width="30%" >
-                <textarea name="" id="" rows="10" placeholder="请添加终止合作原因" v-model="textarea" style="width:100%;"></textarea>
+                <textarea name="" id="" rows="10" placeholder="请添加终止合作原因" v-model="remark" style="width:100%;"></textarea>
                 <span slot="footer" class="dialog-footer">
                     <el-button @click="continueJoin">取 消</el-button>
                     <el-button type="primary" @click="endJoin" >确 定</el-button>
@@ -130,9 +130,10 @@ export default {
             startLevel:1,//二级联动城市传参
             endLevel:2,//二级联动城市传参
             qrCodeShow:false,
+            qrCodeInfo:{},//二维码信息;
             firstDialogVisible: false,//第一个终止合作弹出框
             secondDialogVisible:false,//第二个终止合作弹出框
-            textarea:'',//终止合作原因
+            remark:'',//终止合作原因
             companyInfoIndex:'',//操作门店时该门店处于所有列表的位置
             currentStoreInfo:'',//当前编辑的门店信息
             storeInfo:{},//门店列表
@@ -159,10 +160,13 @@ export default {
         this.requestList();
     },
     methods:{
-        // 子组件添加公司成功之后，传递给父组件的值;
+        // 子组件添加门店成功之后，传递给父组件的值;
         addSuccess(addInfo){
             this.$refs.form.resetFields();
+            this.form.pageSize=10;
+            this.form.currentPage=1;
             this.requestList();
+            console.log('添加门店成功');
         },
         // 子组件编辑成功之后，传递给父组件的值;
         editSuccess(editInfo){
@@ -206,27 +210,46 @@ export default {
         },
         //二维码
         qrCode(index, row){
+            let self=this;
             this.storeId=row.storeId;
+            this.$http.get(this.$apiUrl.store.qrcode+"/"+this.storeId)
+                .then(function(data){
+                    self.qrCodeInfo=data.data.data
+                    console.log(self.qrCodeInfo,'二维码');
+                })
+                .catch(function(err){
+                    console.log(err);
+                })
             this.qrCodeShow=true;
         },
         //终止合作,第一次弹框
         handleEnd(index,row){
-            this.currentStoreInfo=row;
+            this.storeId=row.storeId;
+            console.log(row,1111111111)
             this.firstDialogVisible=true;
         },
         //确定终止合作,第二次弹框
         endJoin(){
-            let form={
-                storeId:this.currentStoreInfo.storeId,
-                textarea:this.textarea
+            let self=this;
+            if(this.remark){
+                this.secondDialogVisible=false;
+                this.$http.post(this.$apiUrl.store.terminate+"/"+this.storeId+"?remark="+this.remark)
+                    .then(function(data){
+                        self.remark="";
+                        console.log(data);
+                    })
+                    .catch(function(err){
+                        console.log(err);
+                    })
+            }else{
+                alert('请填写终止合作原因');
             };
-            this.secondDialogVisible=false;
             //将该门店终止合作申请提交，该公司信息进入终止合作列表;
         },
         //点击二次对话框取消按钮，继续合作
         continueJoin(){
             this.secondDialogVisible=false;
-            this.textarea='';
+            this.remark='';
         },
         // 门店列表请求公共函数;
         requestList(){
