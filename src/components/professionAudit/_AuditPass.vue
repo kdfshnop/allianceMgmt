@@ -84,7 +84,7 @@ export default {
             pagination:{
                 currentPage:1,//默认当前页为1;
                 pageSize:10,//默认显示10条
-                total:400//一共有多少条数据
+                total:null//一共有多少条数据
             },
             passAuditList:[],//通过审核的数据
             submitPeopleList:[],//提交人审核人列表;
@@ -109,12 +109,12 @@ export default {
     methods:{
         //每页多少条
         handleSizeChange(val) {
-            this.pagination.pageSize=val;
+            this.form.pageSize=val;
             this.requestList();
         },
         //当前页
         handleCurrentChange(val) {
-            this.pagination.currentPage=val;
+            this.form.currentPage=val;
             this.requestList();
         },
         resetForm() {

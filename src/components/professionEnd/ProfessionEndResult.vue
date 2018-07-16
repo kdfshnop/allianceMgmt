@@ -19,7 +19,7 @@
                     <p>已驳回</p>
                 </div>
                 <div class="tab" :class="{pass:pass}" @click="storeTab">
-                    <p class="account">{{total.auditedTotal}}</p>
+                    <p class="account">{{total.adoptTotal}}</p>
                     <p>通过</p>
                 </div>
                 <p style="clear:both;"></p>
@@ -54,10 +54,9 @@ export default {
     },
     created(){
         let self=this;
-        this.$http.post(this.$apiUrl.professionEnd.summary)
+        this.$http.get(this.$apiUrl.professionEnd.summary)
             .then(function(data){
-                self.total=data.data.data[0];
-                console.log('summary');
+                self.total=data.data.data;
             })
             .catch(function(err){
                 console.log(err);

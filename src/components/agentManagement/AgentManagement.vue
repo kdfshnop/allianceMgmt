@@ -259,7 +259,7 @@ export default {
         },
         // 添加代理商
         addAgent(){
-             this.$router.push({path:"/agent/creatAgent"});
+             this.$router.push({path:"/agent/createAgent"});
         },
         //点击二次对话框取消按钮，继续合作
         continueJoin(){

@@ -57,8 +57,11 @@ export default {
         summary:"business/audit/summary"//汇总
     },
     professionEnd:{//业务审核-终止合作
-        summary:"base/terminate/auditstate",//get
-        list:"base/terminate/auditstate"//post
+        summary:"base/terminate/auditstate",//get summary
+        list:"base/terminate/auditstate/list",//post终止列表
+        reject:"base/terminate/reject",//审核不通过
+        adopt:"base/terminate/adopt",//审核通过
+        endDetail:"base/terminate/detail"//终止原因
     },
     store:{//门店
         add:"store/single",//添加门店 put,门店详情get,编辑门店post

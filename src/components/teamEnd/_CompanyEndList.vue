@@ -47,7 +47,7 @@ export default {
             pagination:{
                 currentPage:1,//默认当前页为1;
                 pageSize:10,//默认显示10条
-                total:400//一共有多少条数据
+                total:null//一共有多少条数据
             }
         }
     },

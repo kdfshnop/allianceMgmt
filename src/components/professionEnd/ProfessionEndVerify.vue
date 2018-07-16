@@ -70,21 +70,24 @@ export default {
             dialogVisible:false,
             remark:'',
             title:'',
-            id:this.$route.query.id
+            id:this.$route.query.targetId,
+            targetType:this.$route.query.targetType
         }
     },
     created(){
         // 终止合作原因;
-        this.$http.get(this.$apiUrl.professionAudit.detailContract+"?id="+this.id)
+        this.$http.get(this.$apiUrl.professionEnd.endDetail+"?targetId="+this.targetId+"&targetType="+this.targetType)
             .then(function(data){
+                // 此处待处理;
                 console.log('编辑详情')
             })
             .catch(function(err){
                 console.log(err);
             });
         // 历史审核记录
-        this.$http.get(this.$apiUrl.professionAudit.historyAudit+"?id="+this.id)
+        this.$http.get(this.$apiUrl.professionAudit.historyAudit+"?id="+this.targetId)
             .then(function(data){
+                // 此处待处理;
                 console.log('历史审核记录');
             })
             .catch(function(err){
@@ -105,12 +108,12 @@ export default {
         },
         submit(){
             let form={
-                targetId:this.id,
-                auditType:this.auditType,
+                targetId:this.targetId,
+                targetType:this.targetType,
                 remark:this.remark
             };
             if(this.title=='驳回'){
-                this.$http.post(this.$apiUrl.professionAudit.reject,form)
+                this.$http.post(this.$apiUrl.professionEnd.reject,form)
                 .then(function(data){
                     console.log('驳回');
                     this.remark="";
@@ -119,7 +122,7 @@ export default {
                     console.log(err);
                 })
             }else{
-                this.$http.post(this.$apiUrl.professionAudit.pass,form)
+                this.$http.post(this.$apiUrl.professionEnd.adopt,form)
                 .then(function(data){
                     console.log('通过');
                     this.remark="";

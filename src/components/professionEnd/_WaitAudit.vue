@@ -1,9 +1,9 @@
 <template>
     <div>
-        <div class="search-result" >共搜索到 956条数据</div>
+        <div class="search-result" >共搜索到{{pagination.total}}条数据</div>
         <el-table :data="waitAuditList" border style="width: 100%">
             <el-table-column prop="name" label="名称" align="center" ></el-table-column>
-            <el-table-column prop="typeName" label="类型" align="center" ></el-table-column>
+            <el-table-column prop="targetTypeName" label="类型" align="center" ></el-table-column>
             <el-table-column prop="submitterName" label="提交人" align="center" ></el-table-column>
             <el-table-column prop="auditTime" label="提交时间" align="center"></el-table-column>
             <el-table-column prop="auditRemark" label="终止原因" align="center"></el-table-column>
@@ -18,7 +18,7 @@
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
                 :current-page="pagination.currentPage"
-                :page-sizes="[10, 2, 3, 400]"
+                :page-sizes="[10, 20, 50, 100,500]"
                 :page-size="pagination.pageSize"
                 layout="total, sizes, prev, pager, next, jumper"
                 :total="pagination.total">
@@ -32,43 +32,14 @@ export default {
     name:'waitAudit',
     data(){
         return {
+            auditType:"1",//待审核
             // 分页功能
             pagination:{
                 currentPage:1,//默认当前页为1;
                 pageSize:10,//默认显示10条
-                total:400//一共有多少条数据
+                total:null//一共有多少条数据
             },
-            waitAuditList:[],
-            tableData:[
-                {
-                    name:'key',
-                    submitPeople:'wk',
-                    auditPeople:'经纪人',
-                    auditTime:'2018-12-05',
-                    endReason:'不合格'
-                },
-                {
-                    name:'key',
-                    submitPeople:'wk',
-                    auditPeople:'经纪人',
-                    auditTime:'2018-12-05',
-                    endReason:'不合格'
-                },
-                {
-                    name:'key',
-                    submitPeople:'wk',
-                    auditPeople:'经纪人',
-                    auditTime:'2018-12-05',
-                    endReason:'不合格'
-                },
-                {
-                    name:'key',
-                    submitPeople:'wk',
-                    auditPeople:'经纪人',
-                    auditTime:'2018-12-05',
-                    endReason:'不合格'
-                }
-            ]
+            waitAuditList:[]
         }
     },
     created(){
@@ -86,34 +57,22 @@ export default {
             this.requestList();
         },
         audit(index,row){
-            this.$router.push({name:"ProfessionEndVerify",query:{id:row.id}})
+            this.$router.push({name:"ProfessionEndVerify",query:{targetId:row.targetId,targetType:row.targetType}})
         },
         // 终止合作待审核列表信息请求公共函数;
         requestList(){
             let self=this;
-            let requestInfo={
-                auditType:"2",//终止合作
-                currentPage:this.pagination.currentPage,
-                pageSize:this.pagination.pageSize,
-                targetState:"1"//1待审核,2.已驳回，3通过
-            }
-            this.$http.post(this.$apiUrl.professionAudit.auditList,requestInfo)
+            this.$http.post(this.$apiUrl.professionEnd.list,{auditType:this.auditType})
                 .then(function(data){
                     self.pagination.total=data.data.data.total;
                     self.waitAuditList=data.data.data.data;
-                    console.log('成功');
+                    console.log(data,self.pagination.total,'成功请求');
                 })
                 .catch(function(err){
-                    console.log(err);
+                    console.log(err,'waitAudit失败');
                 });
         }
-    },
-    computed:{
-        //分页显示多少条数据
-        searInfoList(){
-            return this.tableData.slice((this.pagination.currentPage-1)*this.pagination.pageSize,this.pagination.currentPage*this.pagination.pageSize); 
-        }
-    },
+    }
 }
 </script>
 

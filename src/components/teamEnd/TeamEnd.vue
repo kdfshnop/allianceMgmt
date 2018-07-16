@@ -55,38 +55,8 @@ export default {
             pagination:{
                 currentPage:1,//默认当前页为1;
                 pageSize:10,//默认显示10条
-                total:400//一共有多少条数据
-            },
-            tableData:[
-                {
-                    name:'key',
-                    submitPeople:'wk',
-                    auditPeople:'经纪人',
-                    auditTime:'2018-12-05',
-                    endReason:'不合格'
-                },
-                {
-                    name:'key',
-                    submitPeople:'wk',
-                    auditPeople:'经纪人',
-                    auditTime:'2018-12-05',
-                    endReason:'不合格'
-                },
-                {
-                    name:'key',
-                    submitPeople:'wk',
-                    auditPeople:'经纪人',
-                    auditTime:'2018-12-05',
-                    endReason:'不合格'
-                },
-                {
-                    name:'key',
-                    submitPeople:'wk',
-                    auditPeople:'经纪人',
-                    auditTime:'2018-12-05',
-                    endReason:'不合格'
-                }
-            ]
+                total:null//一共有多少条数据
+            }
         }
     },
     created(){
@@ -98,20 +68,6 @@ export default {
             .catch(function(err){
                 console.log(err);
             });
-    },
-    computed:{
-        //分页显示多少条数据
-        searInfoList(){
-            if(this.company){
-                return this.tableData.slice((this.pagination.currentPage-1)*this.pagination.pageSize,this.pagination.currentPage*this.pagination.pageSize);
-            };
-            if(this.agent){
-                return this.tableData.slice((this.pagination.currentPage-1)*this.pagination.pageSize,this.pagination.currentPage*this.pagination.pageSize);
-            };
-            if(this.store){
-                return this.tableData.slice((this.pagination.currentPage-1)*this.pagination.pageSize,this.pagination.currentPage*this.pagination.pageSize);
-            }       
-        }
     },
     methods:{
         agentTab(){
