@@ -22,6 +22,8 @@
 
 <script>
 export default {
+    name:"record",
+    prop:['agencyId'],
     data() {
         return {
             listInfo:[],
@@ -29,7 +31,7 @@ export default {
     },
     created(){
         let self=this;
-        this.$http.get(this.$apiUrl.agent.record+"/1")
+        this.$http.get(this.$apiUrl.agent.record+"/"+this.agencyId)
         .then(function(data){
             self.listInfo=data.data.data;
             console.log(self.listInfo,'成功');
