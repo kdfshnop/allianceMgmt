@@ -19,6 +19,7 @@ import EditAgent from '@/components/agent/EditAgent';
 import FollowUp from '@/components/followUp/FollowUp';
 import AddFollowUp from '@/components/followUp/AddFollowUp';
 import FollowUpDetaile from '@/components/followUp/FollowUpDetail';
+import Privileger  from '@/plugins/privileger';
 
 Vue.use(Router);
 
@@ -119,12 +120,20 @@ let router = new Router({
 router.beforeEach((to, from, next) => {
   // TODO: 这里需要根据当前环境来获取前缀
   let url = "https://yun2.test.wkzf/alliance/index.html#" + to.path;
-  // TODO: 发送请求，判断是否可以访问，暂定方案如果不能访问直接登出
-  let canAccess = true;  
-  if(canAccess){
-    next();    
-  }else{
-    parent != window && parent.location.reload();
-  }  
+  // TODO: 发送请求，判断是否可以访问，暂定方案如果不能访问直接登出，
+  // Vue.http.post(Vue.apiUrl.common.privileges, {
+
+  // }).then((data)=>{
+  //   Privileger.setPrivileges(data.data);
+
+  //   let canAccess = true;  
+  //   if(canAccess){
+  //     next();    
+  //   }else{
+  //     parent != window && parent.location.reload();
+  //   } 
+  // }); 
+
+  next();
 });
 export default router;
