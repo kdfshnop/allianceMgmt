@@ -2,12 +2,12 @@
     <div>
         <div class="search-result" >共搜索到{{pagination.total}}条数据</div>
         <el-table :data="waitAuditList" border style="width: 100%">
-            <el-table-column prop="name" label="名称" align="center" ></el-table-column>
+            <el-table-column prop="targetName" label="名称" align="center" ></el-table-column>
             <el-table-column prop="targetTypeName" label="类型" align="center" ></el-table-column>
             <el-table-column prop="submitterName" label="提交人" align="center" ></el-table-column>
             <el-table-column prop="auditTime" label="提交时间" align="center"></el-table-column>
-            <el-table-column prop="auditRemark" label="终止原因" align="center"></el-table-column>
-            <el-table-column prop="endReason" label="操作" align="center">
+            <el-table-column prop="operateRemark" label="终止原因" align="center"></el-table-column>
+            <el-table-column label="操作" align="center">
                 <template slot-scope="scope">
                     <el-button size="mini" @click="audit(scope.$index, scope.row)" type="text">审核</el-button>
                 </template>
@@ -32,7 +32,7 @@ export default {
     name:'waitAudit',
     data(){
         return {
-            auditType:"1",//待审核
+            targetState:"1",//待审核
             // 分页功能
             pagination:{
                 currentPage:1,//默认当前页为1;
@@ -62,7 +62,12 @@ export default {
         // 终止合作待审核列表信息请求公共函数;
         requestList(){
             let self=this;
-            this.$http.post(this.$apiUrl.professionEnd.list,{auditType:this.auditType})
+            let form={
+                targetState:this.targetState,
+                currentPage:this.pagination.currentPage,
+                pageSize:this.pagination.pageSize
+            }
+            this.$http.post(this.$apiUrl.professionEnd.list,form)
                 .then(function(data){
                     self.pagination.total=data.data.data.total;
                     self.waitAuditList=data.data.data.data;

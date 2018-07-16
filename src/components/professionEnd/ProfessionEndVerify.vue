@@ -10,39 +10,19 @@
         <el-main>    
             <bread-crumb :items="breadCrumb"></bread-crumb>
             <div class="hd">终止合作原因： </div>
-            <div>不合格不合格</div>
+            <div>{{operateRemark}}</div>
             <div class="gap-2">
                 <el-button style="width: 140px" type="danger" @click="handleReject">驳回</el-button>
                 <el-button style="width: 140px" type="primary" @click="handleApprove">通过</el-button>
                 <el-button style="width: 140px" type="" @click="handleClose">关闭</el-button>
             </div>
             <h2 class="gap-2">历史审核记录</h2>
-            <el-table
-                :data="historyRecords"
-                stripe
-                style="width: 100%; margin-bottom: 40px;">
-                <el-table-column
-                prop="commitDate"
-                label="提交时间"
-                width="180">
-                </el-table-column>
-                <el-table-column
-                prop="verifyDate"
-                label="审核时间"
-                width="180">
-                </el-table-column>
-                <el-table-column
-                prop="verifyStatus"
-                label="审核状态">
-                </el-table-column>
-                <el-table-column
-                prop="rejectReason"
-                label="驳回理由">
-                </el-table-column>
-                <el-table-column
-                prop="verifyPerson"
-                label="审核人">
-                </el-table-column>
+            <el-table :data="historyRecords" stripe style="width: 100%; margin-bottom: 40px;">
+                <el-table-column prop="submitTime" label="提交时间" width="180"></el-table-column>
+                <el-table-column prop="auditTime" label="审核时间" width="180"></el-table-column>
+                <el-table-column prop="auditState" label="审核状态"></el-table-column>
+                <el-table-column prop="remark" label="驳回理由"></el-table-column>
+                <el-table-column prop="auditor" label="审核人"></el-table-column>
             </el-table> 
             <el-dialog :title="title" :visible.sync="dialogVisible" width="30%">
                 <textarea name="" id="" style="width:100%;" rows="10" placeholder="请添加备注" v-model="remark"></textarea>
@@ -63,32 +43,35 @@ export default {
     components:{BreadCrumb},
     data(){
         return {
-            auditType:'2',//终止合作
             breadCrumb: [{text:'业务审核'},{text: "终止合作"},{text:'审核'}],
             historyRecords:[],// 历史审核记录
-            searInfoList:[],
             dialogVisible:false,
-            remark:'',
+            operateRemark:'',//终止原因
+            remark:'',//通过驳回原因
             title:'',
-            id:this.$route.query.targetId,
+            targetId:this.$route.query.targetId,
             targetType:this.$route.query.targetType
         }
     },
     created(){
+        let self=this;
         // 终止合作原因;
         this.$http.get(this.$apiUrl.professionEnd.endDetail+"?targetId="+this.targetId+"&targetType="+this.targetType)
             .then(function(data){
-                // 此处待处理;
-                console.log('编辑详情')
+                self.operateRemark=data.data.data.operateRemark;
             })
             .catch(function(err){
-                console.log(err);
+                console.log(err,'终止合作失败');
             });
+            let form={
+                targetId:this.targetId,
+                targetType:this.targetType
+            }
         // 历史审核记录
-        this.$http.get(this.$apiUrl.professionAudit.historyAudit+"?id="+this.targetId)
+        this.$http.post(this.$apiUrl.professionEnd.historyRecords,form)
             .then(function(data){
-                // 此处待处理;
-                console.log('历史审核记录');
+                //审核记录字段不一致
+                self.historyRecords=data.data.data;
             })
             .catch(function(err){
                 console.log(err);
@@ -115,7 +98,6 @@ export default {
             if(this.title=='驳回'){
                 this.$http.post(this.$apiUrl.professionEnd.reject,form)
                 .then(function(data){
-                    console.log('驳回');
                     this.remark="";
                 })
                 .catch(function(err){
@@ -124,7 +106,6 @@ export default {
             }else{
                 this.$http.post(this.$apiUrl.professionEnd.adopt,form)
                 .then(function(data){
-                    console.log('通过');
                     this.remark="";
                 })
                 .catch(function(err){

@@ -69,8 +69,14 @@ export default {
                 this.$http.put(this.$apiUrl.agent.followUp,this.form)
                 .then(function(data){
                     self.message="";
-                    alert('已提交');
-                    self.$router.push({name:"FollowUp",query:{agencyId:self.agencyId}});
+                    self.$message({
+                        message: '已提交',
+                        type: 'success',
+                        duration:1000
+                    });
+                    setTimeout(function(){
+                        self.$router.push({name:"FollowUp",query:{agencyId:self.agencyId}});
+                    },1000);
                 })
                 .catch(function(err){
                     console.log(err)
