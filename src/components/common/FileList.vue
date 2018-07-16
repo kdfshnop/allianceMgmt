@@ -1,7 +1,7 @@
 <template>
-    <ul v-if="fileList && fileList.length">
-        <li :key="f.url" v-for="f in fileList">
-            <a :href="f.url" :download="f.fileName" v-if="isImg(f.url)"><img :src="f.url"></a>
+    <ul class="file-list" :id="id">
+        <li :key="f.url" v-for="f in fileList">            
+            <img :src="f.url" v-if="isImg(f.url)">
             <a :download="f.fileName" target="_blank" v-else :href="f.url">{{f.fileName}}</a>            
         </li>
     </ul>
@@ -14,12 +14,13 @@
      2. 根据类型不同展示不同的图标
      3. 多种视图方式（不一定要实现）
  */
+import Viewer from "viewerjs/dist/viewer"
 export default {
     name: "fileList",
     props: ['fileList'],
     data() {
         return {
-
+            id: ""
         };
     }, 
     computed: {
@@ -46,8 +47,30 @@ export default {
         isImg(src) {
             let reg = /jpg|png|jpeg|gif/;
             return reg.test(src);
+            // return true;
         }
-    }  
+    },
+    created() {
+        this.id = Math.random().toString().replace('0.','');
+    },
+    mounted() {
+        //this.viewer = new Viewer(document.getElementById(this.id));
+    },
+    watch: {
+        fileList() {
+            if(this.viewer) {
+                console.log('fileList changed');
+                this.viewer.destroy();
+                this.$nextTick(()=>{                    
+                    this.viewer = new Viewer(document.getElementById(this.id));
+                })                
+            }else{
+                this.$nextTick(()=>{
+                    this.viewer = new Viewer(document.getElementById(this.id));
+                });
+            }
+        }
+    } 
 }
 </script>
 
