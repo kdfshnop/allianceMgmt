@@ -12,7 +12,7 @@
                 </el-form>
             </template>
         </el-table-column>
-        <el-table-column align="center" label="操作类型" prop="operatortype"></el-table-column>
+        <el-table-column align="center" label="操作类型" prop="optype"></el-table-column>
         <el-table-column align="center" label="操作人" prop="operator"></el-table-column>
         <el-table-column align="center" label="执行结果" prop="result"></el-table-column>
         <el-table-column align="center" label="操作时间" prop="operatetime"></el-table-column>
@@ -23,7 +23,7 @@
 <script>
 export default {
     name:"record",
-    prop:['agencyId'],
+    props:['agencyId'],
     data() {
         return {
             listInfo:[],
