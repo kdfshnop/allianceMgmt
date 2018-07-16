@@ -36,9 +36,7 @@
                 <el-col :span="12">  
                     <el-form-item label="上级代理商">              
                         <el-select v-model="parent" placeholder="请选择"                                                     
-                            filterable
-                            :remote="remote"
-                            :remote-method="getAgents"
+                            filterable                            
                             @change="handleParentAgentChange"
                             :loading="parentAgentLoading"
                         >
@@ -132,8 +130,9 @@ export default {
                 label: "区代理商（二级代理商）",
                 value: 2
             }],
+            agents: [{agencyId: '', agencyCompanyName: "请选择"}, {agencyId: 0, agencyCompanyName: "无上级代理商"}],
             // parentAgents: [],
-            remoteAgents: [{agencyId: '', agencyCompanyName: "请选择"}, {agencyId: 0, agencyCompanyName: "无上级代理商"}]
+            remoteAgents: []
         };
     },
     methods: {
@@ -217,19 +216,23 @@ export default {
             return [this.$store.state.AgentBasicInfo.cityName || ''];
         },
         remote() {
+            // 刚开始打算用异步请求联想，后来决定一次性获取全部代理商，但是名字就保留下来了，这里注释一下，以免后面疑惑
             return this.agentType == 2;// 非区域代理都可能有上级代理
         },
         parentAgents:{
             get() {
-                if(this.remote) {// 远程
+                if(this.remote) {// 
                     return this.remoteAgents;
                 }
-                return [{agencyId: '', agencyCompanyName: "请选择"}, {agencyId: 0, agencyCompanyName: "无上级代理商"}]
+                return this.agents;
             },
             set(val) {
                 // if()
             }
         }
+    },
+    created() {
+        this.getAgents();
     }
 }
 </script>
