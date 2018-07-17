@@ -1,5 +1,5 @@
 <template>
-    <el-dialog :title="title" :visible.sync="dialogVisible" width="50%" :before-close="handleClose">
+    <el-dialog :title="title" :visible.sync="dialogVisible" width="50%" >
         <el-form :model="form" :rules="rules" ref="form" label-width="110px">
             <el-row>
                 <el-col :span="12">
@@ -210,13 +210,9 @@ export default {
                 console.log(err,'代理商列表失败');
             })
         },
-        handleClose(done) {
-            this.$confirm('确认关闭？')
-            .then(_ => { 
-                this.$refs.form.resetFields(); 
-                done();
-            })
-            .catch(_ => {});
+        handleClose() {
+                console.log(11111111)
+                this.$refs.form.resetFields();   
         },
         submitForm() {
             let self=this;
@@ -273,7 +269,11 @@ export default {
                         // 此处代码需要加在请求成功之后;
                         // this.$refs[formName].resetFields();
                 }else {
-                    alert('请填写必填信息')
+                    this.$message({
+                        message:"请填写必填信息",
+                        type:"error",
+                        dutration:2000
+                    });
                     return false;
                 }
             });
@@ -286,7 +286,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
     .tl .el-form-item__label{
         text-align: left;
     }

@@ -12,10 +12,10 @@
             <div style="text-align:right;">
                 <el-button type="primary" @click="addAgent">添加代理商</el-button>
             </div>     
-            <el-form ref="form" :model="form" label-width="180px" class="gap">
+            <el-form ref="form" :model="form" label-width="180px" class="gap" label-position="right">
                 <el-row>
                     <el-col :span="12">
-                        <el-form-item label="地区" prop="cityList" class="area">
+                        <el-form-item label="地区" prop="cityList">
                             <region v-model="form.cityList" :startLevel="startLevel" :endLevel="endLevel"></region>
                         </el-form-item>
                         <el-form-item label="合作状态" prop="agencyState">
@@ -61,7 +61,7 @@
                             </el-col>
                             <el-col :span="12" v-if="form.searchType==1">
                                 <el-form-item prop="searchDay" class="expire">
-                                    <el-input v-model="form.searchDay" placeholder="请输入整数" style="width:200px;"></el-input>
+                                    <el-input v-model="form.searchDay" placeholder="请输入整数"></el-input>
                                 </el-form-item>
                             </el-col>
                             <el-col :span="12" v-if="form.searchType==2">
@@ -71,7 +71,7 @@
                                         v-model="form.timeStart"
                                         type="date"
                                         placeholder="选择日期"
-                                        style="width:200px"
+                                        style="width:100%;"
                                         value-format="yyyy-MM-dd">
                                     </el-date-picker>
                                 </el-form-item>
@@ -86,13 +86,13 @@
                             </el-select>
                         </el-form-item>
                         <el-form-item label="代理商公司名称" prop="agencyName">
-                            <el-input v-model="form.agencyName" style="width:220px;"></el-input>
+                            <el-input v-model="form.agencyName"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
             </el-form>
-            <el-row>
-                <el-col :span="2" :offset="10">
+            <el-row :gutter="20">
+                <el-col :span="2" :offset="11">
                     <el-button class="reset" @click="reset">重置</el-button>
                 </el-col>
                 <el-col :span="2">
@@ -202,9 +202,6 @@ export default {
         this.requestList();
     },
     methods:{
-        a(index,row){
-            alert(index);
-        },
         // 编辑
         edit(index,row){
             this.$router.push({name:'EditAgent',params:{id:row.agencyId}});
@@ -315,6 +312,12 @@ export default {
 </script>
 
 <style>
+    .el-select{
+        width:100%;
+    }
+    .el-date-editor.el-range-editor.el-input__inner.el-date-editor--daterange{
+        width:100%;
+    }
     .search-result{
         color:gray;
         margin-bottom: 20px;
@@ -335,9 +338,6 @@ export default {
     }
     .expire .el-form-item__content{
         margin-left: 0 !important;
-    }
-    .area .el-input{
-        width:220px;
     }
 </style>
 

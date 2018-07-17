@@ -12,8 +12,8 @@
             <div style="text-align:right;">
                 <el-button type="primary" @click="addCompany">+增加公司</el-button>
             </div>     
-            <el-form ref="form" :model="form" label-width="180px" class="gap-2">
-                <el-row >
+            <el-form ref="form" :model="form" label-width="180px" class="gap" label-position="right">
+                <el-row>
                     <el-col :span="12">
                         <el-form-item label="公司所属城市" prop="cityList">
                             <region v-model="form.cityList" :startLevel="startLevel" :endLevel="endLevel"></region>
@@ -57,25 +57,25 @@
                                 </el-form-item>
                             </el-col>
                             <el-col :span="12" v-if="form.searchType==1">
-                                <el-form-item prop="searchDay" class="expire">
-                                    <el-input v-model="form.searchDay" placeholder="请输入整数" style="width:200px;"></el-input>
+                                <el-form-item prop="searchDay" label-width="0">
+                                    <el-input v-model="form.searchDay" placeholder="请输入整数"></el-input>
                                 </el-form-item>
                             </el-col>
                             <el-col :span="12" v-if="form.searchType==2">
-                                <el-form-item prop="searchDate" class="expire">
+                                <el-form-item prop="searchDate" label-width="0" >
                                     <el-date-picker
                                         format="yyyy-MM-dd"
                                         v-model="form.timeStart"
+                                        style="width:100%;"
                                         type="date"
                                         placeholder="选择日期"
-                                        style="width:200px"
                                         value-format="yyyy-MM-dd">
                                     </el-date-picker>
                                 </el-form-item>
                             </el-col>
                         </el-row>
                         
-                        <el-form-item label="门店名称" prop="storeName">
+                        <el-form-item label="门店名称" prop="storeName" >
                             <el-input v-model="form.storeName"></el-input>
                         </el-form-item>
                         <el-form-item label="代理商" prop="agency">
@@ -303,7 +303,16 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+    .el-select{
+        width:100%;
+    }
+    .el-form-item .el-form-item__label {
+        text-align: right;
+    }
+    .el-date-editor.el-range-editor.el-input__inner.el-date-editor--daterange{
+        width:100%;
+    }
     .search-result{
         color:gray;
         margin-bottom: 20px;
@@ -318,9 +327,6 @@ export default {
     }
     .el-dialog__footer{
         text-align: right;
-    }
-    .expire .el-form-item__content{
-        margin-left: 0 !important;
     }
 </style>
 

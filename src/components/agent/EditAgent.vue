@@ -102,7 +102,8 @@ export default {
             console.log(tab, event);
         },
         handleCancel() {
-            this.getDetail();
+            // this.getDetail();
+            history.back();
         },
         handleCommit() {
             this.$prompt('', '请说明本次修改的内容和原因', {

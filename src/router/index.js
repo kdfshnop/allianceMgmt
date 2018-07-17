@@ -121,23 +121,27 @@ let env = getEnv();
 // 调用权限控制接口，判断当前用户是否可以访问该页面
 router.beforeEach((to, from, next) => {
   // TODO: 这里需要根据当前环境来获取前缀
-  // let url = Vue.apiUrl.pageUrl[env] + '/index.html/#' + to.path;// "https://yun2.test.wkzf/amgmt/index.html/#" + to.path;
-  // // TODO: 发送请求，判断是否可以访问，暂定方案如果不能访问直接登出，
-  // Vue.http.post(Vue.apiUrl.common.privileges, {
-  //   // params: {
-  //     urls: [url]
-  //   // }
-  // }).then((data)=>{
-  //   //Privileger.setPrivileges(data.data);
+  let url = Vue.apiUrl.pageUrl[env] + '/index.html/#' + to.path;// "https://yun2.test.wkzf/amgmt/index.html/#" + to.path;
+  if(url == 'https://yun2.test.wkzf/amgmt/index.html/#/companyManagement'){
+  // TODO: 发送请求，判断是否可以访问，暂定方案如果不能访问直接登出，
+  Vue.http.post(Vue.apiUrl.common.privileges, {
+    // params: {
+      urls: [url]
+    // }
+  }).then((data)=>{
+    //Privileger.setPrivileges(data.data);
 
-  //   let canAccess = data.data.hasAuth;  
-  //   if(canAccess){
-  //     next();    
-  //   }else{
-  //     parent != window && parent.location.reload();
-  //   } 
-  // }); 
-
+    let canAccess = data.data.hasAuth;  
+    if(canAccess){
+      next();    
+    }else{
+      parent != window && parent.location.reload();
+    } 
+  }); 
+}
+else {
   next();
+}
+  // next();
 });
 export default router;

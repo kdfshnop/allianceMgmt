@@ -4,8 +4,8 @@ export default {
         dev: "https://10.0.18.79:8125",
         // dev: "http://10.0.90.105:8080",
         test: "https://yun2.test.wkzf/amgmtbs",
-        sim: "",
-        prod: ""
+        sim: "https://yun2.sim.wkzf/amgmtbs",
+        prod: "https://yun2.wkzf.com/amgmtbs"
     },
     pageUrl: {// 页面的地址
         dev: "http://localhost:8080",
