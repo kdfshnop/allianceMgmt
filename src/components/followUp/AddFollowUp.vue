@@ -9,7 +9,7 @@
     <el-container>
         <el-main>
             <bread-crumb :items="breadCrumb"></bread-crumb>
-            <div class="gap-2">
+            <div class="gap">
                 <div>跟进信息：</div>
                 <el-input type="textarea" v-model="message" rows="10" placeholder="请输入跟进信息"></el-input>
                 <div class="gap-2">

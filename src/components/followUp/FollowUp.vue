@@ -9,7 +9,7 @@
     <el-container>
         <el-main>
             <bread-crumb :items="breadCrumb"></bread-crumb>
-            <div style="text-align:right;margin-bottom:50px;">
+            <div style="text-align:right;margin-bottom:20px;">
                 <el-button type="primary" @click="goBack">返回</el-button>
                 <el-button type="primary" @click="addFollowUp">+添加跟进</el-button>
             </div>

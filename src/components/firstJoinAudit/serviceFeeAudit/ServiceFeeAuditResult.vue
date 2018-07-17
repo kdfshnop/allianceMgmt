@@ -90,7 +90,7 @@ export default {
         margin:0;
     }
     .tabs{
-        margin-top: 50px;
+        margin-top: 20px;
         margin-left: 50px;
     }
     .tabs div{

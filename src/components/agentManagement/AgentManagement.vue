@@ -12,7 +12,7 @@
             <div style="text-align:right;">
                 <el-button type="primary" @click="addAgent">添加代理商</el-button>
             </div>     
-            <el-form ref="form" :model="form" label-width="180px" class="gap-2">
+            <el-form ref="form" :model="form" label-width="180px" class="gap">
                 <el-row>
                     <el-col :span="12">
                         <el-form-item label="地区" prop="cityList" class="area">

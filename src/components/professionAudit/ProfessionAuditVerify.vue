@@ -143,7 +143,7 @@ export default {
 
 <style>
     .hd{
-        margin: 30px 0;
+        margin: 20px 0;
     }
     .skip{
         color:blue;
