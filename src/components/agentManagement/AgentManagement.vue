@@ -111,13 +111,21 @@
                 <el-table-column prop="endTime" label="合作结束" align="center"></el-table-column>
                 <el-table-column label="操作" width="300px" align="center">
                     <template slot-scope="scope">
-                        <el-button size="mini" @click="detail(scope.$index, scope.row)" v-if="scope.row.agencyState!=2" type="text">详情|</el-button>
-                        <el-tooltip placement="right" effect="light" v-if="scope.row.agencyState!=2">
+                        <el-button size="mini" @click="detail(scope.$index, scope.row)" v-if="scope.row.agencyState!=2" type="text">详情</el-button>
+                        <!--<el-tooltip placement="right" effect="light" v-if="scope.row.agencyState!=2">
                             <el-button type="text" size="mini">更多</el-button>
                             <div slot="content" @click="edit(scope.$index,scope.row)" v-if="scope.row.agencyState!=1">编辑</div>
                             <div slot="content" class="cz" @click="followUp(scope.$index,scope.row)">跟进</div>
                             <div slot="content" class="cz" @click="endJoin(scope.$index,scope.row)" v-if="scope.row.agencyState==4">终止合作</div>
-                        </el-tooltip>
+                        </el-tooltip>-->
+                        <el-dropdown v-if="scope.row.agencyState!=2"trigger="click">
+                            <span class="el-dropdown-link" style="color:#409EFF;font-size:12px;">更多<i class="el-icon-arrow-down el-icon--right"></i></span>
+                            <el-dropdown-menu slot="dropdown" >
+                                <el-dropdown-item @click.native="edit(scope.$index,scope.row)" v-if="scope.row.agencyState!=1">编辑</el-dropdown-item>
+                                <el-dropdown-item @click.native="followUp(scope.$index,scope.row)">跟进</el-dropdown-item>
+                                <el-dropdown-item @click.native="endJoin(scope.$index,scope.row)" v-if="scope.row.agencyState==4">终止合作</el-dropdown-item>
+                            </el-dropdown-menu>
+                        </el-dropdown>
                         <el-button v-if="scope.row.agencyState==2" size="mini" @click="reSubmit(scope.$index, scope.row)" type="text">重新提交</el-button>
                     </template>
                 </el-table-column>
@@ -194,6 +202,9 @@ export default {
         this.requestList();
     },
     methods:{
+        a(index,row){
+            alert(index);
+        },
         // 编辑
         edit(index,row){
             this.$router.push({name:'EditAgent',params:{id:row.agencyId}});

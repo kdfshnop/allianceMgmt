@@ -61,7 +61,8 @@ export default {
         list:"base/terminate/auditstate/list",//post终止列表
         reject:"base/terminate/reject",//审核不通过
         adopt:"base/terminate/adopt",//审核通过
-        endDetail:"base/terminate/detail"//终止原因
+        endDetail:"base/terminate/detail",//终止原因
+        historyRecords: "/agency/audit/history",// 历史记录post
     },
     store:{//门店
         add:"store/single",//添加门店 put,门店详情get,编辑门店post

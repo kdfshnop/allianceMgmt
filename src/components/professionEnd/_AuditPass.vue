@@ -89,14 +89,12 @@ export default {
             // 表单查询信息
             form: {
                 auditorId:'',//审核人Id;
-                auditName:'',//审核人
                 auditTime:[],//审核时间
-                auditType:"3",//通过
+                targetState:"3",//通过
                 targetName:'',//代理商名称
                 currentPage:1,//页码默认为1
                 pageSize:10,//页面量默认为10
                 submitterId:'',//提交人Id
-                submitName:'',//提交人
             }
         }
     },
