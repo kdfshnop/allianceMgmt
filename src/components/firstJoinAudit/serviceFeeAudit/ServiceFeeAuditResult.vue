@@ -84,7 +84,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
     p{
         line-height: 40px;
         margin:0;
