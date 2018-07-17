@@ -72,8 +72,8 @@
                 <el-table-column prop="createTime" label="创建时间" align="center"></el-table-column>
                 <el-table-column label="操作" width="300px" align="center">
                     <template slot-scope="scope">
-                        <el-button size="mini" @click="editStore(scope.$index, scope.row)" type="text">编辑|</el-button>
-                        <el-button size="mini" @click="qrCode(scope.$index, scope.row)" type="text">二维码|</el-button>
+                        <el-button size="mini" @click="editStore(scope.$index, scope.row)" type="text">编辑 </el-button>
+                        <el-button size="mini" @click="qrCode(scope.$index, scope.row)" type="text">二维码 </el-button>
                         <el-button size="mini"  type="text" @click="handleEnd(scope.$index, scope.row)">终止合作</el-button>
                     </template>
                 </el-table-column>

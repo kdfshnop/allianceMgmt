@@ -117,7 +117,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
     .hd{
         margin: 20px 0;
     }

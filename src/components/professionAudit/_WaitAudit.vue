@@ -17,7 +17,7 @@
                 </template>
             </el-table-column>
         </el-table>
-        <div class="block">
+        <div class="pagination">
             <el-pagination
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
@@ -86,8 +86,11 @@ export default {
 }
 </script>
 
-<style>
-
+<style scoped>
+    .pagination{
+        margin-top: 100px;
+        text-align: center;
+    }
 </style>
 
 
