@@ -1,19 +1,21 @@
 import axios from 'axios';
 import apiUrl from '@/configs/api.js';
+import {getEnv} from '@/utils/env';
 export default {    
     install(Vue){
         let UNLOGIN = 1100;
         let SUCCESS = 1;        
 
-        let host = location.host;
-        let env = host.indexOf('localhost') > -1 ? "dev" : "prod";
-        for(let key in apiUrl.baseUrl){
-            if(host.indexOf(key) > -1){
-                env = key;
-                break;
-            }
-        }
-        let baseUrl = apiUrl.baseUrl[env];;
+        // let host = location.host;
+        // let env = host.indexOf('localhost') > -1 ? "dev" : "prod";
+        // for(let key in apiUrl.baseUrl){
+        //     if(host.indexOf(key) > -1){
+        //         env = key;
+        //         break;
+        //     }
+        // }
+        let env = getEnv();
+        let baseUrl = apiUrl.baseUrl[env];
         axios.defaults.baseURL = baseUrl;
 
         Vue.http = Vue.prototype.$http = axios;

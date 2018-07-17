@@ -1,12 +1,18 @@
 export default {
-    baseUrl: {
+    baseUrl: {// 接口的基地址
         // dev: "http://rap2api.taobao.org/app/mock/17025",
-        // dev: "https://10.0.18.79:8125",
-        dev: "http://10.0.90.105:8080",
+        dev: "https://10.0.18.79:8125",
+        // dev: "http://10.0.90.105:8080",
         test: "https://yun2.test.wkzf/amgmtbs",
         sim: "",
         prod: ""
     },
+    pageUrl: {// 页面的地址
+        dev: "http://localhost:8080",
+        test: "https://yun2.test.wkzf/amgmt",
+        sim: "https://yun2.sim.wkzf/amgmt",
+        prod: "https://yun2.wkzf.com/amgmt"
+    }, 
     platformServiceFeeVerify: {// 平台服务费审核
         historyRecords: "/agency/audit/history",// 历史记录
         approve: "/first/audit/adopt",// 通过
@@ -24,7 +30,8 @@ export default {
         city: "/city/list",// 城市接口
         district: "/region/list",// 区域接口
         town: "/plate/list",// 板块接口
-        agency: "/agency/list"//代理商列表，get
+        agency: "/agency/list", //代理商列表，get
+        privileges: "/base/authority", //权限, post
     },
     agent: {
         create: "/agency/single",// put 增
