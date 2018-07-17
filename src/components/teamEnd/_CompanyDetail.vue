@@ -115,10 +115,9 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
     .el-form-item .el-form-item__label{
         text-align: left;
-    }
-    
+    } 
 </style>
 
