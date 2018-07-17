@@ -9,7 +9,7 @@
   <el-container>
       <el-main>
           <bread-crumb :items="breadCrumb"></bread-crumb>
-          <div class="gap-2">
+          <div class="gap">
                 <div>跟进信息：</div>
                 <div style="padding-left:75px;">{{message}}</div>
                 <div class="gap-2" v-if="fileName">上传资料：{{fileName}}</div>
