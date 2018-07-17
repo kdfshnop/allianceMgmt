@@ -1,3 +1,5 @@
+// TODO： 这个里面有很多内容应该提到一个业务处理类中去，有时间做一下
+
 export function generateComputed(fieldName, nameInStore, updateFuncName) {
     return {
         get() {
