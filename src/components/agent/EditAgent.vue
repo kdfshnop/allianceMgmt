@@ -140,7 +140,7 @@ export default {
     }
 }
 </script>
-<style>
+<style scoped>
 .dialog-commit {
     /* // 提交编辑后会进行审核，审核通过后编辑生效 */
     width: 560px;

@@ -3,7 +3,7 @@ export default {
         // dev: "http://rap2api.taobao.org/app/mock/17025",
         // dev: "https://10.0.18.79:8125",
         dev: "http://10.0.90.105:8080",
-        test: "http://10.0.90.105:8080",
+        test: "https://yun2.test.wkzf/amgmtbs",
         sim: "",
         prod: ""
     },
