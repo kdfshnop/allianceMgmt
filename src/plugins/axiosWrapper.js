@@ -34,7 +34,7 @@ export default {
         axios.interceptors.request.use(function(config){
             // 有时候后端需要有这个头才认为是异步请求才返回JSON格式，如果不需要可以移除这个拦截器
             console.log("config:", config);
-            return Object.assign(config, {headers: { 'X-Requested-With': 'XMLHttpRequest'}});
+            return Object.assign(config, {headers: { /*'X-Requested-With': 'XMLHttpRequest'*/}});
         });
 
         Vue.apiUrl = Vue.prototype.$apiUrl = apiUrl;

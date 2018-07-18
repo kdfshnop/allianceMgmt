@@ -19,7 +19,6 @@ import EditAgent from '@/components/agent/EditAgent';
 import FollowUp from '@/components/followUp/FollowUp';
 import AddFollowUp from '@/components/followUp/AddFollowUp';
 import FollowUpDetaile from '@/components/followUp/FollowUpDetail';
-import Privileger  from '@/plugins/privileger';
 import { getEnv } from '../utils/env';
 
 Vue.use(Router);
@@ -118,30 +117,33 @@ let router = new Router({
 });
 
 let env = getEnv();
+function reload() {
+  // parent != window && parent.location.reload();
+  console.log("reload...");
+}
 // 调用权限控制接口，判断当前用户是否可以访问该页面
 router.beforeEach((to, from, next) => {
-  // TODO: 这里需要根据当前环境来获取前缀
-  let url = Vue.apiUrl.pageUrl[env] + '/index.html/#' + to.path;// "https://yun2.test.wkzf/amgmt/index.html/#" + to.path;
-  if(url == 'https://yun2.test.wkzf/amgmt/index.html/#/companyManagement'){
-  // TODO: 发送请求，判断是否可以访问，暂定方案如果不能访问直接登出，
-  Vue.http.post(Vue.apiUrl.common.privileges, {
-    // params: {
-      urls: [url]
-    // }
-  }).then((data)=>{
-    //Privileger.setPrivileges(data.data);
 
-    let canAccess = data.data.hasAuth;  
-    if(canAccess){
-      next();    
-    }else{
-      parent != window && parent.location.reload();
-    } 
-  }); 
-}
-else {
-  next();
-}
+  Vue.http.get(Vue.apiUrl.common.wksso).then((data)=>{
+      // 根据当前环境来获取前缀
+      // let url = Vue.apiUrl.pageUrl[env] + '/index.html#' + to.path;
+      // // 发送请求，判断是否可以访问，暂定方案如果不能访问直接刷新外层
+      // Vue.http.post(Vue.apiUrl.common.privileges, {        
+      //     urls: [url]        
+      // }).then((data)=>{        
+      //   let canAccess = data.data.hasAuth;  
+      //   if(canAccess){
+      //     next();    
+      //   }else{
+      //     reload();
+      //   } 
+      // }); 
+      next();
+  }).catch((data)=>{
+    // 失败刷新一下
+    reload();
+  });
+
   // next();
 });
 export default router;
