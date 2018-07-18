@@ -4,8 +4,8 @@ import Vue from 'vue'
 import router from './router'
 import axiosWrapper from './plugins/axiosWrapper';
 import ElementUI from 'element-ui';
-import App from './App'
 import 'element-ui/lib/theme-chalk/index.css';
+import App from './App'
 import store from './store';
 import "viewerjs/dist/viewer.css"
 

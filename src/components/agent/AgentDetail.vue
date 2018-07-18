@@ -1,7 +1,8 @@
 <template>
       <el-container>
-    <el-main>                
-    <el-tabs v-model="activeName" @tab-click="handleClick">
+    <el-main>    
+    <bread-crumb :items="breadCrumb"></bread-crumb>             
+    <el-tabs v-model="activeName" @tab-click="handleClick" class="gap-2">
         <el-tab-pane label="合作资料" name="first">
             <service-staff-info></service-staff-info>
             <partner-infoes></partner-infoes>
@@ -54,6 +55,8 @@ import PaymentInfo from './_PaymentInfo';
 import Region from '@/components/common/Region';
 import {initStore} from './_Utils'; 
 import Record from '@/components/record/Record';
+import BreadCrumb from '@/components/common/BreadCrumb';
+
 export default { 
     name: "",
      components: {
@@ -73,12 +76,14 @@ export default {
       PaymentInfo,
       DividingInfo,
       Region,
-      Record
+      Record,
+      BreadCrumb
     },
     data() {
         return {
             activeName: "first",
-            agentId: this.$route.params.id
+            agentId: this.$route.params.id,
+            breadCrumb: [{text:'加盟管理'},{text: "代理商"},{text: "详情"}],
         };
     } ,
     created() {

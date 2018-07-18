@@ -16,25 +16,25 @@
             </el-form-item>
             <el-row v-show="signed">
                 <el-col :span="12">
-                    <el-form-item label="公司名">
+                    <el-form-item label="公司名" >
                         <el-input v-model="name" placeholder="请输入营业执照全名" maxlength="50"></el-input>
                     </el-form-item>                                                                         
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="公司简称">
-                        <el-input v-model="shortName"></el-input>
+                        <el-input v-model="shortName" maxlength="50"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>   
             <el-row v-show="signed">
                 <el-col :span="12">
                     <el-form-item label="营业执照号">
-                        <el-input v-model="number"></el-input>
+                        <el-input v-model="number" maxlength="50"></el-input>
                     </el-form-item>                                                                         
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="组织机构代码">
-                        <el-input v-model="code"></el-input>
+                        <el-input v-model="code" maxlength="50"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>     

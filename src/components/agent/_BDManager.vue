@@ -18,7 +18,7 @@
             <el-row>
                 <el-col :span="12">
                     <el-form-item label="姓名">                        
-                        <el-input :readonly="same" v-model="name"></el-input>
+                        <el-input :readonly="same" v-model="name" maxlength="20"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
@@ -30,7 +30,7 @@
             <el-row>
                 <el-col :span="12">
                     <el-form-item label="微信号">                        
-                        <el-input :readonly="same" v-model="wechat"></el-input>
+                        <el-input :readonly="same" v-model="wechat" maxlength="20"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">

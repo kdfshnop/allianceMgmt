@@ -1,7 +1,8 @@
 <template>
   <el-container>
-    <el-main>         
-    <el-steps align-center class="step-container" :active="active" finish-status="success">
+    <el-main>  
+    <bread-crumb :items="breadCrumb"></bread-crumb>       
+    <el-steps align-center class="step-container gap-2" :active="active" finish-status="success">
         <el-step title="合作资料"></el-step>
         <el-step title="代理区域"></el-step>
         <el-step title="代理商资料"></el-step>
@@ -69,6 +70,7 @@ import PlatformServiceFee from './_PlatformServiceFee';
 import DividingInfo from './_DividingInfo';
 import PaymentInfo from './_PaymentInfo';
 import Region from '@/components/common/Region';
+import BreadCrumb from '@/components/common/BreadCrumb';
 
 import { generateParam } from "./_Utils";
 export default {
@@ -89,10 +91,12 @@ export default {
       PlatformServiceFee,
       PaymentInfo,
       DividingInfo,
-      Region
+      Region,
+      BreadCrumb
     },
   data () {
-    return {  
+    return {          
+        breadCrumb: [{text:'加盟管理'},{text: "代理商"},{text: "添加代理商"}],
         regionData: [{
             label: "北京",
             value: "北京",
