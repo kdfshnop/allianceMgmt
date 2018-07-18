@@ -10,7 +10,7 @@
             <el-row>
                 <el-col :span="12">
                     <el-form-item label="法人姓名">
-                        <el-input v-model="name"></el-input>
+                        <el-input v-model="name" maxlength="20"></el-input>
                     </el-form-item>
                     <el-form-item label="法人手机号" prop="mobile">
                         <el-input v-model="mobile"></el-input>
@@ -41,7 +41,7 @@
                     <upload :fileList.sync="scoreFileList" v-if="mode === 'create' || mode === 'edit' && status === 'editing'"></upload>
             </el-form-item>
             <el-form-item label="备注信息">                
-                <el-input type="textarea" v-model="remark"></el-input>                   
+                <el-input type="textarea" v-model="remark" maxlength="200"></el-input>                   
             </el-form-item>
         </el-form>
 

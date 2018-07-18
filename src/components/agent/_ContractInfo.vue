@@ -18,7 +18,7 @@
                 </el-switch>
             </el-form-item>
             <el-form-item label="特殊条款">
-                <el-input type="textarea" v-model="special">
+                <el-input type="textarea" v-model="special" maxlength="1000">
                 </el-input>
             </el-form-item>
 

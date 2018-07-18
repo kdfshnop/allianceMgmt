@@ -1,7 +1,8 @@
 <template>
       <el-container>
-    <el-main>         
-    <el-tabs v-model="activeName" @tab-click="handleClick">
+    <el-main>    
+    <bread-crumb :items="breadCrumb"></bread-crumb>             
+    <el-tabs v-model="activeName" @tab-click="handleClick" class="gap-2">
         <el-tab-pane label="合作资料" name="first">
             <service-staff-info></service-staff-info>
             <partner-infoes></partner-infoes>
@@ -32,6 +33,8 @@
           <record :agencyId="agentId"></record>  
         </el-tab-pane>
     </el-tabs>
+
+    <el-button style="position: fixed; top: 20px; right: 50px" @click="back">返回</el-button>
     </el-main>
       </el-container>
 </template>
@@ -54,7 +57,9 @@ import PaymentInfo from './_PaymentInfo';
 import Region from '@/components/common/Region';
 import {initStore} from './_Utils'; 
 import Record from '@/components/record/Record';
-export default {    
+import BreadCrumb from '@/components/common/BreadCrumb';
+
+export default { 
     name: "",
      components: {
       CollapsePanel, 
@@ -73,15 +78,14 @@ export default {
       PaymentInfo,
       DividingInfo,
       Region,
-      Record
+      Record,
+      BreadCrumb
     },
     data() {
         return {
-            privilegeOption: {
-                "addBtn": "/agent/agentDetail#addBtn"
-            },
             activeName: "first",
-            agentId: this.$route.params.id
+            agentId: this.$route.params.id,
+            breadCrumb: [{text:'加盟管理'},{text: "代理商"},{text: "详情"}],
         };
     } ,
     created() {
@@ -98,6 +102,9 @@ export default {
     methods: {
          handleClick(tab, event) {
             console.log(tab, event);
+        },
+        back() {
+            history.back();
         }
     }
 }
