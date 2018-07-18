@@ -9,7 +9,7 @@
         <el-form ref="form" :model="innerItem" label-width= "180px" v-show="mode === 'create' || mode === 'edit' && status === 'editing'" :rules="rules">
             <el-row>
                 <el-col :span="12">
-                    <el-form-item label="姓名">
+                    <el-form-item label="姓名" prop="name">
                         <el-input v-model="innerItem.name"></el-input>
                     </el-form-item>
                     <el-form-item label="邮箱" prop="email">
@@ -25,7 +25,7 @@
                         <el-input v-model="innerItem.mobile"></el-input>
                     </el-form-item>
                     
-                    <el-form-item label="芝麻信用">
+                    <el-form-item label="芝麻信用" prop="credit">
                         <el-input type="number" v-model="innerItem.credit"></el-input>
                     </el-form-item>
                     
@@ -38,13 +38,13 @@
                             :value="bg.value">
                             </el-option>
                         </el-select>
-                        <el-input style="margin-top: 6px;" v-model="innerItem.backgroundRemark" v-show="innerItem.background=='5'"></el-input>
+                        <el-input style="margin-top: 6px;" :maxlength="50" v-model="innerItem.backgroundRemark" v-show="innerItem.background=='5'"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
                         
             <el-form-item v-show="mode === 'create' || mode === 'edit' && status === 'editing'" label="备注信息">
-                <el-input type="textarea" :rows="2" v-model="innerItem.remark"></el-input>
+                <el-input type="textarea" :maxlength="200" :rows="2" v-model="innerItem.remark"></el-input>
             </el-form-item>            
         </el-form>
 
@@ -128,6 +128,14 @@
                     label: "其他"
                 }],
                 rules: {
+                    credit: [{
+                        validator: Validator.credit,
+                        trigger: 'blur'
+                    }],
+                    name: [{
+                        validator: Validator.name,
+                        trigger: 'blur'
+                    }],
                     mobile: [{
                         validator: Validator.mobile,
                         trigger: 'blur'                        

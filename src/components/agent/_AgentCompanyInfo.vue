@@ -17,7 +17,7 @@
             <el-row v-show="signed">
                 <el-col :span="12">
                     <el-form-item label="公司名">
-                        <el-input v-model="name"></el-input>
+                        <el-input v-model="name" placeholder="请输入营业执照全名" maxlength="50"></el-input>
                     </el-form-item>                                                                         
                 </el-col>
                 <el-col :span="12">
