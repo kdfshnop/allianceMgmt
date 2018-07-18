@@ -32,6 +32,7 @@ export default {
         town: "/plate/list",// 板块接口
         agency: "/agency/list", //代理商列表，get
         privileges: "/base/authority", //权限, post
+        wksso: "/base/currentPerson", //
     },
     agent: {
         create: "/agency/single",// put 增

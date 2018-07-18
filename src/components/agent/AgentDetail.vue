@@ -28,7 +28,7 @@
             <dividing-info></dividing-info>            
             <payment-info></payment-info>
         </el-tab-pane>
-        <el-tab-pane label="日志" name="seventh">
+        <el-tab-pane v-show="privileges.addBtn" label="日志" name="seventh">
           <record :agencyId="agentId"></record>  
         </el-tab-pane>
     </el-tabs>
@@ -54,7 +54,9 @@ import PaymentInfo from './_PaymentInfo';
 import Region from '@/components/common/Region';
 import {initStore} from './_Utils'; 
 import Record from '@/components/record/Record';
+import PrivilegeMixin from '@/utils/privilege';
 export default {
+    mixins: [PrivilegeMixin],
     name: "",
      components: {
       CollapsePanel, 
@@ -77,6 +79,9 @@ export default {
     },
     data() {
         return {
+            privilegeOption: {
+                "addBtn": "/agent/agentDetail#addBtn"
+            },
             activeName: "first",
             agentId: this.$route.params.id
         };
