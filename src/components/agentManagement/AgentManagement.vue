@@ -107,6 +107,7 @@
                 <el-table-column prop="regionTotal" label="代理区域数量" align="center"></el-table-column>
                 <el-table-column prop="storeTotal" label="门店数量" align="center"></el-table-column>
                 <el-table-column prop="agencyStateName" label="合作状态" align="center"></el-table-column>
+                <el-table-column prop="tagsName" label="合作标签" align="center"></el-table-column>
                 <el-table-column prop="startTime" label="合作开始" align="center"></el-table-column>
                 <el-table-column prop="endTime" label="合作结束" align="center"></el-table-column>
                 <el-table-column label="操作" width="300px" align="center">
@@ -254,6 +255,8 @@ export default {
         },
         // 重置表单
         reset(){
+            // 表单重置只是重置form标签选项，而不重置data中form数据;
+            this.form.cityId=null;
             this.$refs.form.resetFields();
         },
         //根据表单信息搜索
@@ -268,7 +271,7 @@ export default {
             }
         },
         //当前页
-        handleCurrentChange() {
+        handleCurrentChange(val) {
             if(val!=this.form.currentPage){
                 this.form.currentPage=val;
                 this.requestList();

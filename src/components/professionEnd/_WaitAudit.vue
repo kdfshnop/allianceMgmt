@@ -9,7 +9,7 @@
             <el-table-column prop="operateRemark" label="终止原因" align="center"></el-table-column>
             <el-table-column label="操作" align="center">
                 <template slot-scope="scope">
-                    <el-button size="mini" @click="audit(scope.$index, scope.row)" type="text" v-show="privileges.EndJoinList">审核</el-button>
+                    <el-button size="mini" @click="audit(scope.$index, scope.row)" type="text" v-show="privileges.endJoinList">审核</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -35,7 +35,7 @@ export default {
     data(){
         return {
             privilegeOption: {
-                "EndJoinList": "/professionEndResult#EndJoinList"
+                "endJoinList": "/professionEndResult#endJoinList"
             },
             targetState:"1",//待审核
             // 分页功能

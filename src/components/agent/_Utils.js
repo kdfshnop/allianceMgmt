@@ -150,7 +150,7 @@ export function generateParam(state) {
           //backgroundRemark: partner.background == 5 && partner.backgroundRemark || '',// 背景选择其他可以手动输入
           wechat: safeGet(state, "ServiceManager.wechat"),//微信
           personType: 7,// 服务经理    
-          id: safe(state, "ServiceManager.id")
+          id: safeGet(state, "ServiceManager.id")
       });
     } else {
         agencyPersons.push({

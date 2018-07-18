@@ -210,6 +210,7 @@ export default {
             this.requestList();
         },
         resetForm(formName) {
+            this.form.cityId=null;
             this.$refs.form.resetFields();
         },
         //根据表单信息搜索
@@ -301,7 +302,6 @@ export default {
             this.$http.post(this.$apiUrl.company.list,realForm)
                 .then(function(data){
                     self.companyInfoList=data.data.data.data;
-                    console.log(data,'12成功');
                 })
                 .catch(function(err){
                     console.log(err,'失败');

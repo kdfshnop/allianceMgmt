@@ -181,6 +181,7 @@ export default {
             this.requestList();
         },
         resetForm(formName) {
+            this.form.cityId=null;
             this.$refs.form.resetFields();
         },
         //根据表单信息搜索
