@@ -27,7 +27,7 @@
             <el-dialog :title="title" :visible.sync="dialogVisible" width="30%">
                 <textarea name="" id="" style="width:100%;" rows="10" placeholder="请添加备注" v-model="remark"></textarea>
                 <span slot="footer" class="dialog-footer">
-                    <el-button @click="dialogVisible = false">取 消</el-button>
+                    <el-button @click="cancel">取 消</el-button>
                     <el-button type="primary" @click="dialogVisible = false,submit()">确 定</el-button>
                 </span>
             </el-dialog>
@@ -89,29 +89,41 @@ export default {
         handleClose(){
             history.back();
         },
+        cancel(){
+            this.dialogVisible = false;
+            this.remark="";
+        },
         submit(){
+            this.dialogVisible = false;
             let form={
                 targetId:this.targetId,
                 targetType:this.targetType,
                 remark:this.remark
             };
-            if(this.title=='驳回'){
-                this.$http.post(this.$apiUrl.professionEnd.reject,form)
-                .then(function(data){
-                    this.remark="";
-                })
-                .catch(function(err){
-                    console.log(err);
-                })
+            if(this.remark){
+                if(this.title=='驳回'){
+                    this.$http.post(this.$apiUrl.professionEnd.reject,form)
+                    .then(function(data){
+                        this.remark="";
+                    })
+                    .catch(function(err){
+                        console.log(err);
+                    })
+                }else{
+                    this.$http.post(this.$apiUrl.professionEnd.adopt,form)
+                    .then(function(data){
+                        this.remark="";
+                    })
+                    .catch(function(err){
+                        console.log(err);
+                    })
+                } 
             }else{
-                this.$http.post(this.$apiUrl.professionEnd.adopt,form)
-                .then(function(data){
-                    this.remark="";
-                })
-                .catch(function(err){
-                    console.log(err);
-                })
-            }  
+                this.$message({
+                    message: '请填写原因',
+                    type: 'warning'
+                });
+            }; 
         }
     }
 }

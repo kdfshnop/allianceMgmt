@@ -1,6 +1,6 @@
 <template>
-    <el-dialog title="设置分佣账户" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
-        <el-form :model="form" :rules="rules"  ref="form" label-width="110px" class="demo-form">
+    <el-dialog title="设置分佣账户" :visible.sync="dialogVisible" width="50%" :before-close="handleClose">
+        <el-form :model="form" ref="form" label-width="110px" class="demo-form">
             <el-row>
                 <el-col :span="12">
                     <el-form-item label="开户银行类型" prop="openBankType" class="tl">
@@ -57,32 +57,25 @@ export default {
     methods:{
         submitForm() {
             let self=this;
-            this.$refs.form.validate((valid) => {
-                if (valid) {
-                    let realForm={};
-                    realForm.bankAccount=this.form.bankAccount;
-                    realForm.openBankType=this.form.openBankType;
-                    realForm.accountName=this.form.accountName;
-                    realForm.openBankBranch=this.form.openBankBranch;
-                    realForm.companyId=this.companyId;
-                    this.dialogVisible=false;
-                    // 获取输入的表单信息,以及该公司的标识如公司Id;
-                    this.$http.post(this.$apiUrl.company.commission,realForm)
-                        .then(function(data){
-                            alert('提交成功');
-                            console.log(data,'成功');
-                            self.$refs.form.resetFields();
-                        })
-                        .catch(function(err){
-                            console.log(err,'失败');
-                        });
-                    // 提交成功后重置
-                    // this.$refs.form.resetFields();
-                } else {
-                    alert('请填写必填信息')
-                    return false;
-                }
-            });
+            // let realForm={};
+            // realForm.bankAccount=this.form.bankAccount;
+            // realForm.openBankType=this.form.openBankType;
+            // realForm.accountName=this.form.accountName;
+            // realForm.openBankBranch=this.form.openBankBranch;
+            self.form.companyId=this.companyId;
+            // 获取输入的表单信息,以及该公司的标识如公司Id;
+            this.$http.post(this.$apiUrl.company.commission,self.form)
+                .then(function(data){
+                    self.$message({
+                        message: '成功',
+                        type: 'success'
+                    });
+                    self.$refs.form.resetFields();
+                    self.dialogVisible=false;
+                })
+                .catch(function(err){
+                    console.log(err,'失败');
+                });    
         },
         resetForm() {
             this.$refs.form.resetFields();

@@ -11,7 +11,7 @@
             <bread-crumb :items="breadCrumb"></bread-crumb>
             <div style="text-align:right;margin-bottom:20px;">
                 <el-button type="primary" @click="goBack">返回</el-button>
-                <el-button type="primary" @click="addFollowUp">+添加跟进</el-button>
+                <el-button type="primary" @click="addFollowUp" v-show="privileges.addFollowUp">+添加跟进</el-button>
             </div>
             <el-table :data="apiData" border style="width: 100%">
                 <el-table-column prop="createTime" label="创建时间" align="center"></el-table-column>
@@ -29,11 +29,16 @@
 
 <script>
 import BreadCrumb from '@/components/common/BreadCrumb';
+import PrivilegeMixin from '@/utils/privilege';
 export default {
     name:"FollowUp",
     components:{BreadCrumb},
+    mixins: [PrivilegeMixin],
     data(){
         return {
+            privilegeOption:{//权限控制
+                "addFollowUp": "/followUp#addFollowUp"//添加跟进
+            },
             breadCrumb:[{text:'加盟管理'},{text:'代理商'},{text:'跟进'}],
             agencyId:this.$route.query.agencyId,
             apiData:[]

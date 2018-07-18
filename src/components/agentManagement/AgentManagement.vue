@@ -10,7 +10,7 @@
         <el-main>    
             <bread-crumb :items="breadCrumb"></bread-crumb>
             <div style="text-align:right;">
-                <el-button type="primary" @click="addAgent">添加代理商</el-button>
+                <el-button type="primary" @click="addAgent" v-show="privileges.addAgent">添加代理商</el-button>
             </div>     
             <el-form ref="form" :model="form" label-width="180px" class="gap" label-position="right">
                 <el-row>
@@ -121,12 +121,12 @@
                         <el-dropdown v-if="scope.row.agencyState!=2"trigger="click">
                             <span class="el-dropdown-link" style="color:#409EFF;font-size:12px;">更多<i class="el-icon-arrow-down el-icon--right"></i></span>
                             <el-dropdown-menu slot="dropdown" >
-                                <el-dropdown-item @click.native="edit(scope.$index,scope.row)" v-if="scope.row.agencyState!=1">编辑</el-dropdown-item>
-                                <el-dropdown-item @click.native="followUp(scope.$index,scope.row)">跟进</el-dropdown-item>
-                                <el-dropdown-item @click.native="endJoin(scope.$index,scope.row)" v-if="scope.row.agencyState==4">终止合作</el-dropdown-item>
+                                <el-dropdown-item @click.native="edit(scope.$index,scope.row)" v-if="scope.row.agencyState!=1&&privileges.agentEdit">编辑</el-dropdown-item>
+                                <el-dropdown-item @click.native="followUp(scope.$index,scope.row)" v-show="privileges.followUp">跟进</el-dropdown-item>
+                                <el-dropdown-item @click.native="endJoin(scope.$index,scope.row)" v-if="scope.row.agencyState==4&&privileges.agentEndJoin">终止合作</el-dropdown-item>
                             </el-dropdown-menu>
                         </el-dropdown>
-                        <el-button v-if="scope.row.agencyState==2" size="mini" @click="reSubmit(scope.$index, scope.row)" type="text">重新提交</el-button>
+                        <el-button v-if="scope.row.agencyState==2&&privileges.resubmit" size="mini" @click="reSubmit(scope.$index, scope.row)" type="text">重新提交</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -163,12 +163,21 @@
 <script>
 import BreadCrumb from '@/components/common/BreadCrumb';
 import Region from '@/components/common/Region';
+import PrivilegeMixin from '@/utils/privilege';
 
 export default {
     name: 'AgentManagement',
     components:{BreadCrumb,Region},
+    mixins: [PrivilegeMixin],
     data () {
         return {
+            privilegeOption: {//权限控制
+                "addAgent": "/agentManagement#addAgent",//添加代理商
+                "followUp": "/agentManagement#followUp",//跟进
+                "resubmit": "/agentManagement#resubmit",//重新提交
+                "agentEdit": "/agentManagement#agentEdit",//编辑
+                "agentEndJoin": "/agentManagement#agentEndJoin"//终止合作
+            },
             agencyInfo:{},//代理商信息
             agencySotre:'',//该代理商旗下有多少家门店
             breadCrumb: [{text:'加盟管理'},{text: "代理商管理"}],//面包屑
