@@ -257,6 +257,7 @@ export default {
         reset(){
             // 表单重置只是重置form标签选项，而不重置data中form数据;
             this.form.cityId=null;
+            this.form.cityList=[];
             this.$refs.form.resetFields();
         },
         //根据表单信息搜索

@@ -139,6 +139,7 @@ export default {
             },
             // 必填设置
             rules: {
+                businessType: [{ required: true, message: '请输入业务', trigger: 'blur' }],
                 name: [{ required: true, message: '请输入公司名称', trigger: 'blur' }],
                 abbreviation: [{ required: true, message: '请输入公司简称', trigger: 'blur' }],
                 cityList: [{ required: true, message: '请输入城市', trigger: 'blur' }],

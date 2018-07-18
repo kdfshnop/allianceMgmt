@@ -129,17 +129,16 @@
                 <p>2、终止合作门店下的经纪人账号将会被冻结</p>
                 <p>3、公司和门店被停止合作后将无法重新再被恢复</p>
                 <span slot="footer" class="dialog-footer">
-                    <el-button type="primary" @click="firstDialogVisible = false,secondDialogVisible = true">以了解风险，下一步</el-button>
+                    <el-button type="primary" @click="firstDialogVisible = false,secondDialogVisible = true,prmpt()">以了解风险，下一步</el-button>
                 </span>
             </el-dialog>
-            <el-dialog title="终止公司合作" :visible.sync="secondDialogVisible" width="30%" >
-                <!--<textarea name="" id="" rows="10" placeholder="请添加终止合作原因" v-model="remark" style="width:100%;"></textarea>-->
-                <el-input type="textarea" autosize placeholder="请添加终止合作原因" v-model="remark" maxlength="200"></el-input>
+            <!--<el-dialog title="终止公司合作" :visible.sync="secondDialogVisible" width="30%" >
+                <el-input type="textarea" rows="10" placeholder="请添加终止合作原因" v-model="remark" maxlength="200"></el-input>
                 <span slot="footer" class="dialog-footer">
                     <el-button @click="continueJoin">取 消</el-button>
                     <el-button type="primary" @click="endJoin" >确 定</el-button>
                 </span>
-            </el-dialog>
+            </el-dialog>-->
             <!--编辑公司组件-->
             <editor-company ref="editor" :companyId="companyId" :title="title" @editSuccess='editSuccess' @addSuccess='addSuccess'></editor-company>
             <!--分佣账号组件-->
@@ -201,6 +200,9 @@ export default {
         this.requestList();
     },
     methods:{
+        prompt(){
+            
+        },
         // 子组件添加公司成功之后，传递给父组件的值;
         addSuccess(addInfo){
             // 第一种再次发送请求，同时表单查询重置;
@@ -211,6 +213,7 @@ export default {
         },
         resetForm(formName) {
             this.form.cityId=null;
+            this.form.cityList=[];
             this.$refs.form.resetFields();
         },
         //根据表单信息搜索

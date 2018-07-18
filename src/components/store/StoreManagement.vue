@@ -182,6 +182,7 @@ export default {
         },
         resetForm(formName) {
             this.form.cityId=null;
+            this.form.cityList=[];
             this.$refs.form.resetFields();
         },
         //根据表单信息搜索

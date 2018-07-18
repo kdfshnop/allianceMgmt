@@ -118,14 +118,19 @@ export default {
                 remark:this.remark
             };
             if(this.title=='驳回'){
-                this.$http.post(this.$apiUrl.professionAudit.reject,form)
-                .then(function(data){
-                    console.log('驳回');
-                    this.remark="";
-                })
-                .catch(function(err){
-                    console.log(err);
-                })
+                if(this.remark){
+                    this.$http.post(this.$apiUrl.professionAudit.reject,form)
+                        .then(function(data){
+                            console.log('驳回');
+                            this.remark="";
+                        })
+                        .catch(function(err){
+                            console.log(err);
+                        })
+                }else{
+                    this.$message.error('请填写驳回原因');
+                }
+                
             }else{
                 this.$http.post(this.$apiUrl.professionAudit.pass,form)
                 .then(function(data){

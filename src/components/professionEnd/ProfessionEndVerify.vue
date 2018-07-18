@@ -100,15 +100,19 @@ export default {
                 targetType:this.targetType,
                 remark:this.remark
             };
-            if(this.remark){
                 if(this.title=='驳回'){
-                    this.$http.post(this.$apiUrl.professionEnd.reject,form)
-                    .then(function(data){
-                        this.remark="";
-                    })
-                    .catch(function(err){
-                        console.log(err);
-                    })
+                    if(this.remark){
+                        this.$http.post(this.$apiUrl.professionEnd.reject,form)
+                            .then(function(data){
+                                this.remark="";
+                            })
+                            .catch(function(err){
+                                console.log(err);
+                            });
+                    }else{
+                        this.$message.error('请填写驳回原因');
+                    }
+                    
                 }else{
                     this.$http.post(this.$apiUrl.professionEnd.adopt,form)
                     .then(function(data){
@@ -117,13 +121,7 @@ export default {
                     .catch(function(err){
                         console.log(err);
                     })
-                } 
-            }else{
-                this.$message({
-                    message: '请填写原因',
-                    type: 'warning'
-                });
-            }; 
+                };  
         }
     }
 }
