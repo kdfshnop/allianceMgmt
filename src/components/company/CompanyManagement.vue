@@ -18,7 +18,7 @@
                         <el-form-item label="公司所属城市" prop="cityList">
                             <region v-model="form.cityList" :startLevel="startLevel" :endLevel="endLevel"></region>
                         </el-form-item>
-                        <el-form-item label="合作时间" prop="cooperationTime">
+                        <el-form-item label="创建时间" prop="cooperationTime">
                             <el-date-picker
                                 v-model="form.cooperationTime"
                                 type="daterange"
@@ -133,7 +133,8 @@
                 </span>
             </el-dialog>
             <el-dialog title="终止公司合作" :visible.sync="secondDialogVisible" width="30%" >
-                <textarea name="" id="" rows="10" placeholder="请添加终止合作原因" v-model="remark" style="width:100%;"></textarea>
+                <!--<textarea name="" id="" rows="10" placeholder="请添加终止合作原因" v-model="remark" style="width:100%;"></textarea>-->
+                <el-input type="textarea" autosize placeholder="请添加终止合作原因" v-model="remark" maxlength="200"></el-input>
                 <span slot="footer" class="dialog-footer">
                     <el-button @click="continueJoin">取 消</el-button>
                     <el-button type="primary" @click="endJoin" >确 定</el-button>
@@ -258,13 +259,20 @@ export default {
         //确定终止合作,第二次弹框
         endJoin(){
             this.secondDialogVisible = false;
-            this.$http.post(this.$apiUrl.company.terminate+"/"+this.companyId+"?remark="+this.remark)
+            if(this.remark){
+                this.$http.post(this.$apiUrl.company.terminate+"/"+this.companyId+"?remark="+this.remark)
                 .then(function(data){
                     console.log(data,'终止成功');
                 })
                 .catch(function(err){
                     console.log(err);
                 });
+            }else{
+                this.$message({
+                    message: '请填写终止合作原因',
+                    type: 'warning'
+                });
+            }  
         },
         //点击二次对话框取消按钮，继续合作
         continueJoin(){
