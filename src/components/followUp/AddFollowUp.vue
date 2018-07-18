@@ -17,6 +17,7 @@
                 </div>
             </div>
             <div style="text-align:center;margin-top:40px;">
+                <el-button type="primary" @click="cancel" style="margin-right:20px;">取消</el-button>
                 <el-button type="primary" @click="submit">提交</el-button>
             </div>
         </el-main>
@@ -45,10 +46,11 @@ export default {
         }
     },
     methods:{
+        cancel(){
+            history.back();
+        },
         submit(){
             let self=this;
-            console.log(this.message,2222222)
-            console.log(this.file.length,1234555555)
             if(this.file.length){
                 this.form={
                     agencyId:this.agencyId,
