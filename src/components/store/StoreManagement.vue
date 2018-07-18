@@ -10,7 +10,7 @@
         <el-main>    
             <bread-crumb :items="breadCrumb"></bread-crumb> 
             <div style="text-align:right;">
-                <el-button type="primary" @click="addStore">+新增门店</el-button>
+                <el-button type="primary" @click="addStore" v-show="privileges.addStore">+新增门店</el-button>
             </div>      
             <el-form ref="form" :model="form" label-width="180px" class="gap">
                 <el-row >
@@ -72,9 +72,9 @@
                 <el-table-column prop="createTime" label="创建时间" align="center"></el-table-column>
                 <el-table-column label="操作" width="300px" align="center">
                     <template slot-scope="scope">
-                        <el-button size="mini" @click="editStore(scope.$index, scope.row)" type="text">编辑 </el-button>
+                        <el-button size="mini" @click="editStore(scope.$index, scope.row)" type="text" v-show="privileges.storeEdit">编辑 </el-button>
                         <el-button size="mini" @click="qrCode(scope.$index, scope.row)" type="text">二维码 </el-button>
-                        <el-button size="mini"  type="text" @click="handleEnd(scope.$index, scope.row)">终止合作</el-button>
+                        <el-button size="mini"  type="text" @click="handleEnd(scope.$index, scope.row)" v-show="privileges.storeEndJoin">终止合作</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -120,12 +120,19 @@
 import BreadCrumb from '@/components/common/BreadCrumb';
 import EditorStore from '@/components/store/_EditorStore';
 import Region from '@/components/common/Region';
+import PrivilegeMixin from '@/utils/privilege';
 
 export default {
     name: 'StoreManagement',
     components:{BreadCrumb,EditorStore,Region},
+    mixins: [PrivilegeMixin],
     data () {
         return {
+            privilegeOption:{//权限控制
+                "addStore": "/storeManagement#addStore",//添加门店
+                "storeEdit": "/storeManagement#storeEdit",//编辑门店
+                "storeEndJoin": "/storeManagement#storeEndJoin"//终止合作
+            },
             breadCrumb: [{text:'加盟管理'},{text: "门店管理"}],
             startLevel:1,//二级联动城市传参
             endLevel:2,//二级联动城市传参

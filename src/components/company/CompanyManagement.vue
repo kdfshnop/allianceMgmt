@@ -10,7 +10,7 @@
         <el-main>    
             <bread-crumb :items="breadCrumb"></bread-crumb>
             <div style="text-align:right;">
-                <el-button type="primary" @click="addCompany">+增加公司</el-button>
+                <el-button type="primary" @click="addCompany" v-show="privileges.addCompany">+增加公司</el-button>
             </div>     
             <el-form ref="form" :model="form" label-width="180px" class="gap" label-position="right">
                 <el-row>
@@ -106,9 +106,9 @@
                 <el-table-column prop="creater" label="创建人" align="center"></el-table-column>
                 <el-table-column prop="name" label="操作" width="300px" align="center">
                     <template slot-scope="scope">
-                        <el-button size="mini" @click="editorCompany(scope.$index, scope.row)" type="text">编辑 </el-button>
-                        <el-button size="mini" @click="bankAccount(scope.$index, scope.row)" type="text">分佣账号设置 </el-button>
-                        <el-button size="mini"  type="text" @click="handleEnd(scope.$index, scope.row)">终止合作</el-button>
+                        <el-button size="mini" @click="editorCompany(scope.$index, scope.row)" type="text" v-show="privileges.companyEdit">编辑 </el-button>
+                        <el-button size="mini" @click="bankAccount(scope.$index, scope.row)" type="text" v-show="privileges.comnAccSet">分佣账号设置 </el-button>
+                        <el-button size="mini"  type="text" @click="handleEnd(scope.$index, scope.row)" v-show="privileges.companyEndJoin">终止合作</el-button>
                     </template>
                 </el-table-column>
                 <el-table-column prop="storeNum" label="门店" align="center"></el-table-column>
@@ -153,12 +153,20 @@ import EditorCompany from '@/components/company/_EditorCompany';
 import Commission from '@/components/company/_Commission';
 import BreadCrumb from '@/components/common/BreadCrumb';
 import Region from '@/components/common/Region';
+import PrivilegeMixin from '@/utils/privilege';
 
 export default {
     name: 'CompanyManagement',
     components:{EditorCompany,Commission,BreadCrumb,Region},
+    mixins: [PrivilegeMixin],
     data () {
         return {
+            privilegeOption:{//权限控制
+                "addCompany": "/companyManagement#addCompany",//添加公司
+                "companyEdit": "/companyManagement#companyEdit",//编辑公司
+                "comnAccSet": "/companyManagement#comnAccSet",//分佣账号
+                "companyEndJoin": "/companyManagement#companyEndJoin"//终止合作
+            },
             breadCrumb: [{text:'加盟管理'},{text: "公司管理"}],//面包屑
             companyId:'',//公司Id;
             companyInfoList:[],//公司列表信息

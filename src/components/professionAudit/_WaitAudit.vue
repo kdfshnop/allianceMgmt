@@ -13,7 +13,7 @@
             <el-table-column prop="auditTime" label="提交时间" align="center"></el-table-column>
             <el-table-column label="操作" align="center">
                 <template slot-scope="scope">
-                    <el-button size="mini" @click="audit(scope.$index, scope.row)" type="text">审核</el-button>
+                    <el-button size="mini" @click="audit(scope.$index, scope.row)" type="text" v-show="privileges.agentAgainAudit">审核</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -32,10 +32,16 @@
 </template>
 
 <script>
+import PrivilegeMixin from '@/utils/privilege';
+
 export default {
     name:'waitAudit',
+    mixins: [PrivilegeMixin],
     data(){
         return {
+            privilegeOption: {//权限控制
+                "agentAgainAudit": "/professionAuditResult#agentAgainAudit"
+            },
             // 分页功能
             pagination:{
                 currentPage:1,//默认当前页为1;
