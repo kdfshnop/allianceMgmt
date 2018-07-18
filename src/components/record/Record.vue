@@ -49,7 +49,7 @@ export default {
 }
 </script>
 
-<style lang="css">
+<style lang="css" scoped>
 .demo-table-expand {
    font-size: 0;
 }

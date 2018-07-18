@@ -60,12 +60,12 @@
                                 </el-form-item>
                             </el-col>
                             <el-col :span="12" v-if="form.searchType==1">
-                                <el-form-item prop="searchDay" class="expire">
+                                <el-form-item prop="searchDay" class="expire" label-width="0">
                                     <el-input v-model="form.searchDay" placeholder="请输入整数"></el-input>
                                 </el-form-item>
                             </el-col>
                             <el-col :span="12" v-if="form.searchType==2">
-                                <el-form-item prop="searchDate" class="expire">
+                                <el-form-item prop="searchDate" class="expire" label-width="0">
                                     <el-date-picker
                                         format="yyyy-MM-dd"
                                         v-model="form.timeStart"
@@ -311,7 +311,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
     .el-select{
         width:100%;
     }
@@ -335,9 +335,6 @@ export default {
     }
     .cz{
         margin-top: 10px;
-    }
-    .expire .el-form-item__content{
-        margin-left: 0 !important;
     }
 </style>
 

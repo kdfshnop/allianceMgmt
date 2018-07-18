@@ -106,8 +106,8 @@
                 <el-table-column prop="creater" label="创建人" align="center"></el-table-column>
                 <el-table-column prop="name" label="操作" width="300px" align="center">
                     <template slot-scope="scope">
-                        <el-button size="mini" @click="editorCompany(scope.$index, scope.row)" type="text">编辑|</el-button>
-                        <el-button size="mini" @click="bankAccount(scope.$index, scope.row)" type="text">分佣账号设置|</el-button>
+                        <el-button size="mini" @click="editorCompany(scope.$index, scope.row)" type="text">编辑 </el-button>
+                        <el-button size="mini" @click="bankAccount(scope.$index, scope.row)" type="text">分佣账号设置 </el-button>
                         <el-button size="mini"  type="text" @click="handleEnd(scope.$index, scope.row)">终止合作</el-button>
                     </template>
                 </el-table-column>
