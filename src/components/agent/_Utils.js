@@ -423,6 +423,22 @@ export function generateParam(state) {
 
 // 用于表单验证的函数集合
 export let Validator = {
+    name(url, value, callback) {
+        // 只能是汉字字母数字
+        if(value == '' || value == null) {
+            callback();
+            return;
+        }
+
+        let reg = /^[0-9a-zA-Z\u4e00-\u9fa5]*$/;
+    
+        if(reg.test(value)) {
+            callback();
+        } else {
+            callback(new Error('只能是汉字字母和数字!'));
+        }
+    },
+
     mobile(rule, value, callback) {
         if(value == '' || value == null) {
             callback();
@@ -448,6 +464,19 @@ export let Validator = {
 
         if(value.length != 15 && value.length != 18) {
             callback(new Error('请输入正确的身份证号'));
+        } else {
+            callback();
+        }
+    },
+    
+    credit(rule, value, callback) {
+        if(value == '' || value == null ) {
+            callback();
+            return;
+        }
+
+        if(value.length > 4 || value > 9999) {
+            callback(new Error('最多4个数字!'));
         } else {
             callback();
         }

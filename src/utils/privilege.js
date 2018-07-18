@@ -23,20 +23,25 @@ export default {
             let mapping = {
 
             };// 快速反查url对应的key
+            let privileges = {
+
+            };
             for(let key in this.privilegeOption) {
                 urls.push(this.privilegeOption[key]);
-                this.privileges[key] = false;// 默认值都是false
+                privileges[key] = false;// 默认值都是false
                 mapping[this.privilegeOption[key]] = key;
             }
             Vue.http.post(Vue.apiUrl.common.privileges, {        
-                urls: [url]        
+                urls        
             }).then((data)=>{
                 if(data.data.data) {
                     let key;
                     for(let d of data.data.data) {
                         key = mapping[d.url];
-                        this.privileges[key] = !!d.hasAuth;
+                        privileges[key] = !!d.hasAuth;
                     }
+
+                    this.privileges = privileges;
                 }
             });
         }

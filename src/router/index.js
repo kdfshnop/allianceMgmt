@@ -118,8 +118,8 @@ let router = new Router({
 
 let env = getEnv();
 function reload() {
-  // parent != window && parent.location.reload();
-  console.log("reload...");
+  parent != window && parent.location.reload();
+  // console.log("reload...");
 }
 // 调用权限控制接口，判断当前用户是否可以访问该页面
 router.beforeEach((to, from, next) => {
