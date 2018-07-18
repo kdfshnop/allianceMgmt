@@ -1,6 +1,6 @@
 <template>
       <el-container>
-    <el-main>         
+    <el-main>                
     <el-tabs v-model="activeName" @tab-click="handleClick">
         <el-tab-pane label="合作资料" name="first">
             <service-staff-info></service-staff-info>
@@ -54,7 +54,7 @@ import PaymentInfo from './_PaymentInfo';
 import Region from '@/components/common/Region';
 import {initStore} from './_Utils'; 
 import Record from '@/components/record/Record';
-export default {    
+export default { 
     name: "",
      components: {
       CollapsePanel, 
@@ -77,9 +77,6 @@ export default {
     },
     data() {
         return {
-            privilegeOption: {
-                "addBtn": "/agent/agentDetail#addBtn"
-            },
             activeName: "first",
             agentId: this.$route.params.id
         };
