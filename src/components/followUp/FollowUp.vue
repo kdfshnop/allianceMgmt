@@ -57,7 +57,8 @@ export default {
             this.$router.push({name:'FollowUpDetail',query:{id:row.id}});
         },
         goBack(){
-            history.back();
+            this.$router.push({path:"/agentManagement"});
+            // history.back();
         }
     }
 }
