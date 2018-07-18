@@ -189,7 +189,8 @@ export default {
         });        
     },
     handleClose() {
-        alert("关闭");
+        // alert("关闭");
+        history.back();
     }      
   },
   created() {      

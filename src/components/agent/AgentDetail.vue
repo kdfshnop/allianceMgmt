@@ -33,6 +33,8 @@
           <record :agencyId="agentId"></record>  
         </el-tab-pane>
     </el-tabs>
+
+    <el-button style="position: fixed; top: 20px; right: 50px" @click="back">返回</el-button>
     </el-main>
       </el-container>
 </template>
@@ -100,6 +102,9 @@ export default {
     methods: {
          handleClick(tab, event) {
             console.log(tab, event);
+        },
+        back() {
+            history.back();
         }
     }
 }
