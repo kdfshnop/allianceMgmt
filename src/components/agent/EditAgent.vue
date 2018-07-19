@@ -126,21 +126,18 @@ export default {
             }).then(({ value }) => { 
                 this.$store.commit("AgentBasicInfo/updateRemark", value);
                 let param = generateParam(this.$store.state);
-                this.$http.post(this.$apiUrl.agent.edit, param).then((data)=>{                    
+                this.$http.post(this.$apiUrl.agent.edit, param).then((data)=>{  
+                    if(data.data.status == 1) {
+                        this.$message({
+                            type: 'success',
+                            message: '提交成功!',
+                            onClose: function() {
+                                history.back();
+                            }
+                        });
+                    }                  
                     console.log(data);
-                }); 
-                // TODO: 接口调试              
-                // this.$http.post(this.$apiUrl.materialVerify.reject).then(()=>{
-                //     this.$message({
-                //         type: 'success',
-                //         message: '拒绝成功'
-                //     });
-                // }).catch(()=>{
-                //     this.$message({
-                //         type: 'error',
-                //         message: '拒绝失败'
-                //     });
-                // });;
+                });                 
             });
         }
     }
