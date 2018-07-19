@@ -28,7 +28,7 @@ export default {
             };
             for(let key in this.privilegeOption) {
                 urls.push(this.privilegeOption[key]);
-                privileges[key] = true;// 默认值都是false，、、如果本地测试改为true,否则为fasle
+                privileges[key] = false;// 默认值都是false，、、如果本地测试改为true,否则为fasle
                 mapping[this.privilegeOption[key]] = key;
             }
             Vue.http.post(Vue.apiUrl.common.privileges, {        
