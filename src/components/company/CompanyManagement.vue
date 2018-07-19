@@ -49,7 +49,7 @@
                         <el-row>
                             <el-col :span="12">
                                 <el-form-item label="到期查询" prop="searchType">
-                                    <el-select v-model="form.searchType" filterable>
+                                    <el-select v-model="form.searchType" filterable @change="searchType">
                                         <el-option label="请选择查询方式" value="0"></el-option>
                                         <el-option label="按即将到期天数查询" value="1"></el-option>
                                         <el-option label="按合作结束日期查询" value="2"></el-option>
@@ -62,7 +62,7 @@
                                 </el-form-item>
                             </el-col>
                             <el-col :span="12" v-if="form.searchType==2">
-                                <el-form-item prop="searchDate" label-width="0" >
+                                <el-form-item prop="searchDate" label-width="0">
                                     <el-date-picker
                                         format="yyyy-MM-dd"
                                         v-model="form.timeStart"
@@ -129,16 +129,9 @@
                 <p>2、终止合作门店下的经纪人账号将会被冻结</p>
                 <p>3、公司和门店被停止合作后将无法重新再被恢复</p>
                 <span slot="footer" class="dialog-footer">
-                    <el-button type="primary" @click="firstDialogVisible = false,secondDialogVisible = true,prmpt()">以了解风险，下一步</el-button>
+                    <el-button type="primary" @click="prompt">以了解风险，下一步</el-button>
                 </span>
             </el-dialog>
-            <!--<el-dialog title="终止公司合作" :visible.sync="secondDialogVisible" width="30%" >
-                <el-input type="textarea" rows="10" placeholder="请添加终止合作原因" v-model="remark" maxlength="200"></el-input>
-                <span slot="footer" class="dialog-footer">
-                    <el-button @click="continueJoin">取 消</el-button>
-                    <el-button type="primary" @click="endJoin" >确 定</el-button>
-                </span>
-            </el-dialog>-->
             <!--编辑公司组件-->
             <editor-company ref="editor" :companyId="companyId" :title="title" @editSuccess='editSuccess' @addSuccess='addSuccess'></editor-company>
             <!--分佣账号组件-->
@@ -173,9 +166,7 @@ export default {
             currentCompanyInfo:'',//当前编辑的公司信息
             endLevel:2,//二级联动城市传参
             firstDialogVisible: false,//第一个终止合作弹出框
-            remark:'',//终止合作原因
             startLevel:1,//二级联动城市传参
-            secondDialogVisible:false,//第二个终止合作弹出框
             summary:{},//summary信息
             title:'',//判断是编辑公司还是添加公司
             // 表单查询信息
@@ -200,8 +191,55 @@ export default {
         this.requestList();
     },
     methods:{
+        // prompt弹框;
         prompt(){
-            
+            let self=this;
+            self.firstDialogVisible = false ;
+            this.$prompt('', '终止公司合作', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消', 
+                inputType: "textarea",  
+                inputPlaceholder: "请添加终止合作原因", 
+                customClass: 'end-join', 
+                inputValidator: function(val){
+                    if(val&&val.length > 200) {
+                        return "最多输入200个字符";
+                    }else if(!val){
+                        return "请填写终止合作原因";
+                    }else{
+                        return true;
+                    }  
+                }   
+            }).then(({ value }) => {                                
+                if(value){
+                    this.$http.post(this.$apiUrl.company.terminate+"/"+this.companyId+"?remark="+value)
+                    .then(function(data){
+                        self.$message({
+                            message: '提交成功',
+                            type: 'success'
+                        });
+                    })
+                    .catch(function(err){
+                        self.$message({
+                            message: '提交失败',
+                            type: 'error'
+                        });
+                    });
+                }else{
+                    self.$message({
+                        message: '请填写终止合作原因',
+                        type: 'warning'
+                    });
+                }
+            });
+        },
+        // searchType查询默认
+        searchType(){
+            console.log(11111111111,this.form.searchType,2222222)
+            if(this.form.searchType==1){
+                console.log(222222222222222)
+                this.form.searchDay=15;
+            }
         },
         // 子组件添加公司成功之后，传递给父组件的值;
         addSuccess(addInfo){
@@ -254,7 +292,6 @@ export default {
         },
         // 子组件编辑成功之后，传递给父组件的值;
         editSuccess(editInfo){
-            // this.companyInfoList.splice(this.companyInfoIndex,1,editInfo);
             this.requestList();
         },
         //分佣账号设置 
@@ -266,30 +303,6 @@ export default {
         handleEnd(index,row){
             this.firstDialogVisible = true,
             this.companyId=row.companyId;
-            this.remark='';
-        },
-        //确定终止合作,第二次弹框
-        endJoin(){
-            this.secondDialogVisible = false;
-            if(this.remark){
-                this.$http.post(this.$apiUrl.company.terminate+"/"+this.companyId+"?remark="+this.remark)
-                .then(function(data){
-                    console.log(data,'终止成功');
-                })
-                .catch(function(err){
-                    console.log(err);
-                });
-            }else{
-                this.$message({
-                    message: '请填写终止合作原因',
-                    type: 'warning'
-                });
-            }  
-        },
-        //点击二次对话框取消按钮，继续合作
-        continueJoin(){
-            this.secondDialogVisible = false;
-            this.remark='';
         },
         // 列表信息请求公共函数
         requestList(){
@@ -348,5 +361,13 @@ export default {
         text-align: right;
     }
 </style>
+
+<style>
+    /*scoped会影响prompt框的样式*/
+    .end-join textarea{
+        height:100px;
+    }
+</style>
+
 
 

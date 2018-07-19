@@ -1,8 +1,8 @@
 export default {
     baseUrl: {// 接口的基地址
         // dev: "http://rap2api.taobao.org/app/mock/17025",
-        dev: "https://10.0.18.79:8125",
-        // dev: "http://10.0.90.105:8080",
+        // dev: "https://10.0.18.79:8125",
+        dev: "http://10.0.90.105:8080",
         test: "https://yun2.test.wkzf/amgmtbs",
         sim: "https://yun2.sim.wkzf/amgmtbs",
         prod: "https://yun2.wkzf.com/amgmtbs"

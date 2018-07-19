@@ -155,6 +155,10 @@ export default {
         margin-top: 100px;
         text-align: center;
     }
+    .search-result{
+        margin-top: 50px;
+        margin-bottom: 20px;
+    }
 </style>
 
 

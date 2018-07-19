@@ -11,7 +11,7 @@
             <bread-crumb :items="breadCrumb"></bread-crumb>
             <div class="gap">
                 <div>跟进信息：</div>
-                <el-input type="textarea" v-model="message" rows="10" placeholder="请输入跟进信息"></el-input>
+                <el-input type="textarea" v-model="message" rows="10" placeholder="请输入跟进信息(不超过1000字)" maxlength="1000"></el-input>
                 <div class="gap-2">
                     <upload :fileList.sync='file' :limit="1"></upload>
                 </div>

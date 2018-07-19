@@ -88,8 +88,7 @@ export default {
         margin:0;
     }
     .tabs{
-        margin-top: 20px;
-        margin-left: 50px;
+        margin:20px 0 50px 50px;
     }
     .tabs div{
         border: 1px solid black;

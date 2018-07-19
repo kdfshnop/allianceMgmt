@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="search-result" >共搜索到{{pagination.total}}条数据</div>
+        <div class="search-result" style="margin-bottom:20px;" >共搜索到{{pagination.total}}条数据</div>
         <el-table :data="waitAuditList" border style="width: 100%">
             <el-table-column prop="targetName" label="名称" align="center" ></el-table-column>
             <el-table-column prop="targetTypeName" label="类型" align="center" ></el-table-column>
