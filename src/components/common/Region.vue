@@ -210,6 +210,7 @@ export default {
                      break;
                  }
              }
+             val.push(label);
              val.label = label;
              console.log('val: ', val);
              this.innerValue = val;
