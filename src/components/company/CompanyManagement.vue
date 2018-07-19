@@ -65,7 +65,7 @@
                                 <el-form-item prop="searchDate" label-width="0">
                                     <el-date-picker
                                         format="yyyy-MM-dd"
-                                        v-model="form.timeStart"
+                                        v-model="form.searchDate"
                                         style="width:100%;"
                                         type="date"
                                         placeholder="选择日期"
@@ -235,11 +235,28 @@ export default {
         },
         // searchType查询默认
         searchType(){
-            console.log(11111111111,this.form.searchType,2222222)
             if(this.form.searchType==1){
-                console.log(222222222222222)
-                this.form.searchDay=15;
+                this.form.searchDay='15';
+                this.form.searchDate=null;
+            }else if(this.form.searchType==2){
+                let date = new Date();
+                let seperator1 = "-";
+                let year = date.getFullYear();
+                let month = date.getMonth() + 1;
+                let strDate = date.getDate();
+                if (month >= 1 && month <= 9) {
+                    month = "0" + month;
+                };
+                if (strDate >= 0 && strDate <= 9) {
+                    strDate = "0" + strDate;
+                };
+                this.form.searchDate = year + seperator1 + month + seperator1 + strDate;
+                this.form.searchDay=null;
+            }else{
+                this.form.searchDay=null;
+                this.form.searchDate=null;
             }
+            console.log(this.form.searchDay,this.form.searchDate,234)
         },
         // 子组件添加公司成功之后，传递给父组件的值;
         addSuccess(addInfo){

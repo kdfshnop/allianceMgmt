@@ -44,6 +44,7 @@ export default {
             //         this.privileges = privileges;
             //     }
             // });
+            // 如果是本地测试注释上部请求;
             this.privileges = privileges;
         }
     }
