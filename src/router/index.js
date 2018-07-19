@@ -121,7 +121,7 @@ function reload() {
   parent != window && parent.location.reload();
   // console.log("reload...");
 }
-// 调用权限控制接口，判断当前用户是否可以访问该页面 测试时要注释
+// 调用权限控制接口，判断当前用户是否可以访问该页面 本地测试时要注释
 router.beforeEach((to, from, next) => {
 
   Vue.http.get(Vue.apiUrl.common.wksso).then((data)=>{

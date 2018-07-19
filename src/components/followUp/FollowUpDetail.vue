@@ -12,7 +12,8 @@
           <div class="gap">
                 <div>跟进信息：</div>
                 <div style="padding-left:75px;">{{message}}</div>
-                <div class="gap-2" v-if="fileName">上传资料：{{fileName}}</div>
+                <div class="gap-2" v-if="fileName">上传资料：{{fileName}}</div>                                  
+                    <file-list :fileList="fileList"></file-list>              
             </div>
             <div style="text-align:center;margin-top:40px;">
                 <el-button type="primary" @click="back">返回</el-button>
@@ -23,14 +24,17 @@
 
 <script>
 import BreadCrumb from '@/components/common/BreadCrumb';
+import FileList from '@/components/common/FileList';
+
 export default {
     name:'FollowUpDetail',
-    components:{BreadCrumb},
+    components:{BreadCrumb, FileList},
     data(){
         return {
             breadCrumb: [{text:'加盟管理'},{text: "代理商"},{text:'跟进'},{text:'跟进详情'}],
             message:'',
             fileName:'',//文件名
+            fileList:[],
             id:this.$route.query.id
         }
     },
@@ -38,7 +42,10 @@ export default {
         let self=this;
         this.$http.get(this.$apiUrl.agent.followUp+"?id="+this.id)
             .then(function(data){
-                self.fileName=data.data.data.resource.fileName;
+                if(data.data.data.resource){
+                    self.fileName=data.data.data.resource.fileName;
+                    self.fileList=[data.data.data.resource];
+                }; 
                 self.message=data.data.data.message;
             })
             .catch(function(err){

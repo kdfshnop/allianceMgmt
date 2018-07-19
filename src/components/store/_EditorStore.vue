@@ -22,7 +22,7 @@
                 </el-select>
             </el-form-item>
             <el-form-item label="中介公司名称" prop="companyId" v-if="form.storeType==2" >
-                <el-select v-model="form.agencyId" placeholder="请选择" @focus="companyList"  filterable>
+                <el-select v-model="form.companyId" placeholder="请选择" @focus="companyList"  filterable>
                     <el-option
                         v-for="item in companyInfoList"
                         :key="item.companyId"
@@ -38,7 +38,7 @@
                 <region v-model="form.areaLinkage" :startLevel="startLevel" :endLevel="endLevel"></region>
             </el-form-item>
             <el-form-item label="经纬度" prop="longlat" placeholder="经度,纬度">
-                <el-input v-model="form.longlat"></el-input>
+                <el-input v-model="form.longlat" @blur="longlat"></el-input>
             </el-form-item>
         </el-form>
         <span slot="footer" class="dialog-footer">
@@ -61,6 +61,7 @@ export default {
             endLevel:4,//二级联动城市传参
             dialogVisible:false,
             companyInfoList:[],
+            longlatFormat:false,//经纬度格式
             form: {
                 address:'',//门店地址;
                 agencyId:'',//代理商Id;
@@ -123,6 +124,17 @@ export default {
             }
             this.dialogVisible = true;
         },
+        longlat(){
+            let longlatArray=this.form.longlat.split(',');
+            if(longlatArray.length==2){
+                this.longlatFormat=true;
+            }else{
+                this.$message({
+                    message: '经纬度格式不正确',
+                    type: 'warning'
+                });
+            }
+        },
         handleClose(done) {
             this.$confirm('确认关闭？')
             .then(_ => { 
@@ -132,45 +144,65 @@ export default {
             .catch(_ => {});
         },
         submitForm() {
-            console.log(this.form,111)
             let self=this;
             this.$refs.form.validate((valid) => {
                 if (valid) {
-                    this.dialogVisible=false;
-                    alert('提交成功');
-                    if(this.title=='编辑门店'){
-                        if(this.form.areaLinkage.length){
-                            this.form.cityId=this.form.areaLinkage[0];
-                            this.form.districtId=this.form.areaLinkage[1];
-                            this.form.townId=this.form.areaLinkage[2];
+                    if(self.longlatFormat){
+                        this.dialogVisible=false;
+                        if(this.title=='编辑门店'){
+                            if(this.form.areaLinkage.length){
+                                this.form.cityId=this.form.areaLinkage[0];
+                                this.form.districtId=this.form.areaLinkage[1];
+                                this.form.townId=this.form.areaLinkage[2];
+                            };
+                            this.$http.post(this.$apiUrl.store.add,this.form)
+                                .then(function(data){
+                                    self.$message({
+                                        message: '编辑成功',
+                                        type: 'success'
+                                    });
+                                    self.$emit('editSuccess',self.form);
+                                })
+                                .catch(function(err){
+                                    self.$message({
+                                        message: '编辑失败',
+                                        type: 'error'
+                                    });
+                                })
+                        }else{
+                            if(this.form.areaLinkage.length){
+                                this.form.cityId=this.form.areaLinkage[0];
+                                this.form.districtId=this.form.areaLinkage[1];
+                                this.form.townId=this.form.areaLinkage[2];
+                            };
+                            this.$http.put(this.$apiUrl.store.add,this.form)
+                                .then(function(data){
+                                    self.$message({
+                                        message: '添加成功',
+                                        type: 'success'
+                                    });
+                                    self.$emit('addSuccess',self.form);
+                                })
+                                .catch(function(err){
+                                    self.$message({
+                                        message: '添加失败',
+                                        type: 'error'
+                                    });
+                                });
                         };
-                        this.$http.post(this.$apiUrl.store.add,this.form)
-                            .then(function(data){
-                                self.$emit('editSuccess',self.form);
-                            })
-                            .catch(function(err){
-                                console.log(err)
-                            })
                     }else{
-                        if(this.form.areaLinkage.length){
-                            this.form.cityId=this.form.areaLinkage[0];
-                            this.form.districtId=this.form.areaLinkage[1];
-                            this.form.townId=this.form.areaLinkage[2];
-                        };
-                        this.$http.put(this.$apiUrl.store.add,this.form)
-                            .then(function(data){
-                                console.log(data,'添加门店success');
-                                self.$emit('addSuccess',self.form);
-                            })
-                            .catch(function(err){
-                                console.log(err,'添加门店err')
-                            });
-                        
-                    };
+                        self.$message({
+                            message: '经纬度格式不正确',
+                            type: 'warning'
+                        });
+                    }
                     // 此处代码需要加在请求成功之后;
                     // this.$refs[formName].resetFields();
                 } else {
-                    alert('请填写必填信息')
+                    self.$message({
+                        message: '请填写必填信息',
+                        type: 'warning'
+                    });
                     return false;
                 }
             });

@@ -99,7 +99,15 @@
                     <el-button type="primary" @click="search">搜索</el-button>
                 </el-col>
             </el-row>
-            <div class="search-result">共搜索到 {{summary.agencyTotal}}家代理商，{{summary.regionTotal}}个代理区域，{{summary.storeTotal}}家门店</div>
+            <span class="search-result">共搜索到 {{summary.agencyTotal}}家代理商，{{summary.regionTotal}}个代理区域，{{summary.storeTotal}}家门店</span>
+            <span style="margin-left:20px;">
+                <el-tooltip placement="right" effect="light" >
+                    <el-button type="text" style="font-size:16px;">?</el-button>
+                    <div slot="content">a、正常合作： 正常合作</div>
+                    <div slot="content">b、首次待缴费：合作的时候还没有付费</div>
+                    <div slot="content">c、待补足资料：合作的时候还没有注册公司</div>
+                </el-tooltip>
+            </span>
             <el-table :data="agencyInfo.data" border style="width: 100%">
                 <el-table-column prop="agencyCompanyName" label="代理商公司名称" align="center" ></el-table-column>
                 <el-table-column prop="cityName" label="城市" align="center"></el-table-column>

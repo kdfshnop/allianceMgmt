@@ -28,7 +28,7 @@
                 <textarea name="" id="" style="width:100%;" rows="10" placeholder="请添加备注" v-model="remark"></textarea>
                 <span slot="footer" class="dialog-footer">
                     <el-button @click="cancel">取 消</el-button>
-                    <el-button type="primary" @click="dialogVisible = false,submit()">确 定</el-button>
+                    <el-button type="primary" @click="submit">确 定</el-button>
                 </span>
             </el-dialog>
         </el-main>
@@ -94,7 +94,6 @@ export default {
             this.remark="";
         },
         submit(){
-            this.dialogVisible = false;
             let form={
                 targetId:this.targetId,
                 targetType:this.targetType,
@@ -105,9 +104,10 @@ export default {
                         this.$http.post(this.$apiUrl.professionEnd.reject,form)
                             .then(function(data){
                                 this.remark="";
+                                self.dialogVisible = false;
                             })
                             .catch(function(err){
-                                console.log(err);
+                                this.$message.error('驳回请求失败');
                             });
                     }else{
                         this.$message.error('请填写驳回原因');
@@ -117,9 +117,10 @@ export default {
                     this.$http.post(this.$apiUrl.professionEnd.adopt,form)
                     .then(function(data){
                         this.remark="";
+                        self.dialogVisible = false;
                     })
                     .catch(function(err){
-                        console.log(err);
+                        this.$message.error('通过请求失败');
                     })
                 };  
         }
