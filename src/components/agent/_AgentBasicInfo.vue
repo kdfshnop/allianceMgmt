@@ -192,14 +192,14 @@ export default {
 
         parentStr() {
             let parent = this.parentAgents.filter((f)=>{
-                return f.value == this.parent;
+                return f.agencyId === this.parent;
             });
 
             if(parent && parent.length) {
-                return parent[0].label;
+                return parent[0].agencyCompanyName || parent[0].agencyId;
             }
 
-            return '';
+            return '无上级代理商';
         },
         startDateStr() {
             return getDateStr(this.startTime);
@@ -208,12 +208,12 @@ export default {
             return getDateStr(this.endTime);
         },
         agentCityStr() {
-            if(this.agentCity && this.agentCity.length && this.agentCity.label && this.agentCity.label.length) {
-                return this.agentCity.label;
+            if(this.agentCity && this.agentCity.length == 3) {
+                return this.agentCity[2] || [];
             }
 
             // 通过详情接口返回的数据有cityName字段，却没有label字段，因为label是在用户选择后前端写入的
-            return [this.$store.state.AgentBasicInfo.cityName || ''];
+            return this.$store.state.AgentBasicInfo.cityName || [];
         },
         remote() {
             // 刚开始打算用异步请求联想，后来决定一次性获取全部代理商，但是名字就保留下来了，这里注释一下，以免后面疑惑

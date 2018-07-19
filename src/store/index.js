@@ -104,7 +104,7 @@ export default new Vuex.Store({
                 };
 
                 if(c){
-                    basicInfo.cityName = c.cityName;
+                    basicInfo.cityName = [c.provinceName, c.cityName];
                     basicInfo.agentCity = [c.provinceId || 42, c.cityId];
                 }
 
@@ -164,7 +164,7 @@ export default new Vuex.Store({
                         paymentStatus: p[0].stageNumber > 0,
                         type: p[0].payMethod,
                         actualPayment: p[0].amount,
-                        containPayment: p[0].costType,
+                        containPayment: p[0].costType||[],
                         number: p[0].paymentNumber,
                         subbankName: p[0].expendBank,
                         remark: p[0].remark,

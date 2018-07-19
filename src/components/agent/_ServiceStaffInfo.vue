@@ -12,10 +12,8 @@
                     <el-form-item label="BD人员姓名">                        
                         <el-select
                             v-model="selectedBD"                            
-                            filterable
-                            remote                            
+                            filterable                                                        
                             placeholder="请输入姓名"
-                            :remote-method="getBDs"
                             @change="handleBdchange"
                             :loading="bdsLoading">
                             <el-option
@@ -29,10 +27,8 @@
                     <el-form-item label="彩霞服务人员姓名">
                         <el-select
                             v-model="selectedCX"                            
-                            filterable
-                            remote                            
-                            placeholder="请输入姓名"
-                            :remote-method="getCXs"
+                            filterable                                                    
+                            placeholder="请输入姓名"                            
                             @change="handleCxchange"
                             :loading="cxsLoading">
                             <el-option
@@ -47,10 +43,8 @@
                         <el-select
                             v-model="selectedDirector" 
                             :value="bdInfo.id"                           
-                            filterable
-                            remote                            
-                            placeholder="请输入姓名"
-                            :remote-method="getDirectors"
+                            filterable                                                    
+                            placeholder="请输入姓名"                            
                             @change="handleDirectorchange"
                             :loading="directorsLoading">
                             <el-option
@@ -139,35 +133,35 @@
             "directorInfo": generateComputed("directorInfo", "ServiceStaffInfo", "updateDirectorInfo")
         },
         methods: {
-            getBDs(keyword) {    
+            getBDs() {    
                 // if(keyword === '' || keyword == null) {
                 //     return;
                 // }
                 this.$http.get(this.$apiUrl.common.employee,{
                     params: {
                         personType: 2,
-                        name: keyword
+                        name: null
                     }
                 }).then((data)=>{                    
                     this.bds = data.data.data;
                 });
                            
             },
-            getCXs(keyword) {
+            getCXs() {
                 this.$http.get(this.$apiUrl.common.employee,{
                     params: {
                         personType: 7,
-                        name: keyword
+                        name: null
                     }
                 }).then((data)=>{
                     this.cxs = data.data.data;
                 });
             },
-            getDirectors(keyword) {
+            getDirectors() {
                 this.$http.get(this.$apiUrl.common.employee, {
                     params: {
                         personType: 8,
-                        name: keyword
+                        name: null
                     }
                 }).then((data)=>{
                     this.directors = data.data.data;
@@ -230,7 +224,21 @@
 
             ...mapMutations("ServiceStaffInfo", ['updateItem', 'updateBdInfo', 'updateCxInfo', 'updateDirectorInfo'])
         },
-        watch: {            
+        created() {
+            this.getBDs();
+            this.getCXs();
+            this.getDirectors();
+        },
+        watch: { 
+            '$store.state.ServiceStaffInfo.bdInfo.id': function(val) {
+                this.selectedBD = val;
+            },
+            '$store.state.ServiceStaffInfo.cxInfo.id': function(val) {
+                this.selectedCX = val;
+            },
+            '$store.state.ServiceStaffInfo.directorInfo.id': function(val) {
+                this.selectedDirector = val;
+            }            
         }
 
     }

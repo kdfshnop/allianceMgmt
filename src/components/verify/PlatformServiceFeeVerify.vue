@@ -101,7 +101,7 @@ export default {
                 inputPlaceholder: "备注", 
                 customClass: 'dialog-pass',   
                 inputValidator: function(val){
-                    if(val.length > 500) {
+                    if(val && val.length > 500) {
                         return "最多输入500个字符";
                     }
                     return true;
@@ -117,7 +117,10 @@ export default {
                 }).then(()=>{
                     this.$message({
                         type: 'success',
-                        message: '通过成功!'
+                        message: '通过成功!',
+                        onClose: function() {
+                            history.back();
+                        }
                     });
                 }).catch((e)=>{
                     console.log(e);
@@ -136,10 +139,13 @@ export default {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消', 
                 inputType: "textarea",  
-                inputPlaceholder: "请输入拒绝理由", 
+                inputPlaceholder: "请输入驳回理由", 
                 customClass: 'dialog-reject', 
                 inputValidator: function(val){
-                    if(val.length > 500) {
+                    if(val==null) {
+                        return "驳回理由必填:)";
+                    }
+                    if(val && val.length > 500) {
                         return "最多输入500个字符";
                     }
                     return true;
@@ -155,12 +161,15 @@ export default {
                 }).then(()=>{
                     this.$message({
                         type: 'success',
-                        message: '拒绝成功'
+                        message: '驳回成功',
+                        onClose: function() {
+                            history.back();
+                        }
                     });
                 }).catch((e)=>{
                     this.$message({
                         type: 'error',
-                        message: '拒绝失败'
+                        message: '驳回失败'
                     });
                 });
             });

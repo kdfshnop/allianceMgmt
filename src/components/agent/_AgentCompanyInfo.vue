@@ -39,7 +39,7 @@
                 </el-col>
             </el-row>     
             <el-form-item label="公司具体地址" v-show="signed">
-                <el-input v-model="address"></el-input>
+                <el-input v-model="address" maxlength="100"></el-input>
             </el-form-item> 
             <el-form-item label="上传营业执照" v-show="signed">                
                     <upload :fileList.sync="numberFileList" v-if="mode === 'create' || mode === 'edit' && status === 'editing'"></upload>
