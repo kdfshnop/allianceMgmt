@@ -41,8 +41,15 @@
                     </el-form-item>
                 </el-col>
             </el-row>
-            <el-form-item label="bd" prop="bdName"  label-width="40px" class="tl">
-                <el-input v-model="form.bdName" placeholder="请选择"></el-input>
+            <el-form-item label="bd" prop="bd"  label-width="40px" class="tl">
+                <el-select v-model="form.bd" placeholder="请选择" @focus="bdList" filterable>
+                    <el-option
+                        v-for="item in bdInfoList"
+                        :key="item.id"
+                        :label="item.name"
+                        :value="item.id">
+                    </el-option>
+                </el-select>
             </el-form-item>
             <el-row>
                 <el-col :span="12">
@@ -110,6 +117,7 @@ export default {
     data(){
         return {
             agencyInfoList:[],
+            bdInfoList:[],
             dialogVisible:false,
             startLevel:1,//二级联动城市传参
             endLevel:2,//二级联动城市传参
@@ -117,7 +125,7 @@ export default {
                 abbreviation:'',//公司简称;
                 address:'',//地址
                 agencyId:'',//代理商Id
-                bdName:'',//bd名字
+                bd:'',//bdId
                 businessType:'',//房源类型,0为选择，1.新上，2.二手房，3.新房＋二手房
                 cityId:'',//所属城市Id
                 cityList:[],//值必须为number
@@ -152,6 +160,7 @@ export default {
     created(){
         //获取代理商列表;
         this.agencyList();
+        this.bdList();
     },
     methods:{
         open() {
@@ -177,7 +186,7 @@ export default {
                     abbreviation:'',//公司简称;
                     address:'',//地址
                     agencyId:'',//代理商Id;
-                    bdName:'',//bd名字
+                    bd:'',//bdId
                     businessType:'',//房源类型,0为选择，1.新上，2.二手房，3.新房＋二手房
                     cityId:'',//所属城市Id
                     cityList:[],//值必须为number
@@ -201,6 +210,15 @@ export default {
             }
             
         },
+        // bdList
+        bdList(){
+            this.$http.get(this.$apiUrl.common.employee+"?personType=5")
+                .then(data=>{
+                    this.bdInfoList=data.data.data;
+                }).catch(err=>{
+                    console.log(err);
+                })
+        },
         agencyList(){
             let self=this;
             this.$http.get(this.$apiUrl.agent.list)
@@ -212,7 +230,7 @@ export default {
             })
         },
         handleClose() {
-                this.$refs.form.resetFields();   
+            this.$refs.form.resetFields();   
         },
         submitForm() {
             let self=this;
@@ -270,7 +288,6 @@ export default {
                                     type: 'success'
                                 });
                                 this.$emit('addSuccess',realForm);
-                                console.log(data);
                             })
                             .catch(function(error){
                                 self.$message({

@@ -74,12 +74,20 @@
                                 </el-form-item>
                             </el-col>
                         </el-row>
-                        
                         <el-form-item label="门店名称" prop="storeName" >
                             <el-input v-model="form.storeName"></el-input>
                         </el-form-item>
-                        <el-form-item label="代理商" prop="agency">
-                            <el-input v-model="form.agency"></el-input>
+                        <el-form-item label="代理商" prop="agencyId">
+                            <!--<el-input v-model="form.agency"></el-input>-->
+                            <el-select v-model="form.agencyId" placeholder="请选择" @focus="agencyList" filterable>
+                                <el-option label="暂无代理商" :value="0"></el-option>
+                                <el-option
+                                    v-for="item in agencyInfoList"
+                                    :key="item.agencyId"
+                                    :label="item.agencyCompanyName"
+                                    :value="item.agencyId">
+                                </el-option>
+                            </el-select>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -160,6 +168,7 @@ export default {
                 "companyEndJoin": "/companyManagement#companyEndJoin"//终止合作
             },
             breadCrumb: [{text:'加盟管理'},{text: "公司管理"}],//面包屑
+            agencyInfoList:[],//代理商列表
             companyId:'',//公司Id;
             companyInfoList:[],//公司列表信息
             companyInfoIndex:'',//操作公司时该公司处于所有列表的位置
@@ -171,7 +180,7 @@ export default {
             title:'',//判断是编辑公司还是添加公司
             // 表单查询信息
             form:{
-                agency:null,//代理商名称
+                agencyId:null,//代理商id
                 businessType:'3',//公司业务类型,空为未选择，1.新房，2.二手房，3.新房＋二手房
                 cityId:null,//所属城市Id
                 cityList:[],//城市二级联动所需
@@ -189,8 +198,20 @@ export default {
     },
     created(){
         this.requestList();
+        this.agencyList();
     },
     methods:{
+        // 代理商列表;
+        agencyList(){
+            let self=this;
+            this.$http.get(this.$apiUrl.agent.list)
+            .then(function(data){
+                self.agencyInfoList=data.data.data;
+            })
+            .catch(function(err){
+                console.log(err,'代理商列表失败');
+            })
+        },
         // prompt弹框;
         prompt(){
             let self=this;
@@ -321,6 +342,7 @@ export default {
         },
         // 子组件编辑成功之后，传递给父组件的值;
         editSuccess(editInfo){
+            console.log(editInfo,1111)
             this.requestList();
         },
         //分佣账号设置 

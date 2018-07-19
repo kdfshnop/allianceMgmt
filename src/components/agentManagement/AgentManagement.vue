@@ -85,8 +85,16 @@
                                 <el-option label="首次待缴费" value="3"></el-option>
                             </el-select>
                         </el-form-item>
-                        <el-form-item label="代理商公司名称" prop="agencyName">
-                            <el-input v-model="form.agencyName"></el-input>
+                        <el-form-item label="代理商公司名称" prop="agencyId">
+                            <el-select v-model="form.agencyId" placeholder="请选择" @focus="agencyList" filterable>
+                                <el-option label="暂无代理商" :value="0"></el-option>
+                                <el-option
+                                    v-for="item in agencyInfoList"
+                                    :key="item.agencyId"
+                                    :label="item.agencyCompanyName"
+                                    :value="item.agencyId">
+                                </el-option>
+                            </el-select>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -188,6 +196,7 @@ export default {
                 "agentEndJoin": "/agentManagement#agentEndJoin"//终止合作
             },
             agencyInfo:{},//代理商信息
+            agencyInfoList:[],//代理商列表;
             agencySotre:'',//该代理商旗下有多少家门店
             breadCrumb: [{text:'加盟管理'},{text: "代理商管理"}],//面包屑
             companyInfoIndex:'',//操作代理商公司时该公司处于所有列表的位置
@@ -201,7 +210,7 @@ export default {
             title:'',//判断是编辑公司还是添加公司
             // 表单查询信息
             form: {
-                agencyName:null,//代理商公司名称
+                agencyId:null,//代理商公司Id
                 agencyState:'0',//合作状态
                 agencyTag:'0',//合作标签
                 agencyType:'0',//代理商类型
@@ -218,8 +227,20 @@ export default {
     },
     created(){
         this.requestList();
+        this.agencyList();
     },
     methods:{
+        // 代理商列表;
+        agencyList(){
+            let self=this;
+            this.$http.get(this.$apiUrl.agent.list)
+            .then(function(data){
+                self.agencyInfoList=data.data.data;
+            })
+            .catch(function(err){
+                console.log(err,'代理商列表失败');
+            })
+        },
         // 编辑
         edit(index,row){
             this.$router.push({name:'EditAgent',params:{id:row.agencyId}});
