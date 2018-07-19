@@ -8,6 +8,13 @@ export default {
         id: ""
     },
     mutations: {
+        clear(state, val) {
+            state.name= "";
+            state.mobile= "";
+            state.wechat= "";
+            state.email= "";
+            state.id= "";
+        },
         updateName(state, name) {
             state.name = name;
         },

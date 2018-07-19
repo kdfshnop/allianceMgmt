@@ -20,6 +20,25 @@ export default {
         tracerId: "",
     },
     mutations: {
+        clear(state, val) {
+            state.signed= false;// 是否已经注册
+            state.name= "";// 公司名称
+            state.shortName= "";// 公司简称
+            state.number= "";// 营业执照号码
+            state.code= ""; // 组织结构代码
+            state.address= "";// 公司地址
+            state.numberFileList= [];// 营业执照的图片
+            state.finishDate= '';// 预计注册完成时间
+            state.tracerName= '';// 代理商负责跟踪人
+            state.mobile= '';// 手机号
+            state.email= '';// 邮箱
+            state.idCard= '';// 身份证
+            state.remark= '';// 备注
+            state.idCardFrontFileList= [];// 身份证正面照
+            state.idCardBackFileList= [];// 身份证背面照
+            state.id= "";
+            state.tracerId= "";
+        },
         updateSigned(state, signed) {
             state.signed = signed;
         },

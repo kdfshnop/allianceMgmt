@@ -13,6 +13,18 @@ export default {
         id: ""
     },
     mutations: {
+        clear(state, val) {
+            state.name= "";
+            state.mobile= "";
+            state.idCard= "";
+            state.email= "";
+            state.score= "";
+            state.idCardFrontFileList= [];
+            state.idCardBackFileList= [];
+            state.scoreFileList= [];
+            state.remark= "";
+            state.id= "";
+        },
         updateName(state, name) {
             state.name = name;
         },

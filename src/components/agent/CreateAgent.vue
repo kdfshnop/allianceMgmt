@@ -48,7 +48,9 @@
     </div>
     <el-button-group class="gap-2" style="margin-left: auto; margin-right: auto; width: 200px; display: block;">
         <el-button v-if="active>0 && active < stepNumber" @click="prev" type="primary">上一步</el-button><el-button type="primary" v-if="active<stepNumber-1" @click="next">下一步</el-button><el-button type="primary" v-if="active==stepNumber - 1" @click="submit">提&nbsp;&nbsp;交</el-button>
-    </el-button-group>    
+    </el-button-group>   
+
+    <el-button style="position: fixed; top: 20px; right: 50px" @click="back">返回</el-button> 
     </el-main>
   </el-container>
 </template>
@@ -191,9 +193,14 @@ export default {
     handleClose() {
         // alert("关闭");
         history.back();
-    }      
+    },
+    back() {
+        history.back();
+    }     
   },
-  created() {      
+  created() { 
+      // 清空store
+      this.$store.dispatch("clear");     
   }
 }
 </script>

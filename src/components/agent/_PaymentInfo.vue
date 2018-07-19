@@ -43,7 +43,7 @@
             <el-row v-show="paymentStatus">
                 <el-col :span="12">
                     <el-form-item label="实际支付">
-                        <el-input v-model="actualPayment">
+                        <el-input type="number" v-model="actualPayment">
                             <template slot="append">元</template>
                         </el-input>
                     </el-form-item>                    
@@ -71,9 +71,26 @@
                     </el-form-item>                    
                 </el-col>
             </el-row> 
-            <el-form-item label="上传汇款凭证" v-show="paymentStatus">                
-                <upload v-if="mode === 'create' || mode === 'edit' && status === 'editing'" :fileList.sync="fileList"></upload>
-            </el-form-item> 
+            <el-row>
+                <el-col :span="12">
+                    <el-form-item label="上传汇款凭证" v-show="paymentStatus">                
+                        <upload v-if="mode === 'create' || mode === 'edit' && status === 'editing'" :fileList.sync="fileList"></upload>
+                    </el-form-item>                                        
+                </el-col>
+                <el-col :span="12">  
+                    <el-form-item label="支付费用归属第几期" v-show="paymentStatus">                
+                        <el-select v-model="stageNumber" placeholder="请选择">
+                            <el-option
+                            v-for="item in stages"
+                            :key="item.val"
+                            :label="item.label"
+                            :value="item.val">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>                                   
+                </el-col>
+            </el-row>
+            
             <!-- </template> -->
             <!-- <template > -->
                 <el-row v-if="!paymentStatus">
@@ -142,9 +159,19 @@
                         </el-form-item>                    
                     </el-col>
                 </el-row> 
-                <el-form-item label="上传汇款凭证" v-show="paymentStatus">                                    
-                    <file-list :fileList="fileList"></file-list>               
-                </el-form-item> 
+                <el-row v-show="paymentStatus">
+                    <el-col :span="12">
+                        <el-form-item label="上传汇款凭证" v-show="paymentStatus">                                    
+                            <file-list :fileList="fileList"></file-list>               
+                        </el-form-item>              
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="支付费用归属第几期" v-show="paymentStatus">                                    
+                            {{stageNumber == -1 ? '请选择第几期' : ("第" + stageNumber + "期")}}               
+                        </el-form-item>           
+                    </el-col>
+                </el-row> 
+                
             <!-- </template> -->
             <!-- <template>                                   -->
                 <el-row v-show="!paymentStatus">
@@ -267,6 +294,26 @@
                 }
 
                 return this.type;
+            },
+            stages() {
+                let stageTotal = this.$store.state.PlatformServiceFee.count || 0;
+
+                if(this.$store.state.PlatformServiceFee.paymentType != 2){// 不分期
+                    stageTotal = 1;
+                }
+
+                let ret = [];
+                ret.push({
+                    val: -1,
+                    label: "请选择第几期"
+                });
+                for(let i = 0; i < stageTotal; i++) {
+                    ret.push({
+                        val: i + 1,
+                        label: "第" + (i + 1) + "期"
+                    });
+                }
+                return ret;
             }
         }
     }

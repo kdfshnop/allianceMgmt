@@ -3,7 +3,10 @@ export default {
     state: {
         dividingInfo: [] // Vue不能监控到数组元素的属性变化，尴尬了，只能给数组元素重新赋值
     },
-    mutations: {        
+    mutations: { 
+        clear(state, val) {
+            state.dividingInfo = [];
+        },    
         updateItem(state, obj) {    
             // 这里是单挑,会有index指明是第几条，想想这个好像暂时用不到
             let index = obj.index;

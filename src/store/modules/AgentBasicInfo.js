@@ -11,6 +11,16 @@ export default {
         id: "", 
     },
     mutations: {
+        clear(state, val) {
+            state.agentType= "";
+            state.startTime= "";
+            state.endTime= "";        
+            state.parent= "";
+            state.agentCity= [];
+            state.status= "";// 代理商状态
+            state.remark= "";//
+            state.id= "";
+        },
         updateAgentType(state, val) {
             state.agentType = val;
         },
