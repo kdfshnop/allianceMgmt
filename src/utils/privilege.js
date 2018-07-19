@@ -28,24 +28,24 @@ export default {
             };
             for(let key in this.privilegeOption) {
                 urls.push(this.privilegeOption[key]);
-                privileges[key] = true;// 默认值都是false，、、如果本地测试改为true,否则为fasle
+                privileges[key] = false;// 默认值都是false，、、如果本地测试改为true,否则为fasle
                 mapping[this.privilegeOption[key]] = key;
             }
-            // Vue.http.post(Vue.apiUrl.common.privileges, {        
-            //     urls        
-            // }).then((data)=>{
-            //     if(data.data.data) {
-            //         let key;
-            //         for(let d of data.data.data) {
-            //             key = mapping[d.url];
-            //             privileges[key] = !!d.hasAuth;
-            //         }
+            Vue.http.post(Vue.apiUrl.common.privileges, {        
+                urls        
+            }).then((data)=>{
+                if(data.data.data) {
+                    let key;
+                    for(let d of data.data.data) {
+                        key = mapping[d.url];
+                        privileges[key] = !!d.hasAuth;
+                    }
 
-            //         this.privileges = privileges;
-            //     }
-            // });
+                    this.privileges = privileges;
+                }
+            });
             // 如果是本地测试注释上部请求;
-            this.privileges = privileges;
+            // this.privileges = privileges;
         }
     }
 };

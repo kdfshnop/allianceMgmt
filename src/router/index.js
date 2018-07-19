@@ -121,29 +121,29 @@ function reload() {
   parent != window && parent.location.reload();
   // console.log("reload...");
 }
-// 调用权限控制接口，判断当前用户是否可以访问该页面
-// router.beforeEach((to, from, next) => {
+// 调用权限控制接口，判断当前用户是否可以访问该页面 测试时要注释
+router.beforeEach((to, from, next) => {
 
-//   Vue.http.get(Vue.apiUrl.common.wksso).then((data)=>{
-//       // 根据当前环境来获取前缀
-//       // let url = Vue.apiUrl.pageUrl[env] + '/index.html#' + to.path;
-//       // // 发送请求，判断是否可以访问，暂定方案如果不能访问直接刷新外层
-//       // Vue.http.post(Vue.apiUrl.common.privileges, {        
-//       //     urls: [url]        
-//       // }).then((data)=>{        
-//       //   let canAccess = data.data.hasAuth;  
-//       //   if(canAccess){
-//       //     next();    
-//       //   }else{
-//       //     reload();
-//       //   } 
-//       // }); 
-//       next();
-//   }).catch((data)=>{
-//     // 失败刷新一下
-//     reload();
-//   });
+  Vue.http.get(Vue.apiUrl.common.wksso).then((data)=>{
+      // 根据当前环境来获取前缀
+      // let url = Vue.apiUrl.pageUrl[env] + '/index.html#' + to.path;
+      // // 发送请求，判断是否可以访问，暂定方案如果不能访问直接刷新外层
+      // Vue.http.post(Vue.apiUrl.common.privileges, {        
+      //     urls: [url]        
+      // }).then((data)=>{        
+      //   let canAccess = data.data.hasAuth;  
+      //   if(canAccess){
+      //     next();    
+      //   }else{
+      //     reload();
+      //   } 
+      // }); 
+      next();
+  }).catch((data)=>{
+    // 失败刷新一下
+    reload();
+  });
 
-//   // next();
-// });
+  // next();
+});
 export default router;
