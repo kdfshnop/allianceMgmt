@@ -4,12 +4,12 @@
             <el-row>
                 <el-col :span="12">
                     <el-form-item label="公司名称" prop="name" class="tl">
-                        <el-input v-model="form.name" placeholder="50字以内"></el-input>
+                        <el-input v-model="form.name" placeholder="50字以内" maxlength="50"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="公司简称" prop="abbreviation">
-                        <el-input v-model="form.abbreviation" placeholder="50字以内"></el-input>
+                        <el-input v-model="form.abbreviation" placeholder="50字以内" maxlength="50"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -212,7 +212,6 @@ export default {
             })
         },
         handleClose() {
-                console.log(11111111)
                 this.$refs.form.resetFields();   
         },
         submitForm() {
@@ -220,7 +219,6 @@ export default {
             this.$refs.form.validate((valid) => {
                 if (valid) {
                     this.dialogVisible=false;
-                    alert('提交成功');
                     if(this.title=='编辑公司'){
                         this.form.cooperationStart=this.form.cooperationTime[0];
                         this.form.cooperationEnd=this.form.cooperationTime[1];
@@ -236,10 +234,17 @@ export default {
                         };
                         this.$http.post(this.$apiUrl.company.add,realForm)
                             .then(function(data){
+                                self.$message({
+                                    message: '编辑成功',
+                                    type: 'success'
+                                });
                                 self.$emit('editSuccess',self.form);
                             })
                             .catch(function(error){
-                                console.log(error)
+                                self.$message({
+                                    message: '编辑失败',
+                                    type: 'error'
+                                });
                             });
                     }else{
                         if(this.form.cityList.length){
@@ -260,12 +265,20 @@ export default {
                         delete realForm.cityList;
                         this.$http.put(this.$apiUrl.company.add,realForm)
                             .then(function(data){
+                                self.$message({
+                                    message: '添加成功',
+                                    type: 'success'
+                                });
+                                this.$emit('addSuccess',realForm);
                                 console.log(data);
                             })
                             .catch(function(error){
+                                self.$message({
+                                    message: '添加失败',
+                                    type: 'err'
+                                });
                                 console.log(error)
                             });
-                        this.$emit('addSuccess',realForm);
                     };
                         // 此处代码需要加在请求成功之后;
                         // this.$refs[formName].resetFields();

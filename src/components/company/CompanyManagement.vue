@@ -256,7 +256,6 @@ export default {
                 this.form.searchDay=null;
                 this.form.searchDate=null;
             }
-            console.log(this.form.searchDay,this.form.searchDate,234)
         },
         // 子组件添加公司成功之后，传递给父组件的值;
         addSuccess(addInfo){
@@ -267,9 +266,22 @@ export default {
             this.requestList();
         },
         resetForm(formName) {
-            this.form.cityId=null;
-            this.form.cityList=[];
-            this.$refs.form.resetFields();
+            // this.$refs.form.resetFields();//此处注释代码重置无法达到要求
+            this.form={
+                agency:null,//代理商名称
+                businessType:'3',//公司业务类型,空为未选择，1.新房，2.二手房，3.新房＋二手房
+                cityId:null,//所属城市Id
+                cityList:[],//城市二级联动所需
+                cooperationTime:null,//合作时间段形式为数组
+                currentPage:this.form.currentPage,//页码默认为1
+                pageSize:this.form.pageSize,//页面量默认为10
+                name:null,//公司名称
+                searchDate:null,//到期日期
+                searchDay:null,//即将到期天数 
+                searchType:null,//到期查询方式
+                storeAddress:null,//门店地址
+                storeName:null//门店名称
+            }
         },
         //根据表单信息搜索
         search(){
