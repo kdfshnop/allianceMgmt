@@ -5,6 +5,10 @@ export default {
         remark: "",        
     },
     mutations: {
+        clear(state, val) {
+            state.ratio= "";
+            state.remark= "";
+        },
         updateRatio(state, ratio) {
             state.ratio = ratio;
         },

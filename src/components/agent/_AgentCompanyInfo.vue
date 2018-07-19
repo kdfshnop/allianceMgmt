@@ -16,7 +16,7 @@
             </el-form-item>
             <el-row v-show="signed">
                 <el-col :span="12">
-                    <el-form-item label="公司名" >
+                    <el-form-item label="公司名">
                         <el-input v-model="name" placeholder="请输入营业执照全名" maxlength="50"></el-input>
                     </el-form-item>                                                                         
                 </el-col>
@@ -26,7 +26,7 @@
                     </el-form-item>
                 </el-col>
             </el-row>   
-            <el-row v-show="signed">
+            <el-row v-if="signed">
                 <el-col :span="12">
                     <el-form-item label="营业执照号">
                         <el-input v-model="number" maxlength="50"></el-input>
@@ -38,15 +38,15 @@
                     </el-form-item>
                 </el-col>
             </el-row>     
-            <el-form-item label="公司具体地址" v-show="signed">
+            <el-form-item label="公司具体地址" v-if="signed">
                 <el-input v-model="address" maxlength="100"></el-input>
             </el-form-item> 
-            <el-form-item label="上传营业执照" v-show="signed">                
+            <el-form-item label="上传营业执照" v-if="signed">                
                     <upload :fileList.sync="numberFileList" v-if="mode === 'create' || mode === 'edit' && status === 'editing'"></upload>
             </el-form-item>  
 
             <!-- 下面是未注册显示的 -->
-            <el-row v-show="!signed">
+            <el-row v-if="!signed">
                 <el-col :span="12">
                     <el-form-item label="预计注册完成时间">
                         <el-date-picker
@@ -59,7 +59,7 @@
                     </el-form-item>                                                                         
                 </el-col>               
             </el-row>  
-            <el-row v-show="!signed">
+            <el-row v-if="!signed">
                 <el-col :span="12">
                     <el-form-item label="代理商负责跟踪人">
                         <el-input v-model="tracerName"></el-input>
@@ -71,7 +71,7 @@
                     </el-form-item>                                                                         
                 </el-col>
             </el-row>     
-            <el-row v-show="!signed">
+            <el-row v-if="!signed">
                 <el-col :span="12">
                     <el-form-item label="邮箱号" prop="email">
                         <el-input v-model="email"></el-input>
@@ -83,14 +83,14 @@
                     </el-form-item>                                                                         
                 </el-col>
             </el-row>  
-            <el-form-item label="备注信息" v-show="!signed">
+            <el-form-item label="备注信息" v-if="!signed">
                 <el-input type="textarea" v-model="remark"></el-input>
             </el-form-item> 
 
-            <el-form-item label="上传身份证正面照" v-show="!signed">                
+            <el-form-item label="上传身份证正面照" v-if="!signed">                
                     <upload :fileList.sync="idCardFrontFileList" v-if="mode === 'create' || mode === 'edit' && status === 'editing'"></upload>
             </el-form-item>
-            <el-form-item label="上传身份证反面照" v-show="!signed">
+            <el-form-item label="上传身份证反面照" v-if="!signed">
                 <upload :fileList.sync="idCardBackFileList" v-if="mode === 'create' || mode === 'edit' && status === 'editing'"></upload>
             </el-form-item>
         </el-form>
@@ -219,6 +219,9 @@ export default {
                 idCard: [{
                     validator: Validator.idCard,
                     trigger: 'blur'
+                }],
+                companyName: [{
+                    required: true, message: "公司名称为必填项", trigger: 'blur'
                 }]
             }
         };

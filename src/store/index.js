@@ -161,10 +161,24 @@ export default new Vuex.Store({
                 let p = data.data.data.payments;
                 if(p && p[0]){
                     paymentInfo = {
-                        paymentStatus: p[0].stageNumber > 0,
+                        paymentStatus: p[0].stageNumber != 0,
                         type: p[0].payMethod,
                         actualPayment: p[0].amount,
-                        containPayment: p[0].costType||[],
+                        containPayment: (function(v){
+                            if(!v){
+                                return [];
+                            }
+
+                            switch(v) {
+                                case 1:
+                                return [1];
+                                case 2:
+                                return [2];
+                                case 3:
+                                return [1, 2];
+                            }
+                            return [];
+                        })(p[0]),
                         number: p[0].paymentNumber,
                         subbankName: p[0].expendBank,
                         remark: p[0].remark,
@@ -372,6 +386,22 @@ export default new Vuex.Store({
                 context.commit('ServiceStaffInfo/updateItem', serviceStaffInfo);
                 cb && cb(data.data);
             });
+        },
+        clear(context) {
+            context.commit('AgentArea/clear');
+            context.commit('AgentBasicInfo/clear');
+            context.commit('AgentCommissionAccount/clear');
+            context.commit('AgentCommissionRatio/clear');
+            context.commit('AgentCompanyInfo/clear');
+            context.commit('BDManager/clear');
+            context.commit('ContractInfo/clear');
+            context.commit('CorporateInfo/clear');
+            context.commit('DividingInfo/clear');
+            context.commit('PartnerInfo/clear');
+            context.commit('PaymentInfo/clear');
+            context.commit('PlatformServiceFee/clear');
+            context.commit('ServiceManager/clear');
+            context.commit('ServiceStaffInfo/clear');
         }
     },
     getters: {

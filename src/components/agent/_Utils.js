@@ -234,6 +234,12 @@ export function generateParam(state) {
           });
     }else{// 已支付
         // 支付记录
+
+        let stageNumber = 1;// 默认认为不分期，所以固定是1
+        if(safeGet(state, 'PlatformServiceFee.paymentType') == 2) {// 分期
+            stageNumber = safeGet(state, "PaymentInfo.stageNumber");
+        }
+
         payments.push({
             id: safeGet(state, "PaymentInfo.id"),
             //   agencyId: 
@@ -251,7 +257,7 @@ export function generateParam(state) {
             // receiveAccount:
             // receiveBank
             remark: safeGet(state, "PaymentInfo.remark"),//
-            stageNumber: safeGet(state, "PaymentInfo.stageNumber"),// prd中是下拉框，下拉框怎么初始化？？
+            stageNumber: stageNumber
             // status
             // updateTime
         });
@@ -264,9 +270,9 @@ export function generateParam(state) {
             //agencyId: ''// 创建接口不需要传递
             //createTime: ''// 创建接口不需要传递
             //   id: ""// 创建接口不需要传递
-            level: (['', '', 3, 4])[r.val.length],// 区域级别，1：国家，2：省/直辖市，3：地级市，4：区、县、县级市，5：片区/板块
+            level: (['', '', 3, 4])[r.val.length-1],// 区域级别，1：国家，2：省/直辖市，3：地级市，4：区、县、县级市，5：片区/板块
             //operator: ''
-            regionId: r.val[r.val.length - 1] || null,// 根据level不同传递不同的意义的值，在创建接口中可以，但是在详情接口中不行
+            regionId: r.val[r.val.length - 2] || null,// 根据level不同传递不同的意义的值，在创建接口中可以，但是在详情接口中不行
             provinceId: r.val[0],
             cityId: r.val[1], 
             id: r.id           

@@ -21,6 +21,26 @@ export default {
         }
     },
     mutations: {
+        clear(state, val) {
+            state.bdInfo= {
+                name: "",
+                department: "",
+                title: "",
+                id: ''
+            };
+            state.cxInfo= {
+                name: "",
+                department: "",
+                title: "",
+                id: ''
+            };
+            state.directorInfo= {
+                name: "",
+                department: "",
+                title: "",
+                id: ''
+            };
+        },
         updateBdInfo(state, val) {
             state.bdInfo = val;
         },

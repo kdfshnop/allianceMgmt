@@ -3,28 +3,28 @@
         <el-main> 
             <bread-crumb :items="breadCrumb"></bread-crumb>        
             <el-tabs v-model="activeName" @tab-click="handleClick" class="gap-2">
-                <el-tab-pane label="合作资料" name="first">
+                <el-tab-pane label="合作资料" name="first" v-if="privileges.materialTab">
                     <service-staff-info :mode="mode"></service-staff-info>
                     <partner-infoes :mode="mode"></partner-infoes>
                 </el-tab-pane>
-                <el-tab-pane label="代理区域" name="second">
+                <el-tab-pane label="代理区域" name="second" v-if="privileges.regionTab">
                     <agent-basic-info :mode="mode"></agent-basic-info>
                     <agent-area :mode="mode"></agent-area>            
                 </el-tab-pane>
-                <el-tab-pane label="代理商资料" name="third">
+                <el-tab-pane label="代理商资料" name="third" v-if="privileges.agentMaterialTab">
                     <agent-company-info :mode="mode"></agent-company-info>
                     <corporate-info :mode="mode"></corporate-info>
                     <contract-info :mode="mode"></contract-info>
                 </el-tab-pane>
-                <el-tab-pane label="服务信息" name="fourth">
+                <el-tab-pane label="服务信息" name="fourth" v-if="privileges.serviceInfoTab">
                     <service-manager :mode="mode"></service-manager>
                     <b-d-manager :mode="mode"></b-d-manager>
                 </el-tab-pane>
-                <el-tab-pane label="佣金信息" name="fifth">
+                <el-tab-pane label="佣金信息" name="fifth" v-if="privileges.commissionTab">
                     <agent-commission-ratio :mode="mode"></agent-commission-ratio>
                     <agent-commission-account :mode="mode"></agent-commission-account>
                 </el-tab-pane>
-                <el-tab-pane label="平台服务费" name="sixth">
+                <el-tab-pane label="平台服务费" name="sixth" v-if="privileges.platformTab">
                     <platform-service-fee :mode="mode"></platform-service-fee>
                     <dividing-info :mode="mode"></dividing-info>
                     <payment-info :mode="mode"></payment-info>
@@ -55,9 +55,11 @@ import PaymentInfo from './_PaymentInfo';
 import Region from '@/components/common/Region';
 import {generateParam} from './_Utils'; 
 import BreadCrumb from '@/components/common/BreadCrumb';
+import PrivilegeMixin from '@/utils/privilege';
 
 export default {
-    name: "",
+     mixins: [PrivilegeMixin],
+     name: "",
      components: {
       CollapsePanel, 
       ServiceStaffInfo, 
@@ -79,7 +81,15 @@ export default {
     },
     data() {
         return {
-            activeName: "first",
+            privilegeOption: {
+                materialTab: "/agent/editAgent#material",
+                regionTab: "/agent/editAgent#region",
+                agentMaterialTab: "/agent/editAgent#agent",
+                serviceInfoTab: "/agent/editAgent#service",
+                commissionTab: "/agent/editAgent#commission",
+                platformTab: "/agent/editAgent#platform",
+            },
+            // activeName: null,
             mode: 'edit',
             initStr: "",
             breadCrumb: [{text:'加盟管理'},{text: "代理商"},{text: "编辑"}],       
@@ -89,7 +99,27 @@ export default {
         this.getDetail();
     },
     computed: {
-        
+        activeName() {
+            // let name = "first";
+            if(this.privileges.materialTab) {
+                return "first";
+            }
+            if(this.privileges.regionTab) {
+                return "second";
+            }
+            if(this.privileges.agentMaterialTab) {
+                return "third";
+            }
+            if(this.privileges.serviceInfoTab) {
+                return "fourth";
+            }
+            if(this.privileges.commissionTab) {
+                return "fifth";
+            }
+            if(this.privileges.platformTab) {
+                return "sixth";
+            }
+        }
     },
     methods: {
         getDetail() {
@@ -139,7 +169,7 @@ export default {
                     console.log(data);
                 });                 
             });
-        }
+        },
     }
 }
 </script>

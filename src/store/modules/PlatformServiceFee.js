@@ -10,6 +10,14 @@ export default {
         // dividingInfo: []
     },
     mutations: {
+        clear(state, val) {
+            state.fee= "";
+            state.month= "";
+            state.prefee= "";
+            state.premonth= "";
+            state.paymentType= "2";
+            state.count= "";
+        },
         updateFee(state, fee) {
             state.fee = fee;
         },

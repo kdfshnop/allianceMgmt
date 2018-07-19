@@ -7,6 +7,12 @@ export default {
         receiptAccount: ""  
     },
     mutations: {
+        clear(state, val) {
+            state.bankName= "";
+            state.subbankName= "";      
+            state.accountName= "";
+            state.receiptAccount= "";
+        },
         updateBankName(state, bankName) {
             state.bankName = bankName;
         },

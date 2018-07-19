@@ -9,7 +9,7 @@ export default {
         subbankName: "",
         fileList: [],
         remark: '',
-        stageNumber: 0, // 支付费用归属第几期
+        stageNumber: -1, // 支付费用归属第几期
 
         planPaymentDate: "",// 预计支付时间
         brokerName: "", // 对接人姓名
@@ -19,6 +19,24 @@ export default {
         brokerId: "",
     },
     mutations: {
+        clear(state, val) {
+            state.paymentStatus= false;
+            state.type= "";// 付款方式
+            state.actualPayment= "";// 实际支付
+            state.containPayment= [];// 费用包含
+            state.number= "";// 汇款编号
+            state.subbankName= "";
+            state.fileList= [];
+            state.remark= '';
+            state.stageNumber= -1; // 支付费用归属第几期
+
+            state.planPaymentDate= "";// 预计支付时间
+            state.brokerName= ""; // 对接人姓名
+            state.brokerMobile= ""; // 对接人手机
+            state.promiseFileList= []; // 承诺书文件
+            state.id= "";
+            state.brokerId= "";
+        },
         updateStageNumber(state, val) {
             state.stageNumber = val;
         },

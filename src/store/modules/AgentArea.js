@@ -9,6 +9,9 @@ export default {
         },        
         updateItem(state, item) {                                    
             state.regions = item.regions;            
+        },
+        clear(state, val){
+            state.regions = [];
         }
     }
 };

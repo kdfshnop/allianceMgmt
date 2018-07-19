@@ -7,6 +7,12 @@ export default {
         promiseFileList: []
     },
     mutations: {
+        clear(state, val) {
+            state.contractFileList= [];
+            state.sealed= false;
+            state.special= '';
+            state.promiseFileList= [];
+        },
         updateContractFileList(state, val) {
             state.contractFileList = val;
         },
