@@ -21,8 +21,13 @@ export default {
         Vue.http = Vue.prototype.$http = axios;
         axios.interceptors.response.use(function(res){
             // 读取res.data.status,处理未登陆逻辑
-            if(res.data && res.data.status == UNLOGIN){
-                 window.parent && window.parent !== window && window.parent.location.reload();                
+            // if(res.data && res.data.status == UNLOGIN){
+            //      window.parent && window.parent !== window && window.parent.location.reload();                
+            // }
+            if(res.headers['content-type'].indexOf('text/html')>-1) {
+                // ajax本该是json数据却返回了html，因为跳转到了登录页，这是由于登录过期了，因此重新登录
+                window.parent && window.parent !== window && window.parent.location.reload();                
+                return;
             }
 
             // 读取res.data.status，除了逻辑失败错误

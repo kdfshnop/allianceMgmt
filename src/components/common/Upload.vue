@@ -11,11 +11,11 @@
         :multiple="multiple"
         :limit="limit || 10"
         :on-exceed="handleExceed"
-        :file-list="fl"
-        multiple
+        :file-list="fl" 
+        list-type="picture"       
         >
         <el-button size="small" type="primary">{{ btnText || '点击上传'}}</el-button>
-        <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+        <div slot="tip" class="el-upload__tip">只能上传图片文件(jpg/jpeg/gif/png/bmp)，且不超过2M</div>
     </el-upload>
 </template>
 <script>
@@ -67,8 +67,20 @@ export default {
             });
             this.$emit('update:fileList', this.innerFileList);
         },
-        beforeUpload(data) {
-            this.name = data.name;            
+        beforeUpload(file) {
+
+            let isImg = file.type.indexOf('image')> -1;
+            let isLt2M = file.size / 1024 / 1024 < 2;
+
+            if(!isImg) {
+                this.$message.error('只能上传图片哦^_^');                
+            }
+            if(!isLt2M) {
+                this.$message.error('文件大小不能超过2M:-)');
+            }
+
+            this.name = file.name; 
+            return isImg && isLt2M;           
         }
     }
 }
