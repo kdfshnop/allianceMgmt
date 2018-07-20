@@ -28,7 +28,7 @@
             <el-row>
                 <el-col :span="12">
                     <el-form-item label="组织机构代码" prop="organizationCode" class="tl">
-                        <el-input v-model="form.organizationCode" placeholder="50字以内"></el-input>
+                        <el-input v-model="form.organizationCode" placeholder="50字以内" maxlength="50"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
@@ -112,7 +112,7 @@ import Region from '@/components/common/Region';
 import Upload from '@/components/common/Upload';
 export default {
     name:'editorCompany',
-    props:['companyId','title'],
+    props:['title'],
     components:{Region,Upload},
     data(){
         return {
@@ -163,11 +163,11 @@ export default {
         this.bdList();
     },
     methods:{
-        open() {
+        open(companyId) {
             let self=this;
             if(this.title=='编辑公司'){
                 // 获取公司详情;
-                this.$http.get(this.$apiUrl.company.detail+"?companyId="+this.companyId)
+                this.$http.get(this.$apiUrl.company.detail+"?companyId="+companyId)
                     .then(function(data){
                         if(data.data.data.file) {
                             data.data.data.file = [data.data.data.file];

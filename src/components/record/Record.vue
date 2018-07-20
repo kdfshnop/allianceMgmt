@@ -1,10 +1,10 @@
 <template lang="html">
     <el-table
-        :data="listInfo"
+        :data="isShow"
         border
         style="width: 100%">
         <el-table-column type="expand" >
-            <template slot-scope="props">
+            <template slot-scope="props" v-if="props.row.expand">
                 <el-form label-position="left" inline class="demo-table-expand" >
                     <el-form-item :label="item.title" v-for="item in props.row.detail" :key="item.title">
                         <span>{{ item.pre}}-->{{item.now}}</span>
@@ -43,8 +43,24 @@ export default {
     methods:{
         
     },
-    mounted() {
-        
+    computed:{
+        // table选项无展开内容时，不展开;
+        isShow(){
+            // 先遍历数组
+            for(var value of this.listInfo){
+                var keys=[];//接收对象的key;
+                // 遍历对象
+                for(var key in value.detail){
+                    keys.push(key);
+                };
+                if(keys.length){
+                    value.expand=true;
+                }else{
+                    value.expand=false;
+                }
+            };
+            return this.listInfo;
+        }
     }
 }
 </script>

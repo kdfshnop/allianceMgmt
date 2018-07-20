@@ -141,7 +141,7 @@
                 </span>
             </el-dialog>
             <!--编辑公司组件-->
-            <editor-company ref="editor" :companyId="companyId" :title="title" @editSuccess='editSuccess' @addSuccess='addSuccess'></editor-company>
+            <editor-company ref="editor" :title="title" @editSuccess='editSuccess' @addSuccess='addSuccess'></editor-company>
             <!--分佣账号组件-->
             <commission ref="commission" :companyId="companyId"></commission>
         </el-main>
@@ -337,7 +337,7 @@ export default {
             this.title='编辑公司';
             // 调用子组件方法，显示对话框,用setTimeout是为了可以加载添加公司组件;
             setTimeout(()=>{
-                this.$refs.editor.open();
+                this.$refs.editor.open(this.comapnyId);
             },200);  
         },
         // 子组件编辑成功之后，传递给父组件的值;
