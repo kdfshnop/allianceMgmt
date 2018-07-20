@@ -57,14 +57,14 @@ export default {
     methods:{
         submitForm() {
             let self=this;
-            // let realForm={};
-            // realForm.bankAccount=this.form.bankAccount;
-            // realForm.openBankType=this.form.openBankType;
-            // realForm.accountName=this.form.accountName;
-            // realForm.openBankBranch=this.form.openBankBranch;
-            self.form.companyId=this.companyId;
+            let realForm={};
+            realForm.bankAccount=this.form.bankAccount;
+            realForm.openBankType=this.form.openBankType;
+            realForm.accountName=this.form.accountName;
+            realForm.openBankBranch=this.form.openBankBranch;
+            realForm.companyId=this.companyId;
             // 获取输入的表单信息,以及该公司的标识如公司Id;
-            this.$http.post(this.$apiUrl.company.commission,self.form)
+            this.$http.post(this.$apiUrl.company.commission,realForm)
                 .then(function(data){
                     self.$message({
                         message: '成功',
@@ -74,7 +74,10 @@ export default {
                     self.dialogVisible=false;
                 })
                 .catch(function(err){
-                    console.log(err,'失败');
+                    self.$message({
+                        message: '成功',
+                        type: 'error'
+                    });
                 });    
         },
         resetForm() {
@@ -95,13 +98,12 @@ export default {
         },
         // 调用子组件方法;
         open(){
-            this.dialogVisible=true;
-            console.log(this.companyId,123456678899)
             // 获取公司详情;
             let self=this;
             this.$http.get(this.$apiUrl.company.detail+"?companyId="+this.companyId)
                 .then(function(data){
                     self.form=data.data.data;
+                    this.dialogVisible=true;
                     console.log(self.form,'公司详情');
                 })
                 .catch(function(err){

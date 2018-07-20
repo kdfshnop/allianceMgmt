@@ -56,9 +56,9 @@ export default {
                     keys.push(key);
                 };
                 if(keys.length){
-                    value.expand=true;
-                }else{
                     value.expand=false;
+                }else{
+                    value.expand=true;
                 }
             };
             console.log(this.listInfo,'日志信息');

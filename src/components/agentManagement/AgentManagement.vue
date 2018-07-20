@@ -163,7 +163,7 @@
                 <p>a、可对门店终止合作</p>
                 <p>b、可对门店重新绑定代理商,继续服务</p>
                 <span slot="footer" class="dialog-footer">
-                    <el-button type="primary" @click="prompt">知道了</el-button>
+                    <el-button type="primary" @click="know">知道了</el-button>
                 </span>
             </el-dialog>
             <!--<el-dialog title="!终止合作,一旦终止合作,将无法重新再启用" :visible.sync="secondDialogVisible" width="30%" >
@@ -272,6 +272,9 @@ export default {
                 }
             });
         },
+        know(){
+            this.firstDialogVisible=false;
+        },
         // 代理商列表;
         agencyList(){
             let self=this;
@@ -295,7 +298,11 @@ export default {
         endJoin(index,row){
             this.currentCompanyInfo=row;
             this.agencySotre=this.currentCompanyInfo.storeTotal;
-            this.firstDialogVisible=true;
+            if(this.agencySotre){
+                this.firstDialogVisible=true;
+            }else{
+                this.prompt();
+            } 
         },
         // 确定终止合作;
         // noJoin(){

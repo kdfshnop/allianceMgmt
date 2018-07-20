@@ -287,7 +287,7 @@ export default {
                                     message: '添加成功',
                                     type: 'success'
                                 });
-                                this.$emit('addSuccess',realForm);
+                                self.$emit('addSuccess',realForm);
                             })
                             .catch(function(error){
                                 self.$message({

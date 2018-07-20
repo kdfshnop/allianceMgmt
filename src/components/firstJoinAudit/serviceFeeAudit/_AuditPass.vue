@@ -39,7 +39,15 @@
                         </el-select>
                     </el-form-item>
                     <el-form-item label="代理商" prop="targetName">
-                        <el-input v-model="form.targetName"></el-input>
+                        <el-select v-model="form.targetName" placeholder="请选择" @focus="agencyList" filterable>
+                            <el-option label="暂无代理商" :value="0"></el-option>
+                            <el-option
+                                v-for="item in agencyInfoList"
+                                :key="item.agencyId"
+                                :label="item.agencyCompanyName"
+                                :value="item.agencyId">
+                            </el-option>
+                        </el-select>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -80,6 +88,7 @@ export default {
     name:'auditPass',
     data(){
         return {
+            agencyInfoList:[],//代理商列表;
             // 表单查询信息
             form: {
                 auditorId:'',//审核人Id;
@@ -100,6 +109,7 @@ export default {
     created(){
         this.requestList();
         this.requestSubmitList();
+        this.agencyList();
     },
     methods:{
         //每页多少条
@@ -129,6 +139,17 @@ export default {
                 .catch(function(err){
                     console.log(err,'失败');
                 });
+        },
+        // 代理商列表;
+        agencyList(){
+            let self=this;
+            this.$http.get(this.$apiUrl.agent.list)
+            .then(function(data){
+                self.agencyInfoList=data.data.data;
+            })
+            .catch(function(err){
+                console.log(err,'代理商列表失败');
+            })
         },
         // 获取提交人列表;
         requestSubmitList(){
