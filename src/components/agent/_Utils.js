@@ -305,8 +305,8 @@ export function generateParam(state) {
         address: safeGet(state, "AgentCompanyInfo.address"), // 公司地址
       //   businesType: // prd中没有
         cityId: safeGet(state, "AgentBasicInfo.agentCity.1"),
-        cooperationEnd: safeGet(state, "AgentBasicInfo.startTime"),
-        cooperationStart: safeGet(state, "AgentBasicInfo.endTime"),
+        cooperationEnd: safeGet(state, "AgentBasicInfo.endTime"),
+        cooperationStart: safeGet(state, "AgentBasicInfo.startTime"),
       //   createTime
       //   createrId:
       //   deposite: 
