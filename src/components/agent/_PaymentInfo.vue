@@ -51,8 +51,8 @@
                 <el-col :span="12">
                     <el-form-item label="费用包含">
                         <el-checkbox-group v-model="containPayment">
-                        <el-checkbox label="1">平台服务费</el-checkbox>
-                        <el-checkbox label="2">保证金</el-checkbox>
+                        <el-checkbox :label="1">平台服务费</el-checkbox>
+                        <el-checkbox :label="2">保证金</el-checkbox>
                         </el-checkbox-group>
                     </el-form-item>                    
                 </el-col>
@@ -142,8 +142,8 @@
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="费用包含">
-                            {{containPayment && containPayment.indexOf('1') > -1&&'平台服务费'||''}} 
-                            {{containPayment && containPayment.indexOf('2') > -1&&'保证金'||''}}
+                            {{containPayment && containPayment.indexOf(1) > -1&&'平台服务费'||''}} 
+                            {{containPayment && containPayment.indexOf(2) > -1&&'保证金'||''}}
                         </el-form-item>                    
                     </el-col>
                 </el-row> 
@@ -222,13 +222,13 @@
                 expand: true,
                 types: [{
                     label: "汇款",
-                    value: "1"
+                    value: 1
                 },{
                     label: "支付宝",
-                    value: "2"
+                    value: 2
                 },{
                     label: "其他",
-                    value: "3"
+                    value: 3
                 },],
                 status: "",
                 innerItem: {},  
