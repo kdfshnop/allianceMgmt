@@ -1,6 +1,6 @@
 <template lang="html">
     <el-table
-        :data="jialist"
+        :data="isShow"
         border
         style="width: 100%" :row-class-name="setClassName">
         <el-table-column type="expand" >
@@ -26,19 +26,7 @@ export default {
     props:['agencyId'],
     data() {
         return {
-            listInfo:[],
-            jialist:[{
-                "optype":1,
-                "result":"成功",
-                detail:null,
-                expand:true
-            },
-            {
-                "optype":1,
-                "result":"成功",
-                detail:null,
-                expand:false
-            }]
+            listInfo:[]
         }
     },
     created(){
@@ -54,9 +42,8 @@ export default {
     },
     methods:{
         setClassName({row, index}){
-        // 通过自己的逻辑返回一个class或者空
-        return row.expand ? 'expand' : '';
-    },
+            return row.expand ? 'expand-record' : '';
+        },
     },
     computed:{
         // table选项无展开内容时，不展开;
@@ -82,9 +69,6 @@ export default {
 </script>
 
 <style scoped>
-.expand .el-table__expand-column .cell {
-    display: none;
-}
 .demo-table-expand {
    font-size: 0;
 }
@@ -96,5 +80,10 @@ export default {
     margin-right: 0;
     margin-bottom: 0;
     width: 50%;
+}
+</style>
+<style>
+.expand-record .el-table__expand-column .cell {
+    display: none;
 }
 </style>
