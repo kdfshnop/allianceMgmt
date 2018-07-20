@@ -216,7 +216,7 @@ export function generateParam(state) {
     }
 
     // 对接人，未支付时
-    if(!safeGet(state, "PaymentInfo.PaymentStatus")) {
+    if(!safeGet(state, "PaymentInfo.paymentStatus")) {
         agencyPersons.push({
             // email: safeGet(state, "AgentCompanyInfo.email"),// 邮箱            
             // idCode: safeGet(state, "AgentCompanyInfo.idCard"),// 身份证
