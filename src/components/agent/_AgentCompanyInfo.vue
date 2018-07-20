@@ -16,7 +16,7 @@
             </el-form-item>
             <el-row v-show="signed">
                 <el-col :span="12">
-                    <el-form-item label="公司名">
+                    <el-form-item label="公司名" prop="name">
                         <el-input v-model="name" placeholder="请输入营业执照全名" maxlength="50"></el-input>
                     </el-form-item>                                                                         
                 </el-col>
@@ -26,7 +26,7 @@
                     </el-form-item>
                 </el-col>
             </el-row>   
-            <el-row v-if="signed">
+            <el-row v-show="signed">
                 <el-col :span="12">
                     <el-form-item label="营业执照号">
                         <el-input v-model="number" maxlength="50"></el-input>
@@ -38,15 +38,15 @@
                     </el-form-item>
                 </el-col>
             </el-row>     
-            <el-form-item label="公司具体地址" v-if="signed">
+            <el-form-item label="公司具体地址" v-show="signed">
                 <el-input v-model="address" maxlength="100"></el-input>
             </el-form-item> 
-            <el-form-item label="上传营业执照" v-if="signed">                
+            <el-form-item label="上传营业执照" v-show="signed">                
                     <upload :fileList.sync="numberFileList" v-if="mode === 'create' || mode === 'edit' && status === 'editing'"></upload>
             </el-form-item>  
 
             <!-- 下面是未注册显示的 -->
-            <el-row v-if="!signed">
+            <el-row v-show="!signed">
                 <el-col :span="12">
                     <el-form-item label="预计注册完成时间">
                         <el-date-picker
@@ -59,7 +59,7 @@
                     </el-form-item>                                                                         
                 </el-col>               
             </el-row>  
-            <el-row v-if="!signed">
+            <el-row v-show="!signed">
                 <el-col :span="12">
                     <el-form-item label="代理商负责跟踪人">
                         <el-input v-model="tracerName"></el-input>
@@ -71,7 +71,7 @@
                     </el-form-item>                                                                         
                 </el-col>
             </el-row>     
-            <el-row v-if="!signed">
+            <el-row v-show="!signed">
                 <el-col :span="12">
                     <el-form-item label="邮箱号" prop="email">
                         <el-input v-model="email"></el-input>
@@ -83,14 +83,14 @@
                     </el-form-item>                                                                         
                 </el-col>
             </el-row>  
-            <el-form-item label="备注信息" v-if="!signed">
+            <el-form-item label="备注信息" v-show="!signed">
                 <el-input type="textarea" v-model="remark"></el-input>
             </el-form-item> 
 
-            <el-form-item label="上传身份证正面照" v-if="!signed">                
+            <el-form-item label="上传身份证正面照" v-show="!signed">                
                     <upload :fileList.sync="idCardFrontFileList" v-if="mode === 'create' || mode === 'edit' && status === 'editing'"></upload>
             </el-form-item>
-            <el-form-item label="上传身份证反面照" v-if="!signed">
+            <el-form-item label="上传身份证反面照" v-show="!signed">
                 <upload :fileList.sync="idCardBackFileList" v-if="mode === 'create' || mode === 'edit' && status === 'editing'"></upload>
             </el-form-item>
         </el-form>
@@ -187,6 +187,7 @@ import {mapMutations} from 'vuex';
  *  1. 上传文件接口
  *  2. 交互
  */
+let agentCompanyInfo;// 这是一个尴尬的事情，rules中的validator不能访问到vue实例，因此需要把实例保存下来:(
 export default {
     name: "agentCompanyInfo",
     props: {
@@ -220,8 +221,21 @@ export default {
                     validator: Validator.idCard,
                     trigger: 'blur'
                 }],
-                companyName: [{
-                    required: true, message: "公司名称为必填项", trigger: 'blur'
+                name: [{
+                    //required: true, message: "公司名称为必填项", trigger: 'blur'
+                    validator: function(rule, value, callback){
+                        //console.log(agentCompanyInfo);   
+                        if(agentCompanyInfo.signed) {
+                            if(value == null || value == '') {
+                                callback('公司名是必填项!');
+                            }else{
+                                callback();
+                            }                            
+                        }else{
+                            callback(); 
+                        }                        
+                    },
+                    trigger: 'blur'
                 }]
             }
         };
@@ -261,7 +275,7 @@ export default {
             },
             validate(fn) {
                 if(this.signed) {
-                    fn(true);
+                    this.$refs.form.validate(fn);
                 }else{
                     this.$refs.form.validate(fn);
                 }                
@@ -283,6 +297,9 @@ export default {
                 'updateRemark',
                 'updateIdCardFrontFileList',
                 'updateIdCardBackFileList'])
+    },
+    created() {
+        agentCompanyInfo = this;
     }
 }
 </script>

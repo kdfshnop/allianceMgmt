@@ -148,7 +148,10 @@ export default {
                 inputPlaceholder: "请说明本次修改的内容和原因", 
                 customClass: 'dialog-commit', 
                 inputValidator: function(val){
-                    if(val.length > 500) {
+                    if(val == null || val == '') {
+                        return "内容和原因是必填项!";
+                    }
+                    if(val && val.length > 500) {
                         return "最多输入500个字符";
                     }
                     return true;
@@ -173,7 +176,7 @@ export default {
     }
 }
 </script>
-<style scoped>
+<style>
 .dialog-commit {
     /* // 提交编辑后会进行审核，审核通过后编辑生效 */
     width: 560px;

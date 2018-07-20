@@ -142,7 +142,7 @@ export default {
                 inputPlaceholder: "请输入驳回理由", 
                 customClass: 'dialog-reject', 
                 inputValidator: function(val){
-                    if(val==null) {
+                    if(val==null || val == '') {
                         return "驳回理由必填:)";
                     }
                     if(val && val.length > 500) {

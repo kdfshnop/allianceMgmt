@@ -11,7 +11,7 @@
                 <el-col :span="12">
                     <el-form-item label="BD人员姓名">                        
                         <el-select
-                            v-model="selectedBD"                            
+                            v-model="bdInfo.id"                            
                             filterable                                                        
                             placeholder="请输入姓名"
                             @change="handleBdchange"
@@ -26,7 +26,7 @@
                     </el-form-item>
                     <el-form-item label="彩霞服务人员姓名">
                         <el-select
-                            v-model="selectedCX"                            
+                            v-model="cxInfo.id"                            
                             filterable                                                    
                             placeholder="请输入姓名"                            
                             @change="handleCxchange"
@@ -41,8 +41,7 @@
                     </el-form-item>
                     <el-form-item label="1对1落地指导">
                         <el-select
-                            v-model="selectedDirector" 
-                            :value="bdInfo.id"                           
+                            v-model="directorInfo.id"                                                     
                             filterable                                                    
                             placeholder="请输入姓名"                            
                             @change="handleDirectorchange"
@@ -124,7 +123,8 @@
                 innerItem: {},
                 bds:[],
                 cxs:[],
-                directors:[]              
+                directors:[],
+                callback: [],             
             };
         },
         computed: {
@@ -133,6 +133,16 @@
             "directorInfo": generateComputed("directorInfo", "ServiceStaffInfo", "updateDirectorInfo")
         },
         methods: {
+            s() {
+                // 为了保证
+                this.c = this.c || 0;
+                this.c++;
+                if(this.c == 3) {
+                    for(let i = 0; i < this.callback.length; i++) {
+                        this.callback[i]();
+                    }                    
+                }
+            },
             getBDs() {    
                 // if(keyword === '' || keyword == null) {
                 //     return;
@@ -144,6 +154,7 @@
                     }
                 }).then((data)=>{                    
                     this.bds = data.data.data;
+                    this.s();
                 });
                            
             },
@@ -155,6 +166,7 @@
                     }
                 }).then((data)=>{
                     this.cxs = data.data.data;
+                    this.s();
                 });
             },
             getDirectors() {
@@ -165,6 +177,7 @@
                     }
                 }).then((data)=>{
                     this.directors = data.data.data;
+                    this.s();
                 });
             },
             handleEdit() {
@@ -231,14 +244,59 @@
         },
         watch: { 
             '$store.state.ServiceStaffInfo.bdInfo.id': function(val) {
-                this.selectedBD = val;
+                if(this.c == 3) {
+                    this.selectedBD = val;    
+                } else {
+                    this.callback.push(()=>{
+                        this.selectedBD = val;
+                   });
+                }                
+            },
+            '$store.state.ServiceStaffInfo.bdInfo': function(val) {
+                if(this.c == 3) {
+                    this.selectedBD = val.id;
+                } else {
+                    this.callback.push(()=>{
+                        this.selectedBD = val.id;
+                   });
+                }                
             },
             '$store.state.ServiceStaffInfo.cxInfo.id': function(val) {
-                this.selectedCX = val;
+                if(this.c == 3) {
+                    this.selectedCX = val;
+                } else {
+                    this.callback.push(()=>{
+                        this.selectedCX = val;
+                   });
+                }                
+            },
+            '$store.state.ServiceStaffInfo.cxInfo': function(val) {
+                if(this.c == 3) {
+                    this.selectedCX = val.id;
+                } else {
+                    this.callback.push(()=>{
+                        this.selectedCX = val.id;
+                   });
+                }                
             },
             '$store.state.ServiceStaffInfo.directorInfo.id': function(val) {
-                this.selectedDirector = val;
-            }            
+                if(this.c == 3) {
+                    this.selectedDirector = val;
+                } else {
+                    this.callback.push(()=>{
+                        this.selectedDirector = val;
+                   });
+                }                
+            },
+            '$store.state.ServiceStaffInfo.directorInfo': function(val) {
+                if(this.c == 3) {
+                    this.selectedDirector = val.id;
+                } else {
+                    this.callback.push(()=>{
+                        this.selectedDirector = val.id;
+                   });
+                }                
+            }          
         }
 
     }
