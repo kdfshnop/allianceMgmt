@@ -42,7 +42,7 @@
                 </el-col>
             </el-row>
             <el-form-item label="bd" prop="bd"  label-width="40px" class="tl">
-                <el-select v-model="form.bd" placeholder="请选择" @focus="bdList" filterable>
+                <el-select v-model="form.bd" placeholder="请选择" @focus="bdList" filterable style="width:100%;">
                     <el-option
                         v-for="item in bdInfoList"
                         :key="item.id"

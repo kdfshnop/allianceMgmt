@@ -13,7 +13,7 @@
             </template>
         </el-table-column>
         <el-table-column align="center" label="操作类型" prop="optype"></el-table-column>
-        <el-table-column align="center" label="操作人" prop="operator"></el-table-column>
+        <el-table-column align="center" label="操作人" prop="operatorName"></el-table-column>
         <el-table-column align="center" label="执行结果" prop="result"></el-table-column>
         <el-table-column align="center" label="操作时间" prop="operatetime"></el-table-column>
         <el-table-column align="center" label="备注" prop="remark"></el-table-column>

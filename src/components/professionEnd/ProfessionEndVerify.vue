@@ -99,28 +99,33 @@ export default {
                 targetType:this.targetType,
                 remark:this.remark
             };
+            let self=this;
                 if(this.title=='驳回'){
                     if(this.remark){
                         this.$http.post(this.$apiUrl.professionEnd.reject,form)
                             .then(function(data){
-                                this.remark="";
+                                self.remark="";
                                 self.dialogVisible = false;
+                                self.$message.success('驳回请求通过');
+                                history.back();
                             })
                             .catch(function(err){
-                                this.$message.error('驳回请求失败');
+                                self.$message.error('驳回请求失败');
                             });
                     }else{
-                        this.$message.error('请填写驳回原因');
+                        self.$message.error('请填写驳回原因');
                     }
                     
                 }else{
                     this.$http.post(this.$apiUrl.professionEnd.adopt,form)
                     .then(function(data){
-                        this.remark="";
+                        self.remark="";
                         self.dialogVisible = false;
+                        self.$message.error('通过请求成功');
+                        history.back();
                     })
                     .catch(function(err){
-                        this.$message.error('通过请求失败');
+                        self.$message.error('通过请求失败');
                     })
                 };  
         }

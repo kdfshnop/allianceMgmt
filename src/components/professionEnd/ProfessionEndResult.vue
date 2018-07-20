@@ -57,6 +57,7 @@ export default {
         this.$http.get(this.$apiUrl.professionEnd.summary)
             .then(function(data){
                 self.total=data.data.data;
+                console.log(123456)
             })
             .catch(function(err){
                 console.log(err);
