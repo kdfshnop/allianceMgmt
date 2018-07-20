@@ -178,7 +178,7 @@ export default new Vuex.Store({
                                 return [1, 2];
                             }
                             return [];
-                        })(p[0]),
+                        })(p[0].costType),
                         number: p[0].paymentNumber,
                         subbankName: p[0].expendBank,
                         remark: p[0].remark,

@@ -18,8 +18,16 @@
                         <el-form-item label="门店所属城市" prop="cityList">
                             <region v-model="form.cityList" :startLevel="startLevel" :endLevel="endLevel"></region>
                         </el-form-item>
-                        <el-form-item label="门店所属代理商" prop="agency">
-                            <el-input v-model="form.agency"></el-input>
+                        <el-form-item label="门店所属代理商" prop="agencyId">
+                            <el-select v-model="form.agencyId" placeholder="请选择" @focus="agencyList" filterable>
+                                <el-option label="暂无代理商" :value="0"></el-option>
+                                <el-option
+                                    v-for="item in agencyInfoList"
+                                    :key="item.agencyId"
+                                    :label="item.agencyCompanyName"
+                                    :value="item.agencyId">
+                                </el-option>
+                            </el-select>
                         </el-form-item>
                         <el-form-item label="门店类型" prop="storeType">
                             <el-select v-model="form.storeType" filterable>
@@ -46,8 +54,16 @@
                                 format="yyyy-MM-dd">
                             </el-date-picker>
                         </el-form-item>
-                        <el-form-item label="门店所属公司" prop="companyName">
-                            <el-input v-model="form.companyName"></el-input>
+                        <el-form-item label="门店所属公司" prop="companyId">
+                            <!--<el-input v-model="form.companyName"></el-input>-->
+                            <el-select v-model="form.companyId" placeholder="请选择" @focus="companyList"  filterable>
+                                <el-option
+                                    v-for="item in companyInfoList"
+                                    :key="item.companyId"
+                                    :label="item.name"
+                                    :value="item.companyId">
+                                </el-option>
+                            </el-select>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -97,19 +113,20 @@
                 </el-dialog>
             <!--终止合作对话框-->
             <el-dialog title="终止门店合作" :visible.sync="firstDialogVisible" width="30%" >
-                <p>1、将不会再被恢复，有房有客app中不可以再选择到该门店</p>
-                <p>2、门店旗下的经纪人账号被冻结</p>
+                <p>一旦终止和门店的合作</p>
+                <p style="padding-left:15px;">a、将不会再被恢复</p>
+                <p style="padding-left:15px;">b、门店旗下的经纪人账号被冻结</p>
                 <span slot="footer" class="dialog-footer">
-                    <el-button type="primary" @click="firstDialogVisible = false,secondDialogVisible = true">以了解风险，下一步</el-button>
+                    <el-button type="primary" @click="prompt">知道了</el-button>
                 </span>
             </el-dialog>
-            <el-dialog title="终止公司合作" :visible.sync="secondDialogVisible" width="30%" >
+            <!--<el-dialog title="终止公司合作" :visible.sync="secondDialogVisible" width="30%" >
                 <textarea name="" id="" rows="10" placeholder="请添加终止合作原因" v-model="remark" style="width:100%;"></textarea>
                 <span slot="footer" class="dialog-footer">
                     <el-button @click="continueJoin">取 消</el-button>
                     <el-button type="primary" @click="endJoin" >确 定</el-button>
                 </span>
-            </el-dialog>
+            </el-dialog>-->
             <!--编辑添加门店组件-->
             <editor-store ref="editor"  :title="title" :storeId="storeId" @editSuccess='editSuccess' @addSuccess='addSuccess' :currentStoreInfo="currentStoreInfo"></editor-store>
         </el-main>
@@ -134,6 +151,8 @@ export default {
                 "storeEndJoin": "/storeManagement#storeEndJoin"//终止合作
             },
             breadCrumb: [{text:'加盟管理'},{text: "门店管理"}],
+            agencyInfoList:[],//代理商列表
+            companyInfoList:[],//中介公司列表
             startLevel:1,//二级联动城市传参
             endLevel:2,//二级联动城市传参
             qrCodeShow:false,
@@ -149,10 +168,10 @@ export default {
             title:'',//判断是编辑门店还是添加门店
             // 表单查询信息
             form: {
-                agency:null,//门店所属代理商
+                agencyId:null,//门店所属代理商Id
                 cityId:null,//门店所属城市Id
                 cityList:[],//城市二级联动所需
-                companyName:null,//门店所属公司
+                companyId:null,//门店所属公司Id
                 cooperationTime:null,//创建时间段;
                 cooperationStart:null,//创建开始时间
                 cooperationEnd:null,//创建结束时间
@@ -165,8 +184,34 @@ export default {
     },
     created(){
         this.requestList();
+        this.agencyList();
+        // 中介公司列表;
+        this.companyList();
     },
     methods:{
+        // 代理商列表;
+        agencyList(){
+            let self=this;
+            this.$http.get(this.$apiUrl.agent.list)
+            .then(function(data){
+                self.agencyInfoList=data.data.data;
+            })
+            .catch(function(err){
+                console.log(err,'代理商列表失败');
+            })
+        },
+        // 中介公司列表;
+        companyList(){
+            let self=this;
+            // 中介公司列表;
+            this.$http.get(this.$apiUrl.company.list)
+                .then(function(data){
+                    self.companyInfoList=data.data.data
+                })
+                .catch(function(err){
+                    console.log(err,'中介公司列表err')
+                })
+        },
         // 子组件添加门店成功之后，传递给父组件的值;
         addSuccess(addInfo){
             this.$refs.form.resetFields();
@@ -234,31 +279,49 @@ export default {
         //终止合作,第一次弹框
         handleEnd(index,row){
             this.storeId=row.storeId;
-            console.log(row,1111111111)
             this.firstDialogVisible=true;
         },
-        //确定终止合作,第二次弹框
-        endJoin(){
+        // prompt弹框;
+        prompt(){
             let self=this;
-            if(this.remark){
-                this.secondDialogVisible=false;
-                this.$http.post(this.$apiUrl.store.terminate+"/"+this.storeId+"?remark="+this.remark)
+            self.firstDialogVisible = false ;
+            this.$prompt('', '终止合作，一旦终止合作，将无法重新再启用', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消', 
+                inputType: "textarea",  
+                inputPlaceholder: "请添加终止合作原因", 
+                customClass: 'store-end-join', 
+                inputValidator: function(val){
+                    if(val&&val.length > 200) {
+                        return "最多输入200个字符";
+                    }else if(!val){
+                        return "请填写终止合作原因";
+                    }else{
+                        return true;
+                    }  
+                }   
+            }).then(({ value }) => {                                
+                if(value){
+                    this.$http.post(this.$apiUrl.store.terminate+"/"+this.storeId+"?remark="+value)
                     .then(function(data){
-                        self.remark="";
-                        console.log(data);
+                        self.$message({
+                            message: '提交成功',
+                            type: 'success'
+                        });
                     })
                     .catch(function(err){
-                        console.log(err);
-                    })
-            }else{
-                alert('请填写终止合作原因');
-            };
-            //将该门店终止合作申请提交，该公司信息进入终止合作列表;
-        },
-        //点击二次对话框取消按钮，继续合作
-        continueJoin(){
-            this.secondDialogVisible=false;
-            this.remark='';
+                        self.$message({
+                            message: '提交失败',
+                            type: 'error'
+                        });
+                    });
+                }else{
+                    self.$message({
+                        message: '请填写终止合作原因',
+                        type: 'warning'
+                    });
+                }
+            });
         },
         // 门店列表请求公共函数;
         requestList(){
@@ -291,6 +354,12 @@ export default {
 </script>
 
 <style scoped>
+    .el-select{
+        width:100%;
+    }
+    .el-date-editor.el-range-editor.el-input__inner.el-date-editor--daterange{
+        width:100%;
+    }
     .search-result{
         color:gray;
         margin-bottom: 20px;
@@ -302,6 +371,13 @@ export default {
     }
     .el-button{
         margin-left: 0 !important;
+    }
+</style>
+
+<style>
+    /*scoped会影响prompt框的样式*/
+    .store-end-join textarea{
+        height:100px;
     }
 </style>
 

@@ -15,7 +15,7 @@
             </div>
             <el-table :data="apiData" border style="width: 100%">
                 <el-table-column prop="createTime" label="创建时间" align="center"></el-table-column>
-                <el-table-column prop="operator" label="添加人" align="center" ></el-table-column>
+                <el-table-column prop="operatorName" label="添加人" align="center" ></el-table-column>
                 <el-table-column prop="message" label="信息" align="center" ></el-table-column>
                 <el-table-column  label="操作" align="center">
                     <template slot-scope="scope">

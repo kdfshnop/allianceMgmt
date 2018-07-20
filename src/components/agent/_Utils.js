@@ -245,7 +245,7 @@ export function generateParam(state) {
             //   agencyId: 
             amount: safeGet(state, "PaymentInfo.actualPayment"),
             // auditor: 
-            costType: safeGet(state, "PaymentInfo.containPayment").reduce(function(t,v,i,a){ return t += v}, 0),//款项类型 1.服务费 2.保证金 3.服务费+保证金 4. 佣金
+            costType: safeGet(state, "PaymentInfo.containPayment").reduce(function(t,v,i,a){ return t += +v}, 0),//款项类型 1.服务费 2.保证金 3.服务费+保证金 4. 佣金
             // createTime
             // expendAccount: //出款账号
             expendBank: safeGet(state, "PaymentInfo.subbankName"), //出款银行

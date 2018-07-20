@@ -99,6 +99,9 @@ export default {
         margin-top: 100px;
         text-align: center;
     }
+    .search-result{
+        margin:50px 0 20px 0;
+    }
 </style>
 
 
