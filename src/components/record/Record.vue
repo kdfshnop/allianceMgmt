@@ -1,10 +1,10 @@
 <template lang="html">
     <el-table
-        :data="isShow"
+        :data="jialist"
         border
-        style="width: 100%">
+        style="width: 100%" :row-class-name="setClassName">
         <el-table-column type="expand" >
-            <template slot-scope="props" v-if="props.row.expand">
+            <template slot-scope="props">
                 <el-form label-position="left" inline class="demo-table-expand" >
                     <el-form-item :label="item.title" v-for="item in props.row.detail" :key="item.title">
                         <span>{{ item.pre}}-->{{item.now}}</span>
@@ -27,6 +27,18 @@ export default {
     data() {
         return {
             listInfo:[],
+            jialist:[{
+                "optype":1,
+                "result":"成功",
+                detail:null,
+                expand:true
+            },
+            {
+                "optype":1,
+                "result":"成功",
+                detail:null,
+                expand:false
+            }]
         }
     },
     created(){
@@ -41,7 +53,10 @@ export default {
         });
     },
     methods:{
-        
+        setClassName({row, index}){
+        // 通过自己的逻辑返回一个class或者空
+        return row.expand ? 'expand' : '';
+    },
     },
     computed:{
         // table选项无展开内容时，不展开;
@@ -59,13 +74,17 @@ export default {
                     value.expand=false;
                 }
             };
+            console.log(this.listInfo,'日志信息');
             return this.listInfo;
         }
     }
 }
 </script>
 
-<style lang="css" scoped>
+<style scoped>
+.expand .el-table__expand-column .cell {
+    display: none;
+}
 .demo-table-expand {
    font-size: 0;
 }

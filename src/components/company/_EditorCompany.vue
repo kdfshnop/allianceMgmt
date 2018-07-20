@@ -112,7 +112,7 @@ import Region from '@/components/common/Region';
 import Upload from '@/components/common/Upload';
 export default {
     name:'editorCompany',
-    props:['title'],
+    props:['companyId','title'],
     components:{Region,Upload},
     data(){
         return {
@@ -163,11 +163,11 @@ export default {
         this.bdList();
     },
     methods:{
-        open(companyId) {
+        open() {
             let self=this;
             if(this.title=='编辑公司'){
                 // 获取公司详情;
-                this.$http.get(this.$apiUrl.company.detail+"?companyId="+companyId)
+                this.$http.get(this.$apiUrl.company.detail+"?companyId="+this.companyId)
                     .then(function(data){
                         if(data.data.data.file) {
                             data.data.data.file = [data.data.data.file];
