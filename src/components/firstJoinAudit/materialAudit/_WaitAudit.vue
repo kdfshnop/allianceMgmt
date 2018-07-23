@@ -10,7 +10,7 @@
                     <div><span class="circle"></span><span>{{scope.row.auditTypeName}}</span></div>
                 </template>
             </el-table-column>
-            <el-table-column prop="auditTime" label="提交时间" align="center"></el-table-column>
+            <el-table-column prop="submitTime" label="提交时间" align="center"></el-table-column>
             <el-table-column prop="endReason" label="操作" align="center">
                 <template slot-scope="scope">
                     <el-button size="mini" @click="audit(scope.$index, scope.row)" type="text" v-show="privileges.materialAudit">审核</el-button>
