@@ -348,9 +348,9 @@ export default {
         },
         //分佣账号设置 
         bankAccount(index, row){
-            this.companyId=row.comapnyId;
-            console.log(this.comapnyId,'父组件companyId')
-            this.$refs.commission.open(this.comapnyId);
+            this.companyId=row.companyId;
+            console.log(this.companyId,'父组件companyId')
+            this.$refs.commission.open(this.companyId);
         },
         //终止合作,第一次弹框
         handleEnd(index,row){
