@@ -1,7 +1,7 @@
 <template>
     <CollapsePanel class="gap-2" :expand="expand" v-show="visible">    
         <div align-left slot="header" class="clearfix">
-            <span style="margin-right: 30px">分佣账号</span> <span v-show="mode=='view'" style="margin-left: -20px;font-size: 14px; color: #4e4e4e;">(代理商接受返佣的银行账户)</span>  
+            <span style="margin-right: 30px">分佣账号</span> <span style="margin-left: -20px;font-size: 14px; color: #4e4e4e;">(代理商接受返佣的银行账户)</span>  
             <el-button v-show="mode === 'edit' && status !== 'editing'" @click="handleEdit" type="primary" size="mini">编辑</el-button>         
             <el-button v-show="mode === 'edit' && status === 'editing'" @click="handleCancel" type="danger" size="mini">取消</el-button>         
             <el-button v-show="mode === 'edit' && status === 'editing'" @click="handleComplete" type="success" size="mini">完成</el-button>                                     

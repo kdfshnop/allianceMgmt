@@ -1,7 +1,7 @@
 <template>
     <CollapsePanel class="gap-2" :expand="expand">    
         <div align-left slot="header" class="clearfix">
-            <span style="margin-right: 30px">代理商提佣比率</span><span v-show="mode=='view'" style="margin-left: -20px;font-size: 14px; color: #4e4e4e;">(代理商扩展1个门店所商定的返佣比率，比如代理商分6成，悟空分4成，提拥比率为60%)</span>    
+            <span style="margin-right: 30px">代理商提佣比率</span><span style="margin-left: -20px;font-size: 14px; color: #4e4e4e;">(代理商扩展1个门店所商定的返佣比率，比如代理商分6成，悟空分4成，提拥比率为60%)</span>    
             <el-button v-show="mode === 'edit' && status !== 'editing'" @click="handleEdit" type="primary" size="mini">编辑</el-button>         
             <el-button v-show="mode === 'edit' && status === 'editing'" @click="handleCancel" type="danger" size="mini">取消</el-button>         
             <el-button v-show="mode === 'edit' && status === 'editing'" @click="handleComplete" type="success" size="mini">完成</el-button>                            

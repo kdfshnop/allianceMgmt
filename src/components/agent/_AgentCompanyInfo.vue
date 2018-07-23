@@ -167,10 +167,10 @@
             </el-form-item> 
 
             <el-form-item label="上传身份证正面照" v-show="!signed">                
-                    <file-list></file-list>
+                    <file-list :fileList="idCardFrontFileList"></file-list>
             </el-form-item>
             <el-form-item label="上传身份证反面照" v-show="!signed">
-                <file-list></file-list>
+                <file-list :fileList="idCardBackFileList"></file-list>
             </el-form-item>
         </el-form>
     </CollapsePanel>

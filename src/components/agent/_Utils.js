@@ -151,7 +151,7 @@ export function generateParam(state) {
           //remark: partner.remark, //备注,服务经理不需要
           //backgroundRemark: partner.background == 5 && partner.backgroundRemark || '',// 背景选择其他可以手动输入
           wechat: safeGet(state, "ServiceManager.wechat"),//微信
-          personType: 7,// 服务经理    
+          personType: 8,// 服务经理    
           id: safeGet(state, "ServiceManager.id")
       });
       agency.isBdServerSame = 1;

@@ -295,7 +295,7 @@ export default new Vuex.Store({
                                     serviceManager.name = p.name;
                                     serviceManager.wechat = p.wechat;  
                                     // serviceManager.same = p.same;
-                                    serviceManager.same = agency.isBdServerSame == 1;
+                                    // serviceManager.same = agency.isBdServerSame == 1;
                                 break;
                                 case 8:
                                     // bdManager.agentId = p.agencyId;
@@ -304,7 +304,7 @@ export default new Vuex.Store({
                                     bdManager.mobile = p.mobile;
                                     bdManager.name = p.name;
                                     bdManager.wechat = p.wechat;  
-                                    bdManager.same = p.same;                  
+                                    bdManager.same = agency.isBdServerSame == 1;
                                 break;
                                 case 9:
                                     paymentInfo.brokerName = p.name;

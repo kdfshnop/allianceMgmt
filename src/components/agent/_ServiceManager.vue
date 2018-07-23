@@ -1,7 +1,7 @@
 <template>
     <CollapsePanel class="gap-2" :expand="expand">    
         <div align-left slot="header" class="clearfix">
-            <span style="margin-right: 30px">服务经理</span>           
+            <span style="margin-right: 30px">服务经理</span><span style="margin-left: -20px;font-size: 14px; color: #4e4e4e;">(为门店提供各种咨询服务，一般由代理商指派，首次添加后交由代理商维护)</span>            
             <el-button v-show="mode === 'edit' && status !== 'editing'" @click="handleEdit" type="primary" size="mini">编辑</el-button>         
             <el-button v-show="mode === 'edit' && status === 'editing'" @click="handleCancel" type="danger" size="mini">取消</el-button>         
             <el-button v-show="mode === 'edit' && status === 'editing'" @click="handleComplete" type="success" size="mini">完成</el-button>                                                
