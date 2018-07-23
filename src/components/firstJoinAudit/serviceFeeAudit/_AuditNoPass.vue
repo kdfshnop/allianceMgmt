@@ -39,7 +39,15 @@
                         </el-select>
                     </el-form-item>
                     <el-form-item label="代理商" prop="targetName">
-                        <el-input v-model="form.targetName"></el-input>
+                        <el-select v-model="form.targetName" placeholder="请选择" @focus="agencyList" filterable>
+                            <el-option label="暂无代理商" :value="0"></el-option>
+                            <el-option
+                                v-for="item in agencyInfoList"
+                                :key="item.agencyId"
+                                :label="item.agencyCompanyName"
+                                :value="item.agencyId">
+                            </el-option>
+                        </el-select>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -52,7 +60,7 @@
                 <el-button type="primary" @click="search">搜索</el-button>
             </el-col>
         </el-row>
-        <div class="search-result" >共搜索到{{rejectList.total}}条数据</div>
+        <div class="search-result">共搜索到{{rejectList.total}}条数据</div>
         <el-table :data="rejectList.data" border style="width: 100%">
             <el-table-column prop="name" label="代理商公司名称" align="center" ></el-table-column>
             <el-table-column prop="typeName" label="类型" align="center" ></el-table-column>
