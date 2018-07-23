@@ -38,6 +38,7 @@ export default {
     name:'commission',
     data(){
         return {
+            companyId:'',//公司Id;
             dialogVisible:false,
             form:{
                 bankAccount:'',//银行账户
@@ -99,6 +100,7 @@ export default {
         open(companyId){
             // 获取公司详情;
             let self=this;
+            this.companyId=companyId;
             this.$http.get(this.$apiUrl.company.detail+"?companyId="+companyId)
                 .then(function(data){
                     self.form=data.data.data;
