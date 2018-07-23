@@ -32,7 +32,13 @@ function hasDifference(fields, obj1, obj2) {
 
 export default new Vuex.Store({
     state: {
-        original: {}
+        original: {},
+        rejectedReason: ""
+    },
+    mutations: {
+        updateRejectedReason(state, val) {
+            state.rejectedReason = val;
+        }
     },
     actions: {
         getAgent(context, {agentId, agentState, cb}) {
@@ -44,7 +50,9 @@ export default new Vuex.Store({
             }).then((data)=>{                
                                 
                 // 把代理商详情接口中的数据赋值给store对象
-    
+                
+
+
                 // 基本信息
                 let agency = data.data.data.agency;
                 let basicInfo = {
@@ -161,7 +169,8 @@ export default new Vuex.Store({
                 let p = data.data.data.payments;
                 if(p && p[0]){
                     paymentInfo = {
-                        paymentStatus: p[0].stageNumber != 0,
+                        // paymentStatus: p[0].stageNumber != 0,
+                        paymentStatus: p[0].paymentState == 1,
                         type: p[0].payMethod,
                         actualPayment: p[0].amount,
                         containPayment: (function(v){
@@ -284,6 +293,7 @@ export default new Vuex.Store({
                                 serviceManager.name = p.name;
                                 serviceManager.wechat = p.wechat;  
                                 // serviceManager.same = p.same;
+                                serviceManager.same = agency.isBdServerSame == 1;
                             break;
                             case 8:
                                 // bdManager.agentId = p.agencyId;
@@ -384,6 +394,7 @@ export default new Vuex.Store({
                 context.commit('PlatformServiceFee/updateItem', platformServiceFee);
                 context.commit('ServiceManager/updateItem', serviceManager);
                 context.commit('ServiceStaffInfo/updateItem', serviceStaffInfo);
+                context.commit("updateRejectedReason", data.data.data.rejectedReason);
                 cb && cb(data.data);
             });
         },

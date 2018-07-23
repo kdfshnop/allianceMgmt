@@ -1,6 +1,11 @@
 <template>
     <el-container>
         <el-main> 
+            <el-alert
+                title="rejectedReason"
+                :closable="false"
+                type="error" v-show="!!rejectedReason">
+            </el-alert>
             <bread-crumb :items="breadCrumb"></bread-crumb>        
             <el-tabs v-model="activeName" @tab-click="handleClick" class="gap-2">
                 <el-tab-pane label="合作资料" name="first" v-if="privileges.materialTab">
@@ -100,7 +105,7 @@ export default {
     },
     computed: {
         activeName() {
-            // let name = "first";
+            // 因为tab是有权限的因此要动态的判断要显示的tab名字
             if(this.privileges.materialTab) {
                 return "first";
             }
@@ -119,6 +124,9 @@ export default {
             if(this.privileges.platformTab) {
                 return "sixth";
             }
+        },
+        rejectedReason() {
+            return this.$store.state.rejectedReason;
         }
     },
     methods: {

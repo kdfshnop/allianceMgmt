@@ -76,7 +76,9 @@ export function generateParam(state) {
 
     // 收集接口数据并发送请求
     let param = {};
-    let agency = {};    
+    let agency = {
+        isBdServerSame: 2
+    };
     agency.additional = safeGet(state, "ContractInfo.special");// 合同的特殊条款
     //agency.agencyState = '';// 创建接口不应该传递这个参数
     agency.agencyType = +safeGet(state, "AgentBasicInfo.agentType");// 代理商基本信息中的代理商类型，1-城市代理商 2-区代理商
@@ -152,6 +154,7 @@ export function generateParam(state) {
           personType: 7,// 服务经理    
           id: safeGet(state, "ServiceManager.id")
       });
+      agency.isBdServerSame = 1;
     } else {
         agencyPersons.push({
           //agencyId: '', // 创建接口不需要传递
@@ -230,7 +233,8 @@ export function generateParam(state) {
         payments.push({
             id: safeGet(state, "PaymentInfo.id"),
             planPayTime: safeGet(state, "PaymentInfo.planPaymentDate"),
-            stageNumber: 0
+            // stageNumber: 0
+            paymentState: 2
           });
     }else{// 已支付
         // 支付记录
@@ -241,6 +245,7 @@ export function generateParam(state) {
         }
 
         payments.push({
+            paymentState: 1,
             id: safeGet(state, "PaymentInfo.id"),
             //   agencyId: 
             amount: safeGet(state, "PaymentInfo.actualPayment"),
