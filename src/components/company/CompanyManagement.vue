@@ -289,7 +289,7 @@ export default {
         resetForm(formName) {
             // this.$refs.form.resetFields();//此处注释代码重置无法达到要求
             this.form={
-                agency:null,//代理商名称
+                agencyId:null,//代理商名称Id
                 businessType:'3',//公司业务类型,空为未选择，1.新房，2.二手房，3.新房＋二手房
                 cityId:null,//所属城市Id
                 cityList:[],//城市二级联动所需

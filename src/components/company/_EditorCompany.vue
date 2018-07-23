@@ -28,7 +28,7 @@
             <el-row>
                 <el-col :span="12">
                     <el-form-item label="组织机构代码" prop="organizationCode" class="tl">
-                        <el-input v-model="form.organizationCode" placeholder="50字以内"></el-input>
+                        <el-input v-model="form.organizationCode" placeholder="50字以内" maxlength="50"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
@@ -287,7 +287,7 @@ export default {
                                     message: '添加成功',
                                     type: 'success'
                                 });
-                                this.$emit('addSuccess',realForm);
+                                self.$emit('addSuccess',realForm);
                             })
                             .catch(function(error){
                                 self.$message({

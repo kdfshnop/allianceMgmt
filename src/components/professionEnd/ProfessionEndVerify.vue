@@ -21,8 +21,8 @@
                 <el-table-column prop="submitTime" label="提交时间" width="180"></el-table-column>
                 <el-table-column prop="auditTime" label="审核时间" width="180"></el-table-column>
                 <el-table-column prop="auditState" label="审核状态"></el-table-column>
-                <el-table-column prop="remark" label="驳回理由"></el-table-column>
-                <el-table-column prop="auditor" label="审核人"></el-table-column>
+                <el-table-column prop="auditRemark" label="驳回理由"></el-table-column>
+                <el-table-column prop="auditorName" label="审核人"></el-table-column>
             </el-table> 
             <el-dialog :title="title" :visible.sync="dialogVisible" width="30%">
                 <textarea name="" id="" style="width:100%;" rows="10" placeholder="请添加备注" v-model="remark"></textarea>

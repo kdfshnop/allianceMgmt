@@ -163,16 +163,16 @@
                 <p>a、可对门店终止合作</p>
                 <p>b、可对门店重新绑定代理商,继续服务</p>
                 <span slot="footer" class="dialog-footer">
-                    <el-button type="primary" @click="firstDialogVisible = false,secondDialogVisible = true">知道了</el-button>
+                    <el-button type="primary" @click="know">知道了</el-button>
                 </span>
             </el-dialog>
-            <el-dialog title="!终止合作,一旦终止合作,将无法重新再启用" :visible.sync="secondDialogVisible" width="30%" >
+            <!--<el-dialog title="!终止合作,一旦终止合作,将无法重新再启用" :visible.sync="secondDialogVisible" width="30%" >
                 <textarea name="" id="" rows="10" placeholder="请添加终止合作原因" v-model="remark" style="width:100%;"></textarea>
                 <span slot="footer" class="dialog-footer">
                     <el-button @click="continueJoin">取 消</el-button>
                     <el-button type="primary" @click="noJoin" >确 定</el-button>
                 </span>
-            </el-dialog>
+            </el-dialog>-->
         </el-main>
     </el-container> 
 </template>
@@ -230,6 +230,51 @@ export default {
         this.agencyList();
     },
     methods:{
+        // 终止合作
+        prompt(){
+            let self=this;
+            self.firstDialogVisible = false ;
+            this.$prompt('', '!终止合作,一旦终止合作,将无法重新再启用', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消', 
+                inputType: "textarea",  
+                inputPlaceholder: "请添加终止合作原因", 
+                customClass: 'agent-end-join', 
+                inputValidator: function(val){
+                    if(val&&val.length > 200) {
+                        return "最多输入200个字符";
+                    }else if(!val){
+                        return "请填写终止合作原因";
+                    }else{
+                        return true;
+                    }  
+                }   
+            }).then(({ value }) => {                                
+                if(value){
+                    this.$http.post(this.$apiUrl.agent.terminate+"/"+this.currentCompanyInfo.agencyId+"?remark="+value)
+                    .then(function(data){
+                        self.$message({
+                            message: '提交成功',
+                            type: 'success'
+                        });
+                    })
+                    .catch(function(err){
+                        self.$message({
+                            message: '提交失败',
+                            type: 'error'
+                        });
+                    });
+                }else{
+                    self.$message({
+                        message: '请填写终止合作原因',
+                        type: 'warning'
+                    });
+                }
+            });
+        },
+        know(){
+            this.firstDialogVisible=false;
+        },
         // 代理商列表;
         agencyList(){
             let self=this;
@@ -253,27 +298,31 @@ export default {
         endJoin(index,row){
             this.currentCompanyInfo=row;
             this.agencySotre=this.currentCompanyInfo.storeTotal;
-            this.firstDialogVisible=true;
+            if(this.agencySotre){
+                this.firstDialogVisible=true;
+            }else{
+                this.prompt();
+            } 
         },
         // 确定终止合作;
-        noJoin(){
-            let self=this;
-            if(this.remark){
-                this.secondDialogVisible = false;
-                this.$http.post(this.$apiUrl.agent.terminate+"/"+this.currentCompanyInfo.agencyId+"?remark="+this.remark)
-                    .then(function(data){
-                        console.log(data,'提交代理商终止合作');
-                        self.remark='';
-                        alert('已将终止合作信息流转到审核流程');
-                    })
-                    .catch(function(err){
-                        console.log(err);
-                    });
-            }else{
-                alert('请填写终止合作原因');
-            }
+        // noJoin(){
+        //     let self=this;
+        //     if(this.remark){
+        //         this.secondDialogVisible = false;
+        //         this.$http.post(this.$apiUrl.agent.terminate+"/"+this.currentCompanyInfo.agencyId+"?remark="+this.remark)
+        //             .then(function(data){
+        //                 console.log(data,'提交代理商终止合作');
+        //                 self.remark='';
+        //                 alert('已将终止合作信息流转到审核流程');
+        //             })
+        //             .catch(function(err){
+        //                 console.log(err);
+        //             });
+        //     }else{
+        //         alert('请填写终止合作原因');
+        //     }
             
-        },
+        // },
         // 详情
         detail(index,row){
             this.$router.push({name:'AgentDetail',params:{id:row.agencyId}});
@@ -379,5 +428,12 @@ export default {
         margin-top: 10px;
     }
 </style>
+<style>
+    /*scoped会影响prompt框的样式*/
+    .agent-end-join textarea{
+        height:100px;
+    }
+</style>
+
 
 

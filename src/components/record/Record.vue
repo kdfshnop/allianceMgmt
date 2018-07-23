@@ -1,8 +1,8 @@
 <template lang="html">
     <el-table
-        :data="listInfo"
+        :data="isShow"
         border
-        style="width: 100%">
+        style="width: 100%" :row-class-name="setClassName">
         <el-table-column type="expand" >
             <template slot-scope="props">
                 <el-form label-position="left" inline class="demo-table-expand" >
@@ -26,7 +26,7 @@ export default {
     props:['agencyId'],
     data() {
         return {
-            listInfo:[],
+            listInfo:[]
         }
     },
     created(){
@@ -41,15 +41,34 @@ export default {
         });
     },
     methods:{
-        
+        setClassName({row, index}){
+            return row.expand ? 'expand-record' : '';
+        },
     },
-    mounted() {
-        
+    computed:{
+        // table选项无展开内容时，不展开;
+        isShow(){
+            // 先遍历数组
+            for(var value of this.listInfo){
+                var keys=[];//接收对象的key;
+                // 遍历对象
+                for(var key in value.detail){
+                    keys.push(key);
+                };
+                if(keys.length){
+                    value.expand=false;
+                }else{
+                    value.expand=true;
+                }
+            };
+            console.log(this.listInfo,'日志信息');
+            return this.listInfo;
+        }
     }
 }
 </script>
 
-<style lang="css" scoped>
+<style scoped>
 .demo-table-expand {
    font-size: 0;
 }
@@ -61,5 +80,10 @@ export default {
     margin-right: 0;
     margin-bottom: 0;
     width: 50%;
+}
+</style>
+<style>
+.expand-record .el-table__expand-column .cell {
+    display: none;
 }
 </style>

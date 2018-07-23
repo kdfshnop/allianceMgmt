@@ -80,13 +80,14 @@ export default {
     name:'auditNoPass',
     data(){
         return {
+            agencyInfoList:[],//代理商列表;
             // 表单查询信息
             form: {
                 auditorId:'',//审核人Id;
                 auditName:'',//审核人
                 auditType:'2',//平台服务费审核
                 auditTime:[],//审核时间
-                targetName:'',//代理商名称
+                targetName:'',//代理商名称Id
                 currentPage:1,//页码默认为1
                 pageSize:10,//页面量默认为10
                 submitterId:'',//提交人Id
@@ -100,6 +101,7 @@ export default {
     created(){
         this.requestList();
         this.requestSubmitList();
+        this.agencyList();
     },
     methods:{
         //每页多少条
@@ -129,6 +131,17 @@ export default {
                 .catch(function(err){
                     console.log(err,'失败');
                 });
+        },
+        // 代理商列表;
+        agencyList(){
+            let self=this;
+            this.$http.get(this.$apiUrl.agent.list)
+            .then(function(data){
+                self.agencyInfoList=data.data.data;
+            })
+            .catch(function(err){
+                console.log(err,'代理商列表失败');
+            })
         },
         // 获取提交人列表;
         requestSubmitList(){
