@@ -5,7 +5,7 @@
             <el-table-column prop="targetName" label="名称" align="center" ></el-table-column>
             <el-table-column prop="targetTypeName" label="类型" align="center" ></el-table-column>
             <el-table-column prop="submitterName" label="提交人" align="center" ></el-table-column>
-            <el-table-column prop="auditTime" label="提交时间" align="center"></el-table-column>
+            <el-table-column prop="submitTime" label="提交时间" align="center"></el-table-column>
             <el-table-column prop="operateRemark" label="终止原因" align="center"></el-table-column>
             <el-table-column label="操作" align="center">
                 <template slot-scope="scope">

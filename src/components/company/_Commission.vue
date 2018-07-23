@@ -97,10 +97,11 @@ export default {
             });
         },
         // 调用子组件方法;
-        open(){
+        open(companyId){
             // 获取公司详情;
             let self=this;
-            this.$http.get(this.$apiUrl.company.detail+"?companyId="+this.companyId)
+            console.log(companyId,'分佣账号子组件companyId')
+            this.$http.get(this.$apiUrl.company.detail+"?companyId="+companyId)
                 .then(function(data){
                     self.form=data.data.data;
                     this.dialogVisible=true;
