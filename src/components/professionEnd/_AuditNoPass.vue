@@ -57,7 +57,7 @@
             <el-table-column prop="name" label="名称" align="center" ></el-table-column>
             <el-table-column prop="targetTypeName" label="类型" align="center" ></el-table-column>
             <el-table-column prop="submitterName" label="提交人" align="center" ></el-table-column>
-            <el-table-column prop="auditorName" label="审核时间" align="center"></el-table-column>
+            <el-table-column prop="auditTime" label="审核时间" align="center"></el-table-column>
             <el-table-column prop="auditRemark" label="终止原因" align="center"></el-table-column>
             <el-table-column prop="operateRemark" label="驳回原因" align="center"></el-table-column>
         </el-table>
