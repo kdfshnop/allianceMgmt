@@ -36,7 +36,6 @@
 <script>
 export default {
     name:'commission',
-    props:['companyId'],
     data(){
         return {
             dialogVisible:false,
@@ -100,11 +99,10 @@ export default {
         open(companyId){
             // 获取公司详情;
             let self=this;
-            console.log(companyId,'分佣账号子组件companyId')
             this.$http.get(this.$apiUrl.company.detail+"?companyId="+companyId)
                 .then(function(data){
                     self.form=data.data.data;
-                    this.dialogVisible=true;
+                    self.dialogVisible=true;
                     console.log(self.form,'公司详情');
                 })
                 .catch(function(err){

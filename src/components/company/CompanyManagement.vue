@@ -144,7 +144,7 @@
             <!--编辑公司组件-->
             <editor-company ref="editor" :companyId="companyId" :title="title" @editSuccess='editSuccess' @addSuccess='addSuccess'></editor-company>
             <!--分佣账号组件-->
-            <commission ref="commission" :companyId="companyId"></commission>
+            <commission ref="commission"></commission>
         </el-main>
     </el-container> 
 </template>
@@ -349,7 +349,6 @@ export default {
         //分佣账号设置 
         bankAccount(index, row){
             this.companyId=row.companyId;
-            console.log(this.companyId,'父组件companyId')
             this.$refs.commission.open(this.companyId);
         },
         //终止合作,第一次弹框
