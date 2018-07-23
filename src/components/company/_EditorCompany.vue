@@ -126,7 +126,7 @@ export default {
                 address:'',//地址
                 agencyId:'',//代理商Id
                 bd:'',//bdId
-                businessType:'',//房源类型,0为选择，1.新上，2.二手房，3.新房＋二手房
+                businessType:'',//房源类型,0为全部，1.新上，2.二手房，3.新房＋二手房
                 cityId:'',//所属城市Id
                 cityList:[],//值必须为number
                 corporate:'',//法人代表

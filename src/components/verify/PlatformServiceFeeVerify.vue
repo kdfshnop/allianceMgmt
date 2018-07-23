@@ -39,7 +39,8 @@
                 <el-table-column
                 prop="auditorName"
                 label="审核人">
-                </el-table-column>          
+                </el-table-column>   
+            </el-table>       
         </el-main>
   </el-container>
 </template>

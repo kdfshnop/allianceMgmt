@@ -400,7 +400,7 @@ export default new Vuex.Store({
                 }
 
                 let result = fromData(data);
-                let original = JSON.parse(JSON.stringify(original));
+                let original = JSON.parse(JSON.stringify(result));
 
                 context.commit('AgentArea/updateRegions', result.region.regions);
                 context.commit('AgentBasicInfo/updateItem', result.basicInfo);

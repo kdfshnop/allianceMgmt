@@ -36,7 +36,6 @@
 <script>
 export default {
     name:'commission',
-    props:['companyId'],
     data(){
         return {
             dialogVisible:false,
@@ -97,13 +96,13 @@ export default {
             });
         },
         // 调用子组件方法;
-        open(){
+        open(companyId){
             // 获取公司详情;
             let self=this;
-            this.$http.get(this.$apiUrl.company.detail+"?companyId="+this.companyId)
+            this.$http.get(this.$apiUrl.company.detail+"?companyId="+companyId)
                 .then(function(data){
                     self.form=data.data.data;
-                    this.dialogVisible=true;
+                    self.dialogVisible=true;
                     console.log(self.form,'公司详情');
                 })
                 .catch(function(err){
