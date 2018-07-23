@@ -2,7 +2,8 @@
     <el-container>
         <el-main> 
             <el-alert
-                title="rejectedReason"
+                style="margin-bottom: 10px"
+                :title="rejectedReason"
                 :closable="false"
                 type="error" v-show="!!rejectedReason">
             </el-alert>

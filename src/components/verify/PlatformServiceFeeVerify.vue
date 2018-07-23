@@ -19,28 +19,28 @@
                 stripe
                 style="width: 100%; margin-bottom: 40px;">
                 <el-table-column
-                prop="commitDate"
+                prop="operatetime"
                 label="提交时间"
                 width="180">
                 </el-table-column>
                 <el-table-column
-                prop="verifyDate"
+                prop="auditTime"
                 label="审核时间"
                 width="180">
                 </el-table-column>
                 <el-table-column
-                prop="verifyStatus"
+                prop="result"
                 label="审核状态">
                 </el-table-column>
                 <el-table-column
-                prop="rejectReason"
+                prop="remark"
                 label="驳回理由">
                 </el-table-column>
                 <el-table-column
-                prop="verifyPerson"
+                prop="auditorName"
                 label="审核人">
-                </el-table-column>
-            </el-table>            
+                </el-table-column>   
+            </el-table>       
         </el-main>
   </el-container>
 </template>
