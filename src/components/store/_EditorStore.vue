@@ -126,9 +126,11 @@ export default {
         },
         longlat(){
             let longlatArray=this.form.longlat.split(',');
-            if(longlatArray.length==2){
+            var reg = /^[0-9]+.?[0-9]*$/;
+            if(longlatArray.length==2&&reg.test(longlatArray[0])&&reg.test(longlatArray[1])){
                 this.longlatFormat=true;
             }else{
+                this.longlatFormat=false;
                 this.$message({
                     message: '经纬度格式不正确',
                     type: 'warning'

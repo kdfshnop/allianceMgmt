@@ -33,9 +33,10 @@
                         </el-form-item>
                         <el-form-item label="业务" prop="businessType">
                             <el-select v-model="form.businessType" filterable>
-                                <el-option label="全部" value="3"></el-option>
+                                <el-option label="全部" value="0"></el-option>
                                 <el-option label="新房" value="1"></el-option>
                                 <el-option label="二手房" value="2"></el-option>
+                                <el-option label="新房和二手房" value="3"></el-option>
                             </el-select>
                         </el-form-item>
                         <el-form-item label="门店地址" prop="storeAddress">
@@ -111,7 +112,7 @@
                 <el-table-column prop="cooperationEnd" label="有效期止" align="center"></el-table-column>
                 <el-table-column prop="bdName" label="bd" align="center"></el-table-column>
                 <el-table-column prop="createTime" label="创建时间" align="center"></el-table-column>
-                <el-table-column prop="creater" label="创建人" align="center"></el-table-column>
+                <el-table-column prop="createrName" label="创建人" align="center"></el-table-column>
                 <el-table-column prop="name" label="操作" width="300px" align="center">
                     <template slot-scope="scope">
                         <el-button size="mini" @click="editorCompany(scope.$index, scope.row)" type="text" v-show="privileges.companyEdit">编辑 </el-button>
