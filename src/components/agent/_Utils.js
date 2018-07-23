@@ -234,7 +234,7 @@ export function generateParam(state) {
             id: safeGet(state, "PaymentInfo.id"),
             planPayTime: safeGet(state, "PaymentInfo.planPaymentDate"),
             // stageNumber: 0
-            paymentState: 2
+            // paymentState: 2
           });
     }else{// 已支付
         // 支付记录
@@ -245,7 +245,7 @@ export function generateParam(state) {
         }
 
         payments.push({
-            paymentState: 1,
+            // paymentState: 1,
             id: safeGet(state, "PaymentInfo.id"),
             //   agencyId: 
             amount: safeGet(state, "PaymentInfo.actualPayment"),
