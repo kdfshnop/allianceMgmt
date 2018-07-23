@@ -18,10 +18,10 @@
             </div>
             <h2 class="gap-2">历史审核记录</h2>
             <el-table :data="historyRecords" stripe style="width: 100%; margin-bottom: 40px;">
-                <el-table-column prop="submitTime" label="提交时间" width="180"></el-table-column>
+                <el-table-column prop="operatetime" label="提交时间" width="180"></el-table-column>
                 <el-table-column prop="auditTime" label="审核时间" width="180"></el-table-column>
-                <el-table-column prop="auditState" label="审核状态"></el-table-column>
-                <el-table-column prop="auditRemark" label="驳回理由"></el-table-column>
+                <el-table-column prop="result" label="审核状态"></el-table-column>
+                <el-table-column prop="remark" label="驳回理由"></el-table-column>
                 <el-table-column prop="auditorName" label="审核人"></el-table-column>
             </el-table> 
             <el-dialog :title="title" :visible.sync="dialogVisible" width="30%">

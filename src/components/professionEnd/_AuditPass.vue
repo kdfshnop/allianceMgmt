@@ -38,7 +38,7 @@
                             </el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="代理商" prop="targetName">
+                    <el-form-item label="门店/代理商" prop="targetName">
                         <el-input v-model="form.targetName"></el-input>
                     </el-form-item>
                 </el-col>
