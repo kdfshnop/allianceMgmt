@@ -113,11 +113,9 @@ export default {
                 agentState: this.$route.query.state || 0                
             });
             
-            this.$http.post(this.$apiUrl.materialVerify.historyRecords,{
-                params: {
-                    targetId: this.$route.params.id,
-                    targetType: 1 
-                }
+            this.$http.post(this.$apiUrl.materialVerify.historyRecords,{                
+                targetId: this.$route.params.id,
+                targetType: 1                 
             }).then((data)=>{
                 this.historyRecords = data.data.data;
             });
