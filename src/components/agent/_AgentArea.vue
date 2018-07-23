@@ -1,7 +1,7 @@
 <template>
     <CollapsePanel class="gap-2" :expand="expand">    
         <div align-left slot="header" class="clearfix">
-            <span style="margin-right: 30px">请选择代理区域</span>               
+            <span style="margin-right: 30px">请选择代理区域</span> <span style="margin-left: -20px;font-size: 14px; color: red;">(代理区域将影响关联门店区域，即该代理商所扩展的门店必须与其代理的区域相符！)</span>             
             <el-button v-show="mode === 'edit' && status !== 'editing'" @click="handleEdit" type="primary" size="mini">编辑</el-button>         
             <el-button v-show="mode === 'edit' && status === 'editing'" @click="handleCancel" type="danger" size="mini">取消</el-button>         
             <el-button v-show="mode === 'edit' && status === 'editing'" @click="handleComplete" type="success" size="mini">完成</el-button>                                             

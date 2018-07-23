@@ -333,10 +333,21 @@ export default {
         },
         // 重置表单
         reset(){
-            // 表单重置只是重置form标签选项，而不重置data中form数据;
-            this.form.cityId=null;
-            this.form.cityList=[];
-            this.$refs.form.resetFields();
+            // this.$refs.form.resetFields();会有问题;表单重置只是重置form标签选项，而不重置data中form数据;
+            this.form={
+                agencyId:null,//代理商公司Id
+                agencyState:'0',//合作状态
+                agencyTag:'0',//合作标签
+                agencyType:'0',//代理商类型
+                cityId:null,//代理商所属城市
+                cityList:[],//二级联动城市
+                cooperationTime:null,//合作时间段
+                currentPage:1,//页码默认为1
+                pageSize:10,//页面量默认为10
+                searchDate:null,//到期日期
+                searchDay:null,//即将到期天数
+                searchType:null,//到期查询方式
+            }
         },
         //根据表单信息搜索
         search(){

@@ -1,7 +1,7 @@
 <template>
     <CollapsePanel @close="handleClose" class="gap-2" :expand="expand" :closable="mode=='create'||mode=='edit'&&status=='editing'">    
         <div align-left slot="header" class="clearfix">
-            <span style="margin-right: 30px">合伙人信息</span>
+            <span style="margin-right: 30px">合伙人信息</span><span style="margin-left: -20px;font-size: 14px; color: #4e4e4e;">(如代理商有多个合伙人请添加多个)</span>
             <el-button v-show="mode === 'edit' && status !== 'editing'" @click="handleEdit" type="primary" size="mini">编辑</el-button>         
             <el-button v-show="mode === 'edit' && status === 'editing'" @click="handleCancel" type="danger" size="mini">取消</el-button>         
             <el-button v-show="mode === 'edit' && status === 'editing'" @click="handleComplete" type="success" size="mini">完成</el-button>                

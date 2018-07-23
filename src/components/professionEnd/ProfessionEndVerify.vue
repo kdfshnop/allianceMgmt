@@ -121,7 +121,7 @@ export default {
                     .then(function(data){
                         self.remark="";
                         self.dialogVisible = false;
-                        self.$message.error('通过请求成功');
+                        self.$message.success('通过请求成功');
                         history.back();
                     })
                     .catch(function(err){

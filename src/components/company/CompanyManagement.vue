@@ -182,7 +182,7 @@ export default {
             // 表单查询信息
             form:{
                 agencyId:null,//代理商id
-                businessType:'3',//公司业务类型,空为未选择，1.新房，2.二手房，3.新房＋二手房
+                businessType:'0',//公司业务类型,0为全部，1.新房，2.二手房，3.新房＋二手房
                 cityId:null,//所属城市Id
                 cityList:[],//城市二级联动所需
                 cooperationTime:null,//合作时间段形式为数组
@@ -282,12 +282,13 @@ export default {
         // 子组件添加公司成功之后，传递给父组件的值;
         addSuccess(addInfo){
             // 第一种再次发送请求，同时表单查询重置;
-            this.$refs.form.resetFields();
+            // this.$refs.form.resetFields();
+            this.resetForm();
             this.form.pageSize=10;
             this.form.currentPage=1;
             this.requestList();
         },
-        resetForm(formName) {
+        resetForm() {
             // this.$refs.form.resetFields();//此处注释代码重置无法达到要求
             this.form={
                 agencyId:null,//代理商名称Id
