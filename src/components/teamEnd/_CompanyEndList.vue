@@ -82,7 +82,6 @@ export default {
             this.$http.post(this.$apiUrl.teamEnd.tabList,form)
                 .then(function(data){
                     self.companyList=data.data.data;
-                    console.log(self.companyList,'终止公司列表123');
                 })
                 .catch(function(err){
                     console.log(err);
@@ -96,6 +95,9 @@ export default {
     .pagination{
         margin-top: 100px;
         text-align: center;
+    }
+    .search-result{
+        margin:50px 0 20px 0;
     }
 </style>
 

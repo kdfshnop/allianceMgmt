@@ -95,7 +95,7 @@ export default {
                 auditName:'',//审核人
                 auditType:2,//资料审核
                 auditTime:[],//审核时间
-                targetId:'',//代理商名称
+                targetId:'',//代理商名称Id
                 currentPage:1,//页码默认为1
                 pageSize:10,//页面量默认为10
                 submitterId:'',//提交人Id

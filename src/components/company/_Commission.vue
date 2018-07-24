@@ -105,7 +105,6 @@ export default {
                 .then(function(data){
                     self.form=data.data.data;
                     self.dialogVisible=true;
-                    console.log(self.form,'公司详情');
                 })
                 .catch(function(err){
                     console.log(err);
