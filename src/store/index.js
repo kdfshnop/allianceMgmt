@@ -160,7 +160,8 @@ export default new Vuex.Store({
                     s && s.forEach((x)=>{
                         dividing.push({
                             ...x,
-                            fee: x.amount
+                            fee: x.amount,
+                            date: x.planPayTime                            
                         });
                     });
                     
