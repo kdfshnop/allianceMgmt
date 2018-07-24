@@ -22,6 +22,11 @@ Vue.use(Vuex);
 function hasDifference(fields, obj1, obj2) {
     if(obj1 == null || obj2 == null) return false;
     for(let i = 0; i < fields.length; i++) {
+        if(Object.prototype.toString.apply(obj1[fields[i]]) == '[object Array]'){
+            if(obj1[fields[i]].length != obj2[fields[i]].length) {
+                return true;
+            }
+        }else
         if(obj1[fields[i]] != obj2[fields[i]]) {
             return true;
         }
@@ -382,40 +387,44 @@ export default new Vuex.Store({
                     }
 
                     return {
-                        region,
-                        basicInfo,
-                        account,
-                        ratio,
-                        company,
-                        bdManager,
-                        contract,
-                        corporate,
-                        dividing,
-                        partners,
-                        paymentInfo,
-                        platformServiceFee,
-                        serviceManager,
-                        serviceStaffInfo                        
+                        AgentArea: region,
+                        AgentBasicInfo: basicInfo,
+                        AgentCommissionAccount: account,
+                        AgentCommissionRatio: ratio,
+                        AgentCompanyInfo: company,
+                        BDManager: bdManager,
+                        ContractInfo: contract,
+                        CorporateInfo: corporate,
+                        DividingInfo: {
+                            dividingInfo: dividing
+                        },
+                        PartnerInfo: {
+                            partnerInfo: partners
+                        },
+                        PaymentInfo: paymentInfo,
+                        PlatformServiceFee: platformServiceFee,
+                        ServiceManager: serviceManager,
+                        ServiceStaffInfo: serviceStaffInfo                        
                     };
                 }
 
                 let result = fromData(data);
                 let original = JSON.parse(JSON.stringify(result));
 
-                context.commit('AgentArea/updateRegions', result.region.regions);
-                context.commit('AgentBasicInfo/updateItem', result.basicInfo);
-                context.commit('AgentCommissionAccount/updateItem', result.account);
-                context.commit('AgentCommissionRatio/updateItem', result.ratio);
-                context.commit('AgentCompanyInfo/updateItem', result.company);
-                context.commit('BDManager/updateItem', result.bdManager);
-                context.commit('ContractInfo/updateItem', result.contract);
-                context.commit('CorporateInfo/updateItem', result.corporate);
-                context.commit('DividingInfo/updateItems', result.dividing);
-                context.commit('PartnerInfo/updateItems', result.partners);
-                context.commit('PaymentInfo/updateItem', result.paymentInfo);
-                context.commit('PlatformServiceFee/updateItem', result.platformServiceFee);
-                context.commit('ServiceManager/updateItem', result.serviceManager);
-                context.commit('ServiceStaffInfo/updateItem', result.serviceStaffInfo);
+                context.commit('AgentArea/updateRegions', result.AgentArea.regions);
+                context.commit('AgentBasicInfo/updateItem', result.AgentBasicInfo);
+                context.commit('AgentCommissionAccount/updateItem', result.AgentCommissionAccount);
+                context.commit('AgentCommissionRatio/updateItem', result.AgentCommissionRatio);
+                context.commit('AgentCompanyInfo/updateItem', result.AgentCompanyInfo);
+                context.commit('BDManager/updateItem', result.BDManager);
+                context.commit('ContractInfo/updateItem', result.ContractInfo);
+                context.commit('CorporateInfo/updateItem', result.CorporateInfo);
+                context.commit('DividingInfo/updateItems', result.DividingInfo.dividingInfo);
+                context.commit('PartnerInfo/updateItems', result.PartnerInfo.partnerInfo);
+                context.commit('PaymentInfo/updateItem', result.PaymentInfo);
+                context.commit('PlatformServiceFee/updateItem', result.PlatformServiceFee);
+                context.commit('ServiceManager/updateItem', result.ServiceManager);
+                context.commit('ServiceStaffInfo/updateItem', result.ServiceStaffInfo);
                 context.commit("updateRejectedReason", data.data.data.rejectedReason);
                 context.commit("updateOriginal", original);
                 cb && cb(data.data);
@@ -439,124 +448,175 @@ export default new Vuex.Store({
         }
     },
     getters: {
-        isChanged() {// 用来控制编辑代理商页面中的提交审核按钮的enabled状态的
-            // return isServiceManagerChanged 
-            //     || isBDManagerChanged 
-            //     || isAgentCommissionRatioChanged 
-            //     || isAgentCommissionAccountChanged 
-            //     || isPlatformServiceFeeChanged
-            //     || isDividingInfoChanged
-            //     || isPaymentInfoChanged
-            //     || isAgentCompanyInfo
-            //     || isCorporateInfoChanged
-            //     || isContractInfoChanged
-            //     || isAgentBasicInfoChanged
-            //     || isAgentAreaChanged
-            //     || isServiceStaffInfoChanged
-            //     || isPartnerInfoChanged;
-            return false;
-
+        isChanged(state, getters) {// 用来控制编辑代理商页面中的提交审核按钮的enabled状态的
+            // return getters.isServiceManagerChanged 
+            //     || getters.isBDManagerChanged 
+            //     || getters.isAgentCommissionRatioChanged 
+            //     || getters.isAgentCommissionAccountChanged 
+            //     || getters.isPlatformServiceFeeChanged
+            //     || getters.isDividingInfoChanged
+            //     || getters.isPaymentInfoChanged
+            //     || getters.isAgentCompanyInfo
+            //     || getters.isCorporateInfoChanged
+            //     || getters.isContractInfoChanged
+            //     || getters.isAgentBasicInfoChanged
+            //     || getters.isAgentAreaChanged
+            //     || getters.isServiceStaffInfoChanged
+            //     || getters.isPartnerInfoChanged;
+            // TODO: 以上基本可以实现，只是针对数组中对象的字段还没有比较，这个比较麻烦
+            return true;
         },
         isServiceManagerChanged(state) {
+            if(state.original.ServiceManager == null) {
+                return false;
+            }  
             let fields = ['name','mobile','email','wechat'];
             return hasDifference(fields, state.original.ServiceManager, state.ServiceManager);            
         },
         isBDManagerChanged(state) {
-            let fields = ['name', 'mobile', 'email', 'wechat'];
+            if(state.original.BDManager == null) {
+                return false;
+            }  
+            let fields = ['name', 'mobile', 'email', 'wechat', 'same'];
             return hasDifference(fields, state.original.BDManager, state.BDManager);
         },
         isAgentCommissionRatioChanged(state) {
+            if(state.original.AgentCommissionRatio == null) {
+                return false;
+            }  
             let fields = ['ratio', 'remark'];
             return hasDifference(fields, state.original.AgentCommissionRatio, state.AgentCommissionRatio);
         },
         isAgentCommissionAccountChanged(state) {
+            if(state.original.AgentCommissionAccount == null) {
+                return false;
+            }  
             let fields = ['bankName', 'subbankName', 'accountName', 'receiptAccount'];
             return hasDifference(fields, state.original.AgentCommissionAccount, state.AgentCommissionAccount);            
         },
         isPlatformServiceFeeChanged(state) {
+            if(state.original.PlatformServiceFee == null) {
+                return false;
+            }  
             let fields = ['fee', 'month', 'premonth', 'prefee', 'paymentType', 'count'];
             return hasDifference(fields, state.original.PlatformServiceFee, state.PlatformServiceFee);
         },
         isDividingInfoChanged(state) {
-            let fields = [''];// TODO: 补全DividingInfo的字段
-            if(state.original.DividingInfo == null) return false;
-            if(state.original.DividingInfo.length != state.DividingInfo.dividingInfo.length) return true;
-            for(let i = 0; i < state.original.DividingInfo.length; i++) {
-                if(hasDifference(fields, state.original.DividingInfo[i], state.DividingInfo.dividingInfo[i])) {
-                    return true;
-                }
-            }
+            if(state.original.DividingInfo == null) {
+                return false;
+            }  
+            let fields = ['dividingInfo'];// TODO: 补全DividingInfo的字段
+            // if(state.original.DividingInfo == null) return false;
+            // if(state.original.DividingInfo.length != state.DividingInfo.dividingInfo.length) return true;
+            // for(let i = 0; i < state.original.DividingInfo.length; i++) {
+            //     if(hasDifference(fields, state.original.DividingInfo[i], state.DividingInfo.dividingInfo[i])) {
+            //         return true;
+            //     }
+            // }
 
-            return false;
+            return hasDifference(fields, state.original.DividingInfo, state.DividingInfo);
         },
-        isPaymentInfoChanged(state) {
-            /**
-             * paymentStatus: false,
-                type: "",
-                actualPayment: "",
-                containPayment: [],// 费用包含
-                number: "",
-                subbankName: "",
-                fileList: [],
-                remark: '',
-                stageNumber: 0, // 支付费用归属第几期
-
-                planPaymentDate: "",// 预计支付时间
-                brokerName: "", // 对接人姓名
-                brokerMobile: "", // 对接人手机
-                promiseFileList: "", // 承诺书文件
-
-             * 
-             */          
+        isPaymentInfoChanged(state) {                
             if(state.original.PaymentInfo == null) {
                 return false;
             }  
-            let fields = ['paymentStatus', 'type', 'actualPayment', 'containPayment', 'number', 'subbankName', 'remark', 'stageName', 'planPaymentDate', 'brokerName', 'brokerMobile'];
+            let fields = ['paymentStatus', 
+                            'type', 
+                            'actualPayment', 
+                            'containPayment', 
+                            'number', 
+                            'subbankName', 
+                            'remark', 
+                            'stageName', 
+                            'planPaymentDate', 
+                            'brokerName', 
+                            'brokerMobile',
+                            'promiseFileList',
+                            'fileList'
+                        ];
 
-            if(hasDifference(fields, state.original.PaymentInfo, state.PaymentInfo)) {
-                return true;
-            }
-
-            if(state.original.PaymentInfo.fileList == null || state.PaymentInfo.fileList == null) {
+            return hasDifference(fields, state.original.PaymentInfo, state.PaymentInfo);                    
+        },
+        isAgentCompanyInfo(state) {  
+            if(state.original.AgentCompanyInfo == null) {
                 return false;
-            }
-
-            if(state.original.PaymentInfo.promiseFileList == null || state.PaymentInfo.promiseFileList == null) {
+            }           
+            let fields = ['signed',
+                        'name',
+                        'shortName',
+                        'number',
+                        'code',
+                        'address',
+                        'finishDate', 
+                        'tracerName', 
+                        'mobile', 
+                        'email', 
+                        'idCard', 
+                        'remark', 
+                        'tracerId', 
+                        'numberFileList',
+                        'idCardFrontFileList',
+                        'idCardBackFileList'];
+            return hasDifference(fields, state.original.AgentCompanyInfo, state.AgentCompanyInfo); 
+        },
+        isCorporateInfoChanged(state) {            
+            if(state.original.CorporateInfo == null) {
                 return false;
-            }
-
-            if(state.original.PaymentInfo.fileList.length != state.PaymentInfo.fileList.length) {
-                return true;
-            }
-            
-            if(state.original.PaymentInfo.promiseFileList.length != state.PaymentInfo.promiseFileList.length) {
-                return true;
-            }
-            
-            // TODO: 比较fileList和promiseFileList中的字段
-
-            return false;
+            }  
+            let fields = ['name', 
+                        'mobile', 
+                        'idCard', 
+                        'email', 
+                        'score', 
+                        'remark', 
+                        'idCardFrontFileList', 
+                        'idCardBackFileList', 
+                        'scoreFileList'];
+            return hasDifference(fields, state.original.CorporateInfo, state.CorporateInfo);
         },
-        isAgentCompanyInfo() {
-
+        isContractInfoChanged(state) {
+            if(state.original.ContractInfo == null) {
+                return false;
+            }  
+            let fields = ['special', 
+                        'sealed', 
+                        'contractFileList', 
+                        'promiseFileList'];
+            return hasDifference(fields, state.original.ContractInfo, state.ContractInfo);
         },
-        isCorporateInfoChanged() {
-
+        isAgentBasicInfoChanged(state) {
+            if(state.original.AgentBasicInfo == null) {
+                return false;
+            }  
+            let fields = ['agentType', 
+                        'startTime', 
+                        'endTime', 
+                        'parent','agentCity','remark'];
+            return hasDifference(fields, state.original.AgentBasicInfo, state.AgentBasicInfo);
         },
-        isContractInfoChanged() {
-
+        isAgentAreaChanged(state) {
+            // TODO: 只判断了数组的length，是有问题的
+            if(state.original.AgentArea == null) {
+                return false;
+            }  
+            let fields = ['regions'];
+            return hasDifference(fields, state.original.AgentArea, state.AgentArea);
         },
-        isAgentBasicInfoChanged() {
-
+        isServiceStaffInfoChanged(state) {            
+            if(state.original.ServiceStaffInfo == null) {
+                return false;
+            }  
+            let fields = ['name', 'department', 'title'];
+            return hasDifference(fields, state.original.ServiceStaffInfo.bdInfo, state.ServiceStaffInfo.bdInfo) ||
+            hasDifference(fields, state.original.ServiceStaffInfo.cxInfo, state.ServiceStaffInfo.cxInfo) ||
+            hasDifference(fields, state.original.ServiceStaffInfo.directorInfo, state.ServiceStaffInfo.directorInfo);
         },
-        isAgentAreaChanged() {
-
-        },
-        isServiceStaffInfoChanged() {
-
-        },
-        isPartnerInfoChanged() {
-
+        isPartnerInfoChanged(state) {            
+            if(state.original.PartnerInfo == null) {
+                return false;
+            }  
+            let fields = ['partnerInfo'];
+            return hasDifference(fields, state.original.PartnerInfo, state.PartnerInfo);            
         }
     },
     modules: {
