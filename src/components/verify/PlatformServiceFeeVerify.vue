@@ -183,7 +183,8 @@ export default {
 
             this.$http.post(this.$apiUrl.materialVerify.historyRecords,{                
                     targetId: this.$route.params.id,
-                    targetType: 1                 
+                    targetType: 1,
+                    auditType: 2                 
             }).then((data)=>{
                 this.historyRecords = data.data.data;
             });            
