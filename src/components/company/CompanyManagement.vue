@@ -241,6 +241,7 @@ export default {
                             message: '提交成功',
                             type: 'success'
                         });
+                        this.requestList();
                     })
                     .catch(function(err){
                         self.$message({
@@ -357,7 +358,7 @@ export default {
         handleEnd(index,row){
             
             this.companyId=row.companyId;
-            this.isTerminate=row.terminate;
+            this.isTerminate=row.isTerminate;
             if(this.isTerminate==0||2){
                 this.firstDialogVisible = true;
             }else{

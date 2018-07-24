@@ -280,7 +280,7 @@ export default {
         //终止合作,第一次弹框
         handleEnd(index,row){
             this.storeId=row.storeId;
-            this.isTerminate=row.terminate;
+            this.isTerminate=row.isTerminate;
             if(this.isTerminate==0||2){
                 this.firstDialogVisible = true;
             }else{
@@ -318,6 +318,7 @@ export default {
                             message: '提交成功',
                             type: 'success'
                         });
+                        self.requestList();
                     })
                     .catch(function(err){
                         self.$message({
