@@ -43,7 +43,7 @@ export default {
         updateIdCardFrontFileList(state, val) {
             state.idCardFrontFileList = val;
         },
-        udpateIdCardBackFileList(state, val) {
+        updateIdCardBackFileList(state, val) {
             state.idCardBackFileList = val;
         },
         updateScoreFileList(state, val) {

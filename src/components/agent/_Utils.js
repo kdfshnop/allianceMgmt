@@ -369,7 +369,7 @@ export function generateParam(state) {
         }));        
     });
     // 法人身份证正面照
-    safeGet(state, "CorporateInfo.idCardBackFileList").forEach((f)=>{
+    safeGet(state, "CorporateInfo.idCardFrontFileList").forEach((f)=>{
         resources.push(makeResource(f,{
             flag: 2,
             ownerType: 3,

@@ -37,8 +37,9 @@
                 </el-tab-pane>
             </el-tabs>
             <el-button-group class="gap-2" style="margin-left: auto; margin-right: auto; width: 200px; display: block;">
-                <el-button @click="handleCancel" type="primary">放弃审核</el-button><el-button @click="handleCommit" type="primary">提交审核</el-button>
+                <el-button @click="handleCancel" type="primary">返回</el-button><el-button :disabled="!isChanged" @click="handleCommit" type="primary">保存</el-button>
             </el-button-group>
+            <p style="display: none">isChanged: {{isChanged}}</p>
         </el-main>
     </el-container>
 </template>
@@ -128,6 +129,9 @@ export default {
         },
         rejectedReason() {
             return this.$store.state.rejectedReason;
+        },
+        isChanged() {
+            return this.$store.getters.isChanged
         }
     },
     methods: {
