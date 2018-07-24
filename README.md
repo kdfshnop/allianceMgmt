@@ -79,6 +79,43 @@ localhost认为是dev环境
 Vue.apiUrl.getFullUrl(Vue.apiUrl.test);
 ```
 
+### 权限控制
+期初考虑的是有页面的权限和页面中按钮（元素）的权限。因此在路由(router/index.js)中注册了beforeEach，但是后来框架那边说提供的接口只能查询页面元素的权限，因此注释掉了！
+
+在beforeEach中会调用currentPerson来保证当前用户已经登录了，在调用这个接口时后端会下发一个wksso的cookie，这个是后端接口需要的，如果没有wksso，后端接口都会报错。
+
+为了控制页面元素的权限，提供了utils/privilege，要控制权限的页面只需要使用这个mixin就可以了
+```
+let PrivilegeMixin from '@/utils/privilege';
+
+...
+
+mixins: [PrivilegeMixin],
+...
+data() {
+
+  return {
+    ...
+    privilegeOption: {
+      key: "/path#name"
+    }
+    ...
+
+  }
+}
+...
+```
+其中key是随便起的，模板中使用，而后面的值则是要跟人事系统中配置的一样，一般会根据当前页面的路径来配置，不过其实只要能保证这个值是唯一的就行，还是建议使用当前页面的路径加上一个名字的规则。
+
+然后就需要用查询出来的权限来控制页面中的元素的显示了。PrivilegeMixin会暴露privileges字段，是个对象，其中的key就是上面privilegeOption中的key。
+
+```
+...
+<button v-show="privileges.key">创建</button>
+...
+```
+
+详细可以参考项目中已经使用了权限控制的地方，比如代理商列表页！
 ### 命名约定
 - 组件名都用驼峰格式，且第一个单词的第一个字母要大写
 - 通用组件放在common目录里
