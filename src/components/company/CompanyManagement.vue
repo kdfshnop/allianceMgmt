@@ -294,7 +294,7 @@ export default {
             // this.$refs.form.resetFields();//此处注释代码重置无法达到要求
             this.form={
                 agencyId:null,//代理商名称Id
-                businessType:'3',//公司业务类型,空为未选择，1.新房，2.二手房，3.新房＋二手房
+                businessType:'0',//公司业务类型,0为全部，1.新房，2.二手房，3.新房＋二手房
                 cityId:null,//所属城市Id
                 cityList:[],//城市二级联动所需
                 cooperationTime:null,//合作时间段形式为数组
@@ -364,9 +364,9 @@ export default {
                 this.firstDialogVisible = true;
             }else{
                 if(this.isTerminate=1){
-                    this.message.warning("该公司正在审核中，请稍候再试");
+                    this.$message.warning("该公司正在审核中，请稍候再试");
                 }else{
-                    this.message.warning("该公司已被终止合作");
+                    this.$message.warning("该公司已被终止合作");
                 }
             };
         },

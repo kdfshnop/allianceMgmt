@@ -309,9 +309,9 @@ export default {
                 }
             }else{
                 if(this.isTerminate=1){
-                    this.message.warning("该代理商正在审核中，请稍候再试");
+                    this.$message.warning("该代理商正在审核中，请稍候再试");
                 }else{
-                    this.message.warning("该代理商已被终止合作");
+                    this.$message.warning("该代理商已被终止合作");
                 }
                 
             }

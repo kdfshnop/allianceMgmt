@@ -285,9 +285,9 @@ export default {
                 this.firstDialogVisible = true;
             }else{
                 if(this.isTerminate=1){
-                    this.message.warning("该门店正在审核中，请稍候再试");
+                    this.$message.warning("该门店正在审核中，请稍候再试");
                 }else{
-                    this.message.warning("该门店已被终止合作");
+                    this.$message.warning("该门店已被终止合作");
                 }
             };
         },
