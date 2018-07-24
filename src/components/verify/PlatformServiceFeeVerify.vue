@@ -2,10 +2,11 @@
     <el-container>        
         <el-main> 
             <bread-crumb :items="breadCrumb"></bread-crumb>   
-            <agent-commission-ratio :item="agentCommissionRatio"></agent-commission-ratio>
-            <agent-commission-account :item="agentCommissionAccount"></agent-commission-account>
-            <platform-service-fee :item="platformServiceFee"></platform-service-fee>
-            <payment-info :item="paymentInfo"></payment-info>
+            <agent-commission-ratio></agent-commission-ratio>
+            <agent-commission-account></agent-commission-account>
+            <platform-service-fee></platform-service-fee>
+            <dividing-info></dividing-info>
+            <payment-info></payment-info>
 
             <div class="gap-2">
                 <el-button style="width: 140px" type="danger" @click="handleReject">驳回</el-button>
@@ -51,6 +52,7 @@ import PlatformServiceFee from '@/components/agent/_PlatformServiceFee';
 import PaymentInfo from '@/components/agent/_PaymentInfo';
 import Vue from 'vue';
 import BreadCrumb from '@/components/common/BreadCrumb';
+import DividingInfo from '@/components/agent/_DividingInfo';
 /**
  * 平台服务费审核
  * TODO:
@@ -65,31 +67,32 @@ export default {
         AgentCommissionAccount, 
         PlatformServiceFee, 
         PaymentInfo, 
-        BreadCrumb
+        BreadCrumb,
+        DividingInfo
     },
     data() {
         return {
             breadCrumb: [{text:'首次加盟审核'},{text: "平台服务费审核"},{text: "审核"}],
             visible: false,
             historyRecords:[],// 历史审核记录
-            agentCommissionRatio: {
+            // agentCommissionRatio: {
 
-            },
-            agentCommissionAccount: {
+            // },
+            // agentCommissionAccount: {
 
-            },
-            platformServiceFee: {
-                serviceFee: {
-                    paymentType: 'sss',
-                    name: "ddd"
-                },
-                dividingInfo: {
+            // },
+            // platformServiceFee: {
+            //     serviceFee: {
+            //         paymentType: 'sss',
+            //         name: "ddd"
+            //     },
+            //     dividingInfo: {
 
-                }
-            },
-            paymentInfo: {
+            //     }
+            // },
+            // paymentInfo: {
 
-            }
+            // }
         };
     },
     methods: {
