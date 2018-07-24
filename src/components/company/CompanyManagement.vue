@@ -346,7 +346,6 @@ export default {
         },
         // 子组件编辑成功之后，传递给父组件的值;
         editSuccess(editInfo){
-            console.log(editInfo,1111)
             this.requestList();
         },
         //分佣账号设置 

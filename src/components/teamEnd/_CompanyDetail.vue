@@ -102,9 +102,7 @@ export default {
             // 获取公司详情;
             this.$http.get(this.$apiUrl.company.detail+"?companyId="+companyId)
                 .then(function(data){
-                    console.log('公司详情')
                     self.companyDetail=data.data.data;
-                    console.log(self.companyDetail,12345678);
                     self.dialogVisible = true;
                 })
                 .catch(function(err){

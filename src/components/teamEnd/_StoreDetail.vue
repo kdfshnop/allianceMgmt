@@ -54,12 +54,11 @@ export default {
             this.$http.get(this.$apiUrl.store.add+"?id="+storeId)
                 .then(function(data){
                     self.form=data.data.data;
-                    console.log(self.form,'门店详情');
+                    self.dialogVisible = true;
                 })
                 .catch(function(err){
                     console.log(err);
-                })
-            this.dialogVisible = true;
+                }) 
         }
     }
 }
