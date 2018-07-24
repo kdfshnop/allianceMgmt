@@ -39,7 +39,7 @@
                         </el-select>
                     </el-form-item>
                     <el-form-item label="代理商" prop="targetName">
-                        <el-select v-model="form.targetName" placeholder="请选择" @focus="agencyList" filterable>
+                        <el-select v-model="form.targetId" placeholder="请选择" @focus="agencyList" filterable>
                             <el-option label="暂无代理商" :value="0"></el-option>
                             <el-option
                                 v-for="item in agencyInfoList"
@@ -95,7 +95,7 @@ export default {
                 auditName:'',//审核人
                 auditType:'2',//平台服务费审核
                 auditTime:[],//审核时间
-                targetName:'',//代理商名称Id
+                targetId:'',//代理商名称Id
                 currentPage:1,//页码默认为1
                 pageSize:10,//页面量默认为10
                 submitterId:'',//提交人Id

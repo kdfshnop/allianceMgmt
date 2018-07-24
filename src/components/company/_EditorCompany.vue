@@ -21,7 +21,7 @@
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="保证金" prop="deposit">
-                        <el-input v-model.number="form.deposit"></el-input>
+                        <el-input v-model.number="form.deposit" placeholder="数字"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>

@@ -65,7 +65,8 @@ export default {
             });
             let form={
                 targetId:this.targetId,
-                targetType:this.targetType
+                targetType:this.targetType,
+                auditType:3
             }
         // 历史审核记录
         this.$http.post(this.$apiUrl.professionEnd.historyRecords,form)

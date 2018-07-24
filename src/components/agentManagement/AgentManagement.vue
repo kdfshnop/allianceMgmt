@@ -68,7 +68,7 @@
                                 <el-form-item prop="searchDate" class="expire" label-width="0">
                                     <el-date-picker
                                         format="yyyy-MM-dd"
-                                        v-model="form.timeStart"
+                                        v-model="form.searchDate"
                                         type="date"
                                         placeholder="选择日期"
                                         style="width:100%;"
@@ -207,6 +207,7 @@ export default {
             secondDialogVisible:false,//第二个终止合作弹出框
             startLevel:1,//二级联动城市传参
             summary:{},//summary信息
+            isTerminate:null,//是否已经申请终止合作;
             title:'',//判断是编辑公司还是添加公司
             // 表单查询信息
             form: {
@@ -298,11 +299,22 @@ export default {
         endJoin(index,row){
             this.currentCompanyInfo=row;
             this.agencySotre=this.currentCompanyInfo.storeTotal;
-            if(this.agencySotre){
-                this.firstDialogVisible=true;
+            this.isTerminate=this.currentCompanyInfo.isTerminate;
+            if(this.isTerminate==0||2){
+                if(this.agencySotre){
+                    this.firstDialogVisible=true;
+                }else{
+                    this.prompt();
+                }
             }else{
-                this.prompt();
-            } 
+                if(this.isTerminate=1){
+                    this.message.warning("该代理商正在审核中，请稍候再试");
+                }else{
+                    this.message.warning("该代理商已被终止合作");
+                }
+                
+            }
+             
         },
         // 确定终止合作;
         // noJoin(){

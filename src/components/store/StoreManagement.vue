@@ -162,6 +162,7 @@ export default {
             remark:'',//终止合作原因
             companyInfoIndex:'',//操作门店时该门店处于所有列表的位置
             currentStoreInfo:'',//当前编辑的门店信息
+            isTerminate:null,//是否已经申请终止合作;
             storeInfo:{},//门店列表
             storeId:'',//门店Id;
             summary:{},//summary
@@ -279,7 +280,16 @@ export default {
         //终止合作,第一次弹框
         handleEnd(index,row){
             this.storeId=row.storeId;
-            this.firstDialogVisible=true;
+            this.isTerminate=row.terminate;
+            if(this.isTerminate==0||2){
+                this.firstDialogVisible = true;
+            }else{
+                if(this.isTerminate=1){
+                    this.message.warning("该门店正在审核中，请稍候再试");
+                }else{
+                    this.message.warning("该门店已被终止合作");
+                }
+            };
         },
         // prompt弹框;
         prompt(){
