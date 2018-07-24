@@ -146,6 +146,7 @@ export default {
         },
         submitForm() {
             let self=this;
+            this.longlat();
             this.$refs.form.validate((valid) => {
                 if (valid) {
                     if(self.longlatFormat){
