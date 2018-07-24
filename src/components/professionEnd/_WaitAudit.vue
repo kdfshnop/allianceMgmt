@@ -76,7 +76,6 @@ export default {
                 .then(function(data){
                     self.pagination.total=data.data.data.total;
                     self.waitAuditList=data.data.data.data;
-                    console.log(data,self.pagination.total,'成功请求');
                 })
                 .catch(function(err){
                     console.log(err,'waitAudit失败');

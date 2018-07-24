@@ -127,6 +127,8 @@ export default {
             this.$refs.form.resetFields();
         },
         search(){
+            this.form.currentPage=1;
+            this.form.pageSize=10;
             this.requestList();
         },
         // 请求公共函数

@@ -58,7 +58,6 @@ export default {
         this.$http.post(this.$apiUrl.agent.firstAuditSummary,{auditType:this.auditType})
             .then(function(data){
                 self.total=data.data.data[0];
-                console.log(self.total);
             })
             .catch(function(err){
                 console.log(err)

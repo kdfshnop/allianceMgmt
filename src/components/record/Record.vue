@@ -34,7 +34,6 @@ export default {
         this.$http.get(this.$apiUrl.agent.record+"/"+this.agencyId)
         .then(function(data){
             self.listInfo=data.data.data;
-            console.log(self.listInfo,'成功');
         })
         .catch(function(err){
             console.log(err,'错误');
@@ -61,7 +60,6 @@ export default {
                     value.expand=true;
                 }
             };
-            console.log(this.listInfo,'日志信息');
             return this.listInfo;
         }
     }

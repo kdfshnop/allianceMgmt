@@ -294,7 +294,6 @@ export default {
                                     message: '添加失败',
                                     type: 'err'
                                 });
-                                console.log(error)
                             });
                     };
                         // 此处代码需要加在请求成功之后;

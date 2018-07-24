@@ -124,7 +124,6 @@ export default {
                 .then(function(data){
                     self.pagination.total=data.data.data.total;
                     self.passAuditList=data.data.data.data;
-                    console.log(data,'成功');
                 })
                 .catch(function(err){
                     console.log(err,'失败');

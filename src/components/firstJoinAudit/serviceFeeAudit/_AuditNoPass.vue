@@ -126,6 +126,8 @@ export default {
             this.$refs.form.resetFields();
         },
         search(){
+            this.form.currentPage=1;
+            this.form.pageSize=10;
             this.requestList();
         },
         // 请求公共函数
@@ -134,7 +136,6 @@ export default {
             this.$http.post(this.$apiUrl.agent.firstWaitAuditList,this.form)
                 .then(function(data){
                     self.rejectList=data.data.data;
-                    console.log(self.rejectList,'成功驳回');
                 })
                 .catch(function(err){
                     console.log(err,'失败');

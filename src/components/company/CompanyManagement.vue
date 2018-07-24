@@ -310,6 +310,8 @@ export default {
         },
         //根据表单信息搜索
         search(){
+            this.form.currentPage=1;
+            this.form.pageSize=10;
             this.requestList();
         },
         //每页多少条
@@ -358,7 +360,7 @@ export default {
             
             this.companyId=row.companyId;
             this.isTerminate=row.isTerminate;
-            if(this.isTerminate==0||2){
+            if(this.isTerminate==0||this.isTerminate==2){
                 this.firstDialogVisible = true;
             }else{
                 if(this.isTerminate=1){

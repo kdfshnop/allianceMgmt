@@ -101,7 +101,6 @@ export default {
                 this.$http.get(this.$apiUrl.store.add+"?id="+this.storeId)
                     .then(function(data){
                         self.form=data.data.data;
-                        console.log(self.form,'门店详情');
                         self.form.areaLinkage=[self.form.cityId,self.form.districtId,self.form.townId];
                     })
                     .catch(function(err){

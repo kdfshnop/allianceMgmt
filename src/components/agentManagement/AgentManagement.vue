@@ -301,7 +301,7 @@ export default {
             this.currentCompanyInfo=row;
             this.agencySotre=this.currentCompanyInfo.storeTotal;
             this.isTerminate=this.currentCompanyInfo.isTerminate;
-            if(this.isTerminate==0||2){
+            if(this.isTerminate==0||this.isTerminate==2){
                 if(this.agencySotre){
                     this.firstDialogVisible=true;
                 }else{
@@ -355,8 +355,8 @@ export default {
                 cityId:null,//代理商所属城市
                 cityList:[],//二级联动城市
                 cooperationTime:null,//合作时间段
-                currentPage:1,//页码默认为1
-                pageSize:10,//页面量默认为10
+                currentPage:this.form.currentPage,//页码默认为1
+                pageSize:this.form.pageSize,//页面量默认为10
                 searchDate:null,//到期日期
                 searchDay:null,//即将到期天数
                 searchType:null,//到期查询方式
@@ -364,6 +364,8 @@ export default {
         },
         //根据表单信息搜索
         search(){
+            this.form.currentPage=1;
+            this.form.pageSize=10;
             this.requestList();
         },
         //每页多少条

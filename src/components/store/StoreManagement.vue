@@ -219,7 +219,6 @@ export default {
             this.form.pageSize=10;
             this.form.currentPage=1;
             this.requestList();
-            console.log('添加门店成功');
         },
         // 子组件编辑成功之后，传递给父组件的值;
         editSuccess(editInfo){
@@ -233,6 +232,8 @@ export default {
         },
         //根据表单信息搜索
         search(){
+            this.form.currentPage=1;
+            this.form.pageSize=10;
             this.requestList();
         },
         //每页多少条
@@ -270,7 +271,6 @@ export default {
             this.$http.get(this.$apiUrl.store.qrcode+"/"+this.storeId)
                 .then(function(data){
                     self.qrCodeInfo=data.data.data
-                    console.log(self.qrCodeInfo,'二维码');
                 })
                 .catch(function(err){
                     console.log(err);
@@ -281,7 +281,7 @@ export default {
         handleEnd(index,row){
             this.storeId=row.storeId;
             this.isTerminate=row.isTerminate;
-            if(this.isTerminate==0||2){
+            if(this.isTerminate==0||this.isTerminate==2){
                 this.firstDialogVisible = true;
             }else{
                 if(this.isTerminate=1){
@@ -345,7 +345,6 @@ export default {
             this.$http.post(this.$apiUrl.store.list,this.form)
                 .then(function(data){
                     self.storeInfo=data.data.data;
-                    console.log(self.storeInfo,'门店列表');
                 })
                 .catch(function(err){
                     console.log(err);
@@ -354,7 +353,6 @@ export default {
             this.$http.post(this.$apiUrl.store.summary,this.form)
                 .then(function(data){
                     self.summary=data.data.data
-                    console.log(self.summary,'summary');
                 })
                 .catch(function(err){
                     console.log(err);
