@@ -38,7 +38,7 @@
                             </el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="代理商" prop="targetName">
+                    <el-form-item label="代理商" prop="targetId">
                         <el-select v-model="form.targetId" placeholder="请选择" @focus="agencyList" filterable>
                             <el-option label="暂无代理商" :value="0"></el-option>
                             <el-option
