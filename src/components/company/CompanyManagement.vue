@@ -176,6 +176,7 @@ export default {
             currentCompanyInfo:'',//当前编辑的公司信息
             endLevel:2,//二级联动城市传参
             firstDialogVisible: false,//第一个终止合作弹出框
+            isTerminate:null,//是否已经申请终止合作;
             startLevel:1,//二级联动城市传参
             summary:{},//summary信息
             title:'',//判断是编辑公司还是添加公司
@@ -240,6 +241,7 @@ export default {
                             message: '提交成功',
                             type: 'success'
                         });
+                        this.requestList();
                     })
                     .catch(function(err){
                         self.$message({
@@ -354,8 +356,18 @@ export default {
         },
         //终止合作,第一次弹框
         handleEnd(index,row){
-            this.firstDialogVisible = true,
+            
             this.companyId=row.companyId;
+            this.isTerminate=row.isTerminate;
+            if(this.isTerminate==0||2){
+                this.firstDialogVisible = true;
+            }else{
+                if(this.isTerminate=1){
+                    this.message.warning("该公司正在审核中，请稍候再试");
+                }else{
+                    this.message.warning("该公司已被终止合作");
+                }
+            };
         },
         // 列表信息请求公共函数
         requestList(){
