@@ -117,6 +117,8 @@ export default {
             this.requestList();
         },
         resetForm() {
+            this.form.currentPage=1;
+            this.form.pageSize=10;
             this.$refs.form.resetFields();
         },
         search(){
