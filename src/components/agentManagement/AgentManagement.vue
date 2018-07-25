@@ -258,7 +258,7 @@ export default {
                             message: '提交成功',
                             type: 'success'
                         });
-                        this.requestList();
+                        self.requestList();
                     })
                     .catch(function(err){
                         self.$message({

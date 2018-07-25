@@ -73,7 +73,7 @@
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
-                    <el-form-item  class="tl" label="上传文件:">
+                    <el-form-item  class="tl" label="上传文件:" v-if="companyDetail.file">
                         <span>{{companyDetail.file.fileName}}</span>
                     </el-form-item>
                 </el-col>
