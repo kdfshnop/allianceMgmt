@@ -39,7 +39,7 @@
                     </el-form-item>
                 </el-col>
             </el-row>
-            <el-form-item label="bd:"  label-width="40px" class="tl">
+            <el-form-item label="bd:" class="tl">
                 <span>{{companyDetail.bdName}}</span>
             </el-form-item>
             <el-row>
