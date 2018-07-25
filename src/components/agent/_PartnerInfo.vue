@@ -111,22 +111,22 @@
 
                 },
                 bgs: [{
-                    value: "0",
+                    value: 0,
                     label: "请选择"
                 },{
-                    value: "1",
+                    value: 1,
                     label: "新房代理商"
                 },{
-                    value: "2",
+                    value: 2,
                     label: "二手房租房中介"
                 },{
-                    value: "3",
+                    value: 3,
                     label: "头条、美团、58城市代理商"
                 },{
-                    value: "4",
+                    value: 4,
                     label: "房产开发商"
                 },{
-                    value: "5",
+                    value: 5,
                     label: "其他"
                 }],
                 rules: {
