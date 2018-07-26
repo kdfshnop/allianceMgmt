@@ -1,17 +1,17 @@
 <template>
     <el-dialog  :visible.sync="dialogVisible" width="50%">
         <el-form  label-width="120px">
-            <el-form-item label="门店名称">
+            <el-form-item label="门店名称:">
                 <span>{{form.name}}</span>
             </el-form-item>
-            <el-form-item label="门店类型">
+            <el-form-item label="门店类型:">
                 <span v-if="form.storeType==1">代理商直营门店</span>
                 <span v-if="form.storeType==2">加盟门店</span>
             </el-form-item>
-            <el-form-item label="代理商公司名称" v-if="form.storeType==1" >
+            <el-form-item label="代理商公司名称:" v-if="form.storeType==1" >
                 <span>{{form.agencyName}}</span>
             </el-form-item>
-            <el-form-item label="中介公司名称" v-if="form.storeType==2" >
+            <el-form-item label="中介公司名称:" v-if="form.storeType==2" >
                 <span>{{form.companyName}}</span>
             </el-form-item>
             <el-form-item label="门店地址:">
