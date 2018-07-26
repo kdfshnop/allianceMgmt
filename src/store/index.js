@@ -82,14 +82,19 @@ export default new Vuex.Store({
                     };
                     let agencyRegions = data.data.data.agencyRegions; // 代理区域信息
                     if(agencyRegions && agencyRegions.length) {
-                        agencyRegions.forEach(a => {
+                        agencyRegions.forEach(a => { 
+                            let label = [a.provinceName, a.cityName,a.regionName||"全部"];                            
                             region.regions.push({
                                 label: [a.provinceName, a.cityName,a.regionName||"全部"],
-                                val:[a.provinceId, a.cityId, a.regionId || -1],
+                                val:[a.provinceId, a.cityId, a.regionId || -1, label],
                                 id: a.id,
+                                level: a.level,
                                 operator: a.operator,
                                 status: a.status,
-                                updateTime: a.updateTime
+                                updateTime: a.updateTime,
+                                provinceId: a.provinceId,
+                                cityId: a.cityId,
+                                regionId: a.regionId
                             });
                         });                    
                     }

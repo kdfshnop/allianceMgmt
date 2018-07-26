@@ -36,8 +36,8 @@
                                 v-model="paymentType"
                                 active-text="分期"
                                 inactive-text="一次性"
-                                active-value="2"
-                                inactive-value="1"
+                                :active-value="2"
+                                :inactive-value="1"
                                 >
                             </el-switch>
                         </el-form-item>                    

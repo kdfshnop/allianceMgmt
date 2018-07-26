@@ -275,11 +275,11 @@ export function generateParam(state) {
             //agencyId: ''// 创建接口不需要传递
             //createTime: ''// 创建接口不需要传递
             //   id: ""// 创建接口不需要传递
-            level: (['', '', 3, 4])[r.val.length-1],// 区域级别，1：国家，2：省/直辖市，3：地级市，4：区、县、县级市，5：片区/板块
+            level: r.level || (['', '', 3, 4])[r.val.length-1],// 区域级别，1：国家，2：省/直辖市，3：地级市，4：区、县、县级市，5：片区/板块
             //operator: ''
-            regionId: r.val[r.val.length - 2] || null,// 根据level不同传递不同的意义的值，在创建接口中可以，但是在详情接口中不行
-            provinceId: r.val[0],
-            cityId: r.val[1], 
+            regionId: r.regionId || r.val[r.val.length - 2] || null,// 根据level不同传递不同的意义的值，在创建接口中可以，但是在详情接口中不行
+            provinceId: r.provinceId || r.val[0],
+            cityId: r.cityId || r.val[1], 
             id: r.id           
             //status: '' // 
           //   updateTime: ''
