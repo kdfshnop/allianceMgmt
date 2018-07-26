@@ -70,7 +70,7 @@ export default {
             status: "",
             innerItem: [],
             format: "yyyy-MM-dd",
-            valueFormat: "yyyy-MM-dd HH:mm:ss"
+            valueFormat: "yyyy-MM-dd"
         };
     },
     methods: {

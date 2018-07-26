@@ -114,7 +114,7 @@ export default {
             innerItem: {
 
             },
-            valueFormat: "yyyy-MM-dd HH:mm:ss",
+            valueFormat: "yyyy-MM-dd",
             format: "yyyy-MM-dd",
             /*:remote-method="getAgents"
                             @change="handleParentAgentChange"
