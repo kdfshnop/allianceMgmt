@@ -396,7 +396,8 @@ export function generateParam(state) {
     // 4. 合同
     safeGet(state, "ContractInfo.contractFileList").forEach((f)=>{
         resources.push(makeResource(f,{
-            flag: 4,            
+            flag: 4,  
+            tags: safeGet(state, "ContractInfo.sealed") ? '41' : '42' // 有章/无章          
         }));        
     });
     // 5. 承诺书

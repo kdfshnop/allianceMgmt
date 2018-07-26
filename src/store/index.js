@@ -147,8 +147,7 @@ export default new Vuex.Store({
                         special: agency.additional,
                         contractFileList: [],
                         promiseFileList: [],
-                        sealed: false
-                        // TODO: sealed要根据资源中的字段获取
+                        sealed: false                        
                     };
 
                     // 法人
@@ -374,7 +373,7 @@ export default new Vuex.Store({
                                 case 4:// 合同
                                     contract.contractFileList.push(x);
                                     // 判断是否盖章
-                                    contract.sealed = r.tags == '42';
+                                    contract.sealed = r.tags == '41';
                                 break;
                                 case 5:
                                     contract.promiseFileList.push(x);
