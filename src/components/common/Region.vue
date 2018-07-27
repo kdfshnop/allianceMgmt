@@ -4,8 +4,7 @@
         :options="options"
         v-model="selectedOptions"
         @active-item-change="handleItemChange"
-        @change="handleChange"
-        filterable
+        @change="handleChange"        
         clearable
         >
     </el-cascader>
