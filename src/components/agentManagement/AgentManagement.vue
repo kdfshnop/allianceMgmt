@@ -10,7 +10,16 @@
         <el-main>    
             <bread-crumb :items="breadCrumb"></bread-crumb>
             <div style="text-align:right;">
-                <el-button type="primary" @click="addAgent" v-show="privileges.addAgent">添加代理商</el-button>
+                <el-button type="primary" size="small" @click="addAgent" v-show="privileges.addAgent">添加代理商</el-button>
+                <el-upload  
+                    v-show="privileges.import"   
+                    class="import-agent"               
+                    :action="importUrl" 
+                    :on-success="handleSuccess" 
+                    :before-upload="handleBeforeUpload"                  
+                    list-type="none">
+                    <el-button size="small" type="primary">批量导入</el-button>                    
+                </el-upload>
             </div>     
             <el-form ref="form" :model="form" label-width="180px" class="gap" label-position="right">
                 <el-row>
@@ -192,7 +201,8 @@ export default {
                 "followUp": "/agentManagement#followUp",//跟进
                 "resubmit": "/agentManagement#resubmit",//重新提交
                 "agentEdit": "/agentManagement#agentEdit",//编辑
-                "agentEndJoin": "/agentManagement#agentEndJoin"//终止合作
+                "agentEndJoin": "/agentManagement#agentEndJoin",//终止合作
+                "import": "/agentManagement#importBtn",//批量导入
             },
             agencyInfo:{},//代理商信息
             agencyInfoList:[],//代理商列表;
@@ -222,7 +232,8 @@ export default {
                 searchDate:null,//到期日期
                 searchDay:null,//即将到期天数
                 searchType:null,//到期查询方式
-            }  
+            },
+            importUrl: this.$apiUrl.getFullUrl('/agency/upload')
         }
     },
     created(){
@@ -422,6 +433,23 @@ export default {
                 .catch(function(err){
                     console.log(err);
                 });
+        },
+        handleSuccess(data){
+            if(data.status == 1) {
+                this.$message({
+                    message: "导入成功",
+                    type: "success"
+                });
+            }else{
+                this.$message.error(data.message || "导入失败");
+            }            
+        },
+        handleBeforeUpload(file) {
+            let isExcel = file.name.indexOf('.xls') > -1 || file.name.indexOf('.xlsx') > -1;
+            if(!isExcel) {
+                this.$message.error('只支持Excel文件格式！');
+            }
+            return isExcel;
         }
     }
 }
@@ -451,12 +479,19 @@ export default {
     }
     .cz{
         margin-top: 10px;
-    }
+    }    
 </style>
 <style>
     /*scoped会影响prompt框的样式*/
     .agent-end-join textarea{
         height:100px;
+    }
+
+    .import-agent {
+        display: inline-block;
+    }
+    .import-agent .el-upload-list{
+        display: none;/* 导入按钮不希望看到列表*/
     }
 </style>
 
