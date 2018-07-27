@@ -4,7 +4,7 @@
             <el-row >
                 <el-col :span="12">
                     <el-form-item label="提交人" prop="submitterId">
-                        <el-select v-model="form.submitterId" placeholder="请选择" @focus="requestSubmitList" filterable>
+                        <el-select v-model="form.submitterId" placeholder="请选择" @focus="requestSubmitList" filterable clearable="true">
                             <el-option
                                 v-for="item in submitPeopleList"
                                 :key="item.id"
@@ -29,7 +29,7 @@
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="审核人" prop="auditorId">
-                        <el-select v-model="form.auditorId" placeholder="请选择" @focus="requestSubmitList" filterable>
+                        <el-select v-model="form.auditorId" placeholder="请选择" @focus="requestSubmitList" filterable clearable="true">
                             <el-option
                                 v-for="item in submitPeopleList"
                                 :key="item.id"
@@ -39,7 +39,7 @@
                         </el-select>
                     </el-form-item>
                     <el-form-item label="代理商" prop="targetId">
-                        <el-select v-model="form.targetId" placeholder="请选择" @focus="agencyList" filterable>
+                        <el-select v-model="form.targetId" placeholder="请选择" @focus="agencyList" filterable clearable="true">
                             <el-option label="暂无代理商" :value="0"></el-option>
                             <el-option
                                 v-for="item in agencyInfoList"
