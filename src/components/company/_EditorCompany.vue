@@ -42,7 +42,7 @@
                 </el-col>
             </el-row>
             <el-form-item label="bd" prop="bd"  label-width="40px" class="tl">
-                <el-select v-model="form.bd" placeholder="请选择" @focus="bdList" filterable style="width:100%;">
+                <el-select v-model="form.bd" placeholder="请选择" @focus="bdList" filterable style="width:100%;" clearable="true">
                     <el-option
                         v-for="item in bdInfoList"
                         :key="item.id"
@@ -86,7 +86,7 @@
                 </el-col>
             </el-row>
             <el-form-item label="代理商" class="tl" prop="agencyId">
-                <el-select v-model="form.agencyId" placeholder="请选择" @focus="agencyList" filterable>
+                <el-select v-model="form.agencyId" placeholder="请选择" @focus="agencyList" filterable clearable="true">
                     <el-option label="暂无代理商" :value="0"></el-option>
                     <el-option
                         v-for="item in agencyInfoList"
