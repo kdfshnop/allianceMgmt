@@ -78,7 +78,7 @@
                     </el-form-item>                                        
                 </el-col>
                 <el-col :span="12">  
-                    <el-form-item label="支付费用归属第几期" v-show="paymentStatus">                
+                    <el-form-item label="支付费用归属第几期" v-show="paymentStatus && paymentMethod == 2">                
                         <el-select v-model="stageNumber" placeholder="请选择">
                             <el-option
                             v-for="item in stages"
@@ -126,7 +126,7 @@
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="支付方式" v-show="paymentStatus">
-                        {{paymentType}}                        
+                        {{paymentTypeStr}}                        
                     </el-form-item>    
                     <el-form-item label="预计支付时间" v-show="!paymentStatus">
                         {{getDateStr(planPaymentDate)}}                        
@@ -166,7 +166,7 @@
                         </el-form-item>              
                     </el-col>
                     <el-col :span="12">
-                        <el-form-item label="支付费用归属第几期" v-show="paymentStatus">                                    
+                        <el-form-item label="支付费用归属第几期" v-show="paymentStatus && paymentMethod == 2">                                    
                             {{stageNumber == -1 ? '请选择第几期' : ("第" + stageNumber + "期")}}               
                         </el-form-item>           
                     </el-col>
@@ -287,13 +287,16 @@
             brokerMobile: generateComputed('brokerMobile', 'PaymentInfo', "updateBrokerMobile"),
             promiseFileList: generateComputed('promiseFileList', 'PaymentInfo', "updatePromiseFileList"),            
 
-            paymentType: function(){
+            paymentTypeStr: function(){
                 let tmp = this.types.filter((v)=>{return v.value == this.type});
                 if(tmp && tmp.length){
                     return tmp[0].label;
                 }
 
                 return this.type;
+            },
+            paymentMethod: function() {// 一次性/分期
+                return this.$store.state.PlatformServiceFee.paymentType;// 2: 分期 1： 一次性
             },
             stages() {
                 let stageTotal = this.$store.state.PlatformServiceFee.count || 0;
