@@ -341,9 +341,10 @@ export default {
             if(this.form.cityList.length){
                 this.form.cityId=this.form.cityList[1];
             };
-            delete this.form.cityList;
+            let realForm=Object.assign({},this.form);
+            delete realForm.cityList;
             // 获取代理商列表信息;
-            this.$http.post(this.$apiUrl.store.list,this.form)
+            this.$http.post(this.$apiUrl.store.list,realForm)
                 .then(function(data){
                     self.storeInfo=data.data.data;
                 })
@@ -351,7 +352,7 @@ export default {
                     console.log(err);
                 });
             // 获取该页面summary信息;
-            this.$http.post(this.$apiUrl.store.summary,this.form)
+            this.$http.post(this.$apiUrl.store.summary,realForm)
                 .then(function(data){
                     self.summary=data.data.data
                 })
