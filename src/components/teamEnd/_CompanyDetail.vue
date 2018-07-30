@@ -66,19 +66,12 @@
                     </el-form-item>
                 </el-col>
             </el-row>
-            <el-row>
-                <el-col :span="12">
-                    <el-form-item label="代理商:" class="tl" prop="agencyId">
-                        <span>{{companyDetail.agencyName}}</span>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                    <el-form-item  class="tl" label="上传文件:" v-if="companyDetail.file">
-                        <!--<span>{{companyDetail.file.fileName}}</span>-->
-                        <img :src="companyDetail.file.url" alt="">
-                    </el-form-item>
-                </el-col>
-            </el-row>
+            <el-form-item label="代理商:" class="tl" prop="agencyId">
+                <span>{{companyDetail.agencyName}}</span>
+            </el-form-item>
+            <el-form-item  class="tl" label="上传文件:" v-if="companyDetail.file">
+                <img :src="companyDetail.file.url" alt="">
+            </el-form-item>   
         </el-form>
     </el-dialog>
 </template>
@@ -118,5 +111,9 @@ export default {
     .el-form-item .el-form-item__label{
         text-align: left;
     } 
+    img{
+        width: 200px;
+        height: auto;
+    }
 </style>
 
