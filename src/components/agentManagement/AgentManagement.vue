@@ -143,7 +143,7 @@
                             <div slot="content" class="cz" @click="followUp(scope.$index,scope.row)">跟进</div>
                             <div slot="content" class="cz" @click="endJoin(scope.$index,scope.row)" v-if="scope.row.agencyState==4">终止合作</div>
                         </el-tooltip>-->
-                        <el-dropdown v-if="scope.row.agencyState!=2"trigger="click">
+                        <el-dropdown v-if="scope.row.agencyState!=2" trigger="click">
                             <span class="el-dropdown-link" style="color:#409EFF;font-size:12px;">更多<i class="el-icon-arrow-down el-icon--right"></i></span>
                             <el-dropdown-menu slot="dropdown" >
                                 <el-dropdown-item @click.native="edit(scope.$index,scope.row)" v-if="scope.row.agencyState!=1&&privileges.agentEdit">编辑</el-dropdown-item>

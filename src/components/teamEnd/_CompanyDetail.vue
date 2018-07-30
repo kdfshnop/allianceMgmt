@@ -74,7 +74,8 @@
                 </el-col>
                 <el-col :span="12">
                     <el-form-item  class="tl" label="上传文件:" v-if="companyDetail.file">
-                        <span>{{companyDetail.file.fileName}}</span>
+                        <!--<span>{{companyDetail.file.fileName}}</span>-->
+                        <img :src="companyDetail.file.url" alt="">
                     </el-form-item>
                 </el-col>
             </el-row>

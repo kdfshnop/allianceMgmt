@@ -341,6 +341,7 @@ export default {
             if(this.form.cityList.length){
                 this.form.cityId=this.form.cityList[1];
             };
+            delete this.form.cityList;
             // 获取代理商列表信息;
             this.$http.post(this.$apiUrl.store.list,this.form)
                 .then(function(data){

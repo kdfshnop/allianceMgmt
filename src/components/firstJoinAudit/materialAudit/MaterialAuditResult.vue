@@ -11,15 +11,15 @@
             <bread-crumb :items="breadCrumb"></bread-crumb>
             <div class="tabs">
                 <div class="tab" :class="{wait:wait}" @click="agentTab">
-                    <p class="account">{{total.waitTotal}}</p>
+                    <p class="account">{{total.waitTotal||0}}</p>
                     <p>待审核代理商</p>
                 </div>
                 <div class="tab" :class="{reject:reject}" @click="companyTab">
-                    <p class="account">{{total.rejectTotal}}</p>
+                    <p class="account">{{total.rejectTotal||0}}</p>
                     <p>已驳回</p>
                 </div>
                 <div class="tab" :class="{pass:pass}" @click="storeTab">
-                    <p class="account">{{total.auditedTotal}}</p>
+                    <p class="account">{{total.auditedTotal||0}}</p>
                     <p>通过</p>
                 </div>
                 <p style="clear:both;"></p>
