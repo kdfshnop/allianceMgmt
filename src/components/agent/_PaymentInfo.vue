@@ -167,7 +167,7 @@
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="支付费用归属第几期" v-show="paymentStatus && paymentMethod == 2">                                    
-                            {{stageNumber == -1 ? '请选择第几期' : ("第" + stageNumber + "期")}}               
+                            {{stageNumber == -1 && '请选择第几期' || stageNumber!=null && ("第" + stageNumber + "期") || ''}}               
                         </el-form-item>           
                     </el-col>
                 </el-row> 
