@@ -71,9 +71,10 @@ export default new Vuex.Store({
                         startTime: agency.startTime,
                         endTime: agency.endTime,
                         tags: agency.tags,
-                        updateTime: agency.updateTime,
-                        agentCity: [],
-                        id: agency.id
+                        updateTime: agency.updateTime,                        
+                        id: agency.id,
+                        cityName: [agency.provinceName, agency.cityName],
+                        agentCity: [agency.provinceId, agency.cityId]
                     };
 
                     // 代理区域信息
@@ -94,7 +95,7 @@ export default new Vuex.Store({
                                 updateTime: a.updateTime,
                                 provinceId: a.provinceId,
                                 cityId: a.cityId,
-                                regionId: a.regionId
+                                regionId: a.regionId                                
                             });
                         });                    
                     }
@@ -123,10 +124,10 @@ export default new Vuex.Store({
                         // 代理商负责追踪人信息放到了agencyPersons里面
                     };
 
-                    if(c){
-                        basicInfo.cityName = [c.provinceName, c.cityName];
-                        basicInfo.agentCity = [c.provinceId || 42, c.cityId];
-                    }
+                    // if(c){
+                    //     basicInfo.cityName = [c.provinceName, c.cityName];
+                    //     basicInfo.agentCity = [c.provinceId || 42, c.cityId];
+                    // }
 
                     // 分佣账号                
                     let account = {

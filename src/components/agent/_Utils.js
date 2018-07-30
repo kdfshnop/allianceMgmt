@@ -109,6 +109,7 @@ export function generateParam(state) {
     agency.wkcx = safeGet(state, "ServiceStaffInfo.cxInfo.id"); // 悟空彩霞服务id
     agency.operateRemark = safeGet(state, "AgentBasicInfo.remark");
     agency.id = safeGet(state, "AgentBasicInfo.id");
+    agency.cityId = safeGet(state, "AgentBasicInfo.agentCity.1");
     
     let agencyPersons = []; // 
     let agencyRegions = []; // 代理区域信息
