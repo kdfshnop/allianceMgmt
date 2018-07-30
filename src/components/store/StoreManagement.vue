@@ -19,7 +19,7 @@
                             <region v-model="form.cityList" :startLevel="startLevel" :endLevel="endLevel"></region>
                         </el-form-item>
                         <el-form-item label="门店所属代理商" prop="agencyId">
-                            <el-select v-model="form.agencyId" placeholder="请选择" @focus="agencyList" filterable clearable="true">
+                            <el-select v-model="form.agencyId" placeholder="请选择" @focus="agencyList" filterable>
                                 <el-option label="暂无代理商" :value="0"></el-option>
                                 <el-option
                                     v-for="item in agencyInfoList"
@@ -56,7 +56,7 @@
                         </el-form-item>
                         <el-form-item label="门店所属公司" prop="companyId">
                             <!--<el-input v-model="form.companyName"></el-input>-->
-                            <el-select v-model="form.companyId" placeholder="请选择" @focus="companyList"  filterable clearable="true">
+                            <el-select v-model="form.companyId" placeholder="请选择" @focus="companyList"  filterable>
                                 <el-option
                                     v-for="item in companyInfoList"
                                     :key="item.companyId"

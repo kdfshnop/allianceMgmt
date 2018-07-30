@@ -28,7 +28,7 @@
                 <textarea name="" id="" style="width:100%;" rows="10" placeholder="请添加备注" v-model="remark"></textarea>
                 <span slot="footer" class="dialog-footer">
                     <el-button @click="cancel">取 消</el-button>
-                    <el-button type="primary" @click="submit">确 定</el-button>
+                    <el-button type="primary" @click="submit" ref="button">确 定</el-button>
                 </span>
             </el-dialog>
         </el-main>
@@ -95,6 +95,8 @@ export default {
             this.remark="";
         },
         submit(){
+            // 按钮只能点击一次;
+            this.$refs.button.disabled=true;
             let form={
                 targetId:this.targetId,
                 targetType:this.targetType,
