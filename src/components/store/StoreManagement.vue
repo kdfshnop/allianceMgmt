@@ -341,7 +341,7 @@ export default {
             if(this.form.cityList.length){
                 this.form.cityId=this.form.cityList[1];
             };
-            let realForm=Oject.assign({},this.form);
+            let realForm=Object.assign({},this.form);
             delete realForm.cityList;
             // 获取代理商列表信息;
             this.$http.post(this.$apiUrl.store.list,realForm)
