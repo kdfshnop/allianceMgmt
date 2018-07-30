@@ -214,10 +214,8 @@ export default {
                 })
         },
         // 子组件添加门店成功之后，传递给父组件的值;
-        addSuccess(addInfo){
-            this.$refs.form.resetFields();
-            this.form.pageSize=10;
-            this.form.currentPage=1;
+        addSuccess(){
+            this.resetForm();
             this.requestList();
         },
         // 子组件编辑成功之后，传递给父组件的值;
@@ -225,10 +223,20 @@ export default {
             // 替换原有已经被编辑的数据;
             this.requestList();
         },
-        resetForm(formName) {
-            this.form.cityId=null;
-            this.form.cityList=[];
-            this.$refs.form.resetFields();
+        resetForm() {
+            this.form={
+                agencyId:null,//门店所属代理商Id
+                cityId:null,//门店所属城市Id
+                cityList:[],//城市二级联动所需
+                companyId:null,//门店所属公司Id
+                cooperationTime:null,//创建时间段;
+                cooperationStart:null,//创建开始时间
+                cooperationEnd:null,//创建结束时间
+                currentPage:1,//页码默认为1
+                pageSize:10,//页面量默认为10
+                storeName: null,//门店名称
+                storeType:'0',//门店类型
+            } 
         },
         //根据表单信息搜索
         search(){
