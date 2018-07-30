@@ -50,6 +50,7 @@ export default new Vuex.Store({
     },
     actions: {
         getAgent(context, {agentId, agentState, cb}) {
+            context.dispatch("clear");
             Vue.http.get(Vue.apiUrl.agent.detail,{
                 params: {
                     agencyId: agentId,
@@ -63,6 +64,20 @@ export default new Vuex.Store({
                 function fromData(data){
                     // 基本信息
                     let agency = data.data.data.agency;
+                    let cityNames = [];
+                    let cityIds = [];
+                    if(agency.provinceName){
+                        cityNames.push(agency.provinceName);
+                    }
+                    if(agency.cityName){
+                        cityNames.push(agency.cityName);
+                    }
+                    if(agency.provinceId){
+                        cityIds.push(agency.provinceId);
+                    }
+                    if(agency.cityId){
+                        cityIds.push(agency.cityId);
+                    }
                     let basicInfo = {
                         status: agency.agencyState,
                         agentType: agency.agencyType,   
@@ -73,8 +88,8 @@ export default new Vuex.Store({
                         tags: agency.tags,
                         updateTime: agency.updateTime,                        
                         id: agency.id,
-                        cityName: [agency.provinceName, agency.cityName],
-                        agentCity: [agency.provinceId, agency.cityId]
+                        cityName: cityNames,
+                        agentCity: cityIds
                     };
 
                     // 代理区域信息
