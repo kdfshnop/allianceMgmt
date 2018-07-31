@@ -1,6 +1,7 @@
 import axios from 'axios';
 import apiUrl from '@/configs/api.js';
 import {getEnv} from '@/utils/env';
+import {Message} from 'element-ui';
 export default {    
     install(Vue){
         let UNLOGIN = 1100;
@@ -32,6 +33,8 @@ export default {
 
             // 读取res.data.status，除了逻辑失败错误
             if(res.data && res.data.status != SUCCESS){// 失败
+                // Vue.message.error(res.data.message || "接口失败，请稍后重试");
+                Message.error(res.data.message || "接口失败，请稍后重试");
                 return Promise.reject(res.data);
             }
             return res;
