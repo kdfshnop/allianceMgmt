@@ -97,7 +97,7 @@
                 </el-select>
             </el-form-item>
             <el-form-item  class="tl upload">
-                <upload :fileList.sync='form.file' v-if="dialogVisible"></upload> 
+                <upload :fileList.sync='form.files' v-if="dialogVisible"></upload> 
             </el-form-item>
         </el-form>
         <span slot="footer" class="dialog-footer">
@@ -134,7 +134,7 @@ export default {
                 cooperationTime:[],//合作时间段
                 companyId:'',//公司Id;
                 deposit:'',//保证金
-                file:[],//上传资料
+                files:[],//上传资料
                 name:"",//公司名称;
                 organizationCode:'',//组织机构代码
                 provinceId:'',//省份Id
@@ -168,11 +168,11 @@ export default {
                 // 获取公司详情;
                 this.$http.get(this.$apiUrl.company.detail+"?companyId="+this.companyId)
                     .then(function(data){
-                        if(data.data.data.file) {
-                            data.data.data.file = [data.data.data.file];
-                        }else{
-                            data.data.data.file = [];
-                        }
+                        // if(data.data.data.files) {
+                        //     data.data.data.file = [data.data.data.file];
+                        // }else{
+                        //     data.data.data.file = [];
+                        // }
                         // self.form=data.data.data;
                         self.form=Object.assign({},self.form,data.data.data);
                         for(var i in self.form.bdList){
@@ -198,7 +198,7 @@ export default {
                     cooperationTime:[],//合作时间段
                     companyId:'',//公司id;
                     deposit:'',//保证金
-                    file:[],//上传资料
+                    files:[],//上传资料
                     name:"",//公司名称;
                     organizationCode:'',//组织机构代码
                     provinceId:'',//省份Id
@@ -214,7 +214,6 @@ export default {
         },
         // bdList
         bdList(){
-            console.log(this.form.file,'file')
             this.$http.get(this.$apiUrl.common.employee+"?personType=5")
                 .then(data=>{
                     this.bdInfoList=data.data.data;
@@ -245,12 +244,12 @@ export default {
                         this.form.cooperationEnd=this.form.cooperationTime[1];
                         let realForm=Object.assign({},this.form);
                         realForm.cityId=this.form.cityList[1];
-                        if(realForm.file.length){
-                            for(var i in realForm.file){
+                        if(realForm.files.length){
+                            for(var i in realForm.files){
                                 realForm.resource.push({
-                                    fileName:realForm.file[i].fileName,
+                                    fileName:realForm.files[i].fileName,
                                     owner:realForm.companyId,
-                                    resourceKey:realForm.file[i].resourceKey
+                                    resourceKey:realForm.files[i].resourceKey
                                 });
                             };
                         };
@@ -276,12 +275,12 @@ export default {
                         this.form.cooperationStart=this.form.cooperationTime[0];
                         this.form.cooperationEnd=this.form.cooperationTime[1];
                         let realForm=Object.assign({},this.form);
-                        if(realForm.file.length){
-                            for(var i in realForm.file){
+                        if(realForm.files.length){
+                            for(var i in realForm.files){
                                 realForm.resource.push({
-                                    fileName:realForm.file[i].fileName,
+                                    fileName:realForm.files[i].fileName,
                                     owner:realForm.companyId,
-                                    resourceKey:realForm.file[i].resourceKey
+                                    resourceKey:realForm.files[i].resourceKey
                                 });
                             };
                         };
