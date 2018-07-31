@@ -76,7 +76,7 @@
             <el-row>
                 <el-col :span="12">
                     <el-form-item label="电话" class="tl" prop="corporatePhone">
-                        <el-input v-model="form.corporatePhone" ></el-input>
+                        <el-input v-model.number="form.corporatePhone" ></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
@@ -149,7 +149,7 @@ export default {
                 deposit: [{ required: true, message: '请输入保证金', trigger: 'blur' },{ type: 'number', message: '保证金必须为数字值'}],
                 organizationCode: [{ required: true, message: '请输入组织机构代码', trigger: 'blur' }],
                 cooperationTime: [{ required: true, message: '请输入合作时间段', trigger: 'blur' }],
-                corporatePhone:[{ type: 'number', message: '必须为数字'}]
+                corporatePhone:[{ required: false, message: '请输入保证金', trigger: 'blur' },{ type: 'number', message: '必须为数字'}]
             }
         }
     },
