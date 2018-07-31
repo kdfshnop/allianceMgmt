@@ -424,8 +424,11 @@ export default {
             delete realForm.cityList;
             delete realForm.searchType;
             // 获取代理商列表信息;
-            this.$http.post(this.$apiUrl.agent.list,realForm)
-                .then(function(data){
+            this.$http.post(this.$apiUrl.agent.list,realForm,{
+                loading: {
+                    fullscreen: true
+                }
+            }).then(function(data){
                     self.agencyInfo=data.data.data;
                     loading.close();
                 })
