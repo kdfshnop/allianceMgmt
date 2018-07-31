@@ -176,7 +176,7 @@ export default {
                         // self.form=data.data.data;
                         self.form=Object.assign({},self.form,data.data.data);
                         for(var i in self.form.bdList){
-                            self.form.bds.push(self.form.bdList[i].bdId);
+                            self.form.bds.push(self.form.bdList[i].bd);
                         };
                         self.form.cityList=[self.form.provinceId,self.form.cityId];
                         self.dialogVisible = true;
