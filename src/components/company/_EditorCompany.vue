@@ -177,6 +177,7 @@ export default {
                         self.form.abbreviation=data.data.data.abbreviation;//公司简称;
                         self.form.address=data.data.data.address;//公司地址
                         self.form.agencyId=data.data.data.agencyId;//代理商Id;
+                        self.form.companyId=data.data.data.companyId;//公司Id;
                         self.form.name=data.data.data.name;//公司名称;
                         self.form.deposit=data.data.data.deposit;//保证金;
                         self.form.organizationCode=data.data.data.organizationCode;//组织机构代码;
@@ -311,7 +312,7 @@ export default {
                         // this.$refs[formName].resetFields();
                 }else {
                     this.$message({
-                        message:"请填写必填信息",
+                        message:"请填写必填或正确信息",
                         type:"error",
                         dutration:2000
                     });
