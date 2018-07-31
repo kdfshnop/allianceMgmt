@@ -138,11 +138,7 @@ export default {
                 name:"",//公司名称;
                 organizationCode:'',//组织机构代码
                 provinceId:'',//省份Id
-                resource:[{
-                    fileName:'',//上传文件的名
-                    owner:'',//公司Id
-                    resourceKey:'',//上传文件的key
-                }]//上传所需字段
+                resource:[]//上传所需数组对象，字段fileName:'',//上传文件的名 owner:'',//公司Id resourceKey:'',//上传文件的key
             },
             // 必填设置
             rules: {
@@ -173,10 +169,11 @@ export default {
                         // }else{
                         //     data.data.data.file = [];
                         // }
-                        // self.form=data.data.data;
-                        self.form=Object.assign({},self.form,data.data.data);
+                        self.form=data.data.data;
+                        let bds=[];//bdId;
+                        // self.form=Object.assign({},self.form,data.data.data);
                         for(var i in self.form.bdList){
-                            self.form.bds.push(self.form.bdList[i].bd);
+                            self.form.bds=bds.push(self.form.bdList[i].bd);
                         };
                         self.form.cityList=[self.form.provinceId,self.form.cityId];
                         self.dialogVisible = true;
