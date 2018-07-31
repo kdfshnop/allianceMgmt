@@ -55,6 +55,9 @@ export default new Vuex.Store({
                 params: {
                     agencyId: agentId,
                     agencyState: agentState
+                },
+                loading: {
+                    fullscreen: true
                 }
             }).then((data)=>{                
                                 

@@ -19,6 +19,7 @@ export default {
         let env = getEnv();
         let baseUrl = apiUrl.baseUrl[env];
         axios.defaults.baseURL = baseUrl;
+        let loading = null;
 
         Vue.http = Vue.prototype.$http = axios;
         axios.interceptors.response.use(function(res){
@@ -27,8 +28,13 @@ export default {
             //      window.parent && window.parent !== window && window.parent.location.reload();                
             // }
             // 关闭loading
-            if(res.config.loading){
-                res.config.loading.instance.close();
+            if(res.config.loading && loading){
+                //res.config.loading.instance.close();\
+                loading.total--;
+                if(loading.total <= 0){
+                    loading.close();
+                    loading = null;
+                }
             }
 
             if(res.headers['content-type'].indexOf('text/html')>-1) {
@@ -45,8 +51,13 @@ export default {
             }
             return res;
         },function(error,arg){
-            if(error.config.loading){
-                error.config.loading.instance.close();
+            if(error.config.loading && loading){
+                // error.config.loading.instance.close();
+                loading.total--;
+                if(loading.total <= 0){
+                    loading.close();
+                    loading = null;
+                }
             }
             Message.error(res.data.message || "接口失败，请稍后重试");
             return Promise.reject(error);
@@ -56,7 +67,11 @@ export default {
             // console.log("config:", config);
             // 处理loading
             if(config.loading) {
-                config.loading.instance = Loading.service(config.loading);
+                if(!loading) {
+                    loading = Loading.service(config.loading);
+                    loading.total = 0;
+                }
+                loading.total++;// total为了保证全局只有一个loading弹出
             }            
             return Object.assign(config, {headers: { /*'X-Requested-With': 'XMLHttpRequest'*/}});
         });
