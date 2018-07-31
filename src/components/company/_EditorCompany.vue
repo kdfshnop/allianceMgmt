@@ -148,7 +148,8 @@ export default {
                 cityList: [{ required: true, message: '请输入城市', trigger: 'blur' }],
                 deposit: [{ required: true, message: '请输入保证金', trigger: 'blur' },{ type: 'number', message: '保证金必须为数字值'}],
                 organizationCode: [{ required: true, message: '请输入组织机构代码', trigger: 'blur' }],
-                cooperationTime: [{ required: true, message: '请输入合作时间段', trigger: 'blur' }]
+                cooperationTime: [{ required: true, message: '请输入合作时间段', trigger: 'blur' }],
+                corporatePhone:[{ type: 'number', message: '必须为数字'}]
             }
         }
     },
@@ -169,13 +170,21 @@ export default {
                         // }else{
                         //     data.data.data.file = [];
                         // }
-                        self.form=data.data.data;
-                        let bds=[];//bdId;
-                        // self.form=Object.assign({},self.form,data.data.data);
-                        for(var i in self.form.bdList){
-                            self.form.bds=bds.push(self.form.bdList[i].bd);
+                        self.form.abbreviation=data.data.data.abbreviation;//公司简称;
+                        self.form.address=data.data.data.address;//公司地址
+                        self.form.agencyId=data.data.data.agencyId;//代理商Id;
+                        self.form.name=data.data.data.name;//公司名称;
+                        self.form.deposit=data.data.data.deposit;//保证金;
+                        self.form.organizationCode=data.data.data.organizationCode;//组织机构代码;
+                        self.form.businessType=data.data.data.businessType;//房源类型;
+                        self.form.cooperationTime=data.data.data.cooperationTime;//合作时间段;
+                        self.form.corporate=data.data.data.corporate;//法人代表;
+                        self.form.corporatePhone=data.data.data.corporatePhone;//电话;
+                        self.form.files=data.data.data.files;//上传图片;
+                        for(var i in data.data.data.bdList){
+                            self.form.bds.push(data.data.data.bdList[i].bd);//bd
                         };
-                        self.form.cityList=[self.form.provinceId,self.form.cityId];
+                        self.form.cityList=[data.data.data.provinceId,data.data.data.cityId];//所属城市;
                         self.dialogVisible = true;
                 })
                 .catch(function(err){
@@ -199,11 +208,7 @@ export default {
                     name:"",//公司名称;
                     organizationCode:'',//组织机构代码
                     provinceId:'',//省份Id
-                    resource:[{
-                        fileName:'',//上传文件的名
-                        owner:'',//公司Id
-                        resourceKey:'',//上传文件的key
-                    }],//上传所需字段 
+                    resource:[],//上传所需字段 
                 };
                 this.dialogVisible = true;
             }
