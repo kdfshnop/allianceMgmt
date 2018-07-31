@@ -139,7 +139,7 @@ export default {
                 name:"",//公司名称;
                 organizationCode:'',//组织机构代码
                 provinceId:'',//省份Id
-                resource:[]//上传所需数组对象，字段fileName:'',//上传文件的名 owner:'',//公司Id resourceKey:'',//上传文件的key
+                resources:[]//上传所需数组对象，字段fileName:'',//上传文件的名 owner:'',//公司Id resourceKey:'',//上传文件的key
             },
             // 必填设置
             rules: {
@@ -213,7 +213,7 @@ export default {
                     name:"",//公司名称;
                     organizationCode:'',//组织机构代码
                     provinceId:'',//省份Id
-                    resource:[],//上传所需字段 
+                    resources:[],//上传所需字段 
                 };
                 this.dialogVisible = true;
             }
@@ -251,10 +251,10 @@ export default {
                         this.form.cooperationEnd=this.form.cooperationTime[1];
                         let realForm=Object.assign({},this.form);
                         realForm.cityId=this.form.cityList[1];
-                        realForm.resource=[];//清空;
+                        realForm.resources=[];//清空;
                         if(realForm.files.length){
                             for(var i in realForm.files){
-                                realForm.resource.push({
+                                realForm.resources.push({
                                     fileName:realForm.files[i].fileName,
                                     owner:realForm.companyId,
                                     resourceKey:realForm.files[i].resourceKey
@@ -285,7 +285,7 @@ export default {
                         let realForm=Object.assign({},this.form);
                         if(realForm.files.length){
                             for(var i in realForm.files){
-                                realForm.resource.push({
+                                realForm.resources.push({
                                     fileName:realForm.files[i].fileName,
                                     owner:realForm.companyId,
                                     resourceKey:realForm.files[i].resourceKey
