@@ -248,6 +248,7 @@ export default {
                         this.form.cooperationEnd=this.form.cooperationTime[1];
                         let realForm=Object.assign({},this.form);
                         realForm.cityId=this.form.cityList[1];
+                        realForm.resource=[];//清空;
                         if(realForm.files.length){
                             for(var i in realForm.files){
                                 realForm.resource.push({
