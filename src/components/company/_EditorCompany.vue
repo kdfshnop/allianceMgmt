@@ -42,7 +42,7 @@
                 </el-col>
             </el-row>
             <el-form-item label="bd" prop="bd"  label-width="40px" class="tl">
-                <el-select v-model="form.bd" placeholder="请选择" @focus="bdList" filterable style="width:100%;" clearable="true">
+                <el-select v-model="form.bd" placeholder="请选择" @focus="bdList" filterable multiple style="width:100%;" clearable="true">
                     <el-option
                         v-for="item in bdInfoList"
                         :key="item.id"
@@ -125,7 +125,7 @@ export default {
                 abbreviation:'',//公司简称;
                 address:'',//地址
                 agencyId:'',//代理商Id
-                bd:'',//bdId
+                bd:[],//bdId
                 businessType:'',//房源类型,0为全部，1.新上，2.二手房，3.新房＋二手房
                 cityId:'',//所属城市Id
                 cityList:[],//值必须为number
