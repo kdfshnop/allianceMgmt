@@ -46,7 +46,11 @@ export default {
     },
     created(){
         let self=this;
-        this.$http.post(this.$apiUrl.agent.followUp,{agencyId:this.agencyId})
+        this.$http.post(this.$apiUrl.agent.followUp,{agencyId:this.agencyId},{
+                loading: {
+                    fullscreen: true,
+                }
+            })
             .then(function(data){
                 self.apiData=data.data.data;
             })

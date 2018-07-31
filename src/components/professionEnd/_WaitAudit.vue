@@ -72,7 +72,11 @@ export default {
                 currentPage:this.pagination.currentPage,
                 pageSize:this.pagination.pageSize
             }
-            this.$http.post(this.$apiUrl.professionEnd.list,form)
+            this.$http.post(this.$apiUrl.professionEnd.list,form,{
+                loading: {
+                    fullscreen: true
+                }
+            })
                 .then(function(data){
                     self.pagination.total=data.data.data.total;
                     self.waitAuditList=data.data.data.data;

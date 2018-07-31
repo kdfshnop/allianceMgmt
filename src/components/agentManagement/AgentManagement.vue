@@ -95,7 +95,7 @@
                             </el-select>
                         </el-form-item>
                         <el-form-item label="代理商公司名称" prop="agencyId">
-                            <el-select v-model="form.agencyId" placeholder="请选择" @focus="agencyList" filterable clearable="true">
+                            <el-select v-model="form.agencyId" placeholder="请选择" @focus="agencyList" filterable :clearable="true">
                                 <el-option
                                     v-for="item in agencyInfoList"
                                     :key="item.agencyId"
@@ -404,12 +404,6 @@ export default {
         // 代理商列表请求公共函数;
         requestList(){
             let self=this;
-            let loading = this.$loading({
-                    lock: true,
-                    text: 'Loading',
-                    spinner: 'el-icon-loading',
-                    background: 'rgba(0, 0, 0, 0.7)'
-            });
             // 判断是否选择了省市;
             if(this.form.cityList.length){
                 this.form.cityId=this.form.cityList[1];
@@ -430,10 +424,8 @@ export default {
                 }
             }).then(function(data){
                     self.agencyInfo=data.data.data;
-                    loading.close();
                 })
                 .catch(function(err){
-                    loading.close();
                     console.log(err,'代理商列表接口错误');
                 });
             // 获取该页面summary信息;

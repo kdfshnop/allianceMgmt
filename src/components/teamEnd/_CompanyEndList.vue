@@ -79,7 +79,11 @@ export default {
                 pageSize:this.pagination.pageSize,
                 type:"2"
             }
-            this.$http.post(this.$apiUrl.teamEnd.tabList,form)
+            this.$http.post(this.$apiUrl.teamEnd.tabList,form,{
+                loading: {
+                    fullscreen: true,
+                }
+            })
                 .then(function(data){
                     self.companyList=data.data.data;
                 })

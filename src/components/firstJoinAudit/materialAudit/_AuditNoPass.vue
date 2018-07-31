@@ -4,7 +4,7 @@
             <el-row >
                 <el-col :span="12">
                     <el-form-item label="提交人" prop="submitterId">
-                        <el-select v-model="form.submitterId" placeholder="请选择" @focus="requestSubmitList" filterable clearable="true">
+                        <el-select v-model="form.submitterId" placeholder="请选择" @focus="requestSubmitList" filterable :clearable="true">
                             <el-option
                                 v-for="item in submitPeopleList"
                                 :key="item.id"
@@ -29,7 +29,7 @@
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="审核人" prop="auditorId">
-                        <el-select v-model="form.auditorId" placeholder="请选择" @focus="requestSubmitList" filterable clearable="true">
+                        <el-select v-model="form.auditorId" placeholder="请选择" @focus="requestSubmitList" filterable :clearable="true">
                             <el-option
                                 v-for="item in submitPeopleList"
                                 :key="item.id"
@@ -40,7 +40,7 @@
                     </el-form-item>
                     <el-form-item label="代理商" prop="targetId">
                         <!--<el-input v-model="form.targetName"></el-input>-->
-                        <el-select v-model="form.targetId" placeholder="请选择" @focus="agencyList" filterable clearable="true">
+                        <el-select v-model="form.targetId" placeholder="请选择" @focus="agencyList" filterable :clearable="true">
                             <el-option
                                 v-for="item in agencyInfoList"
                                 :key="item.agencyId"
@@ -133,7 +133,11 @@ export default {
         // 请求公共函数
         requestList(){
             let self=this;
-            this.$http.post(this.$apiUrl.agent.firstWaitAuditList,this.form)
+            this.$http.post(this.$apiUrl.agent.firstWaitAuditList,this.form,{
+                loading: {
+                    fullscreen: true,
+                }
+            })
                 .then(function(data){
                     self.rejectList=data.data.data;
                 })

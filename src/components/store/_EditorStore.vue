@@ -11,7 +11,7 @@
                 </el-select>
             </el-form-item>
             <el-form-item label="代理商公司名称" prop="agencyId" v-if="form.storeType==1" >
-                <el-select v-model="form.agencyId" placeholder="请选择" @focus="agencyList" filterable clearable="true">
+                <el-select v-model="form.agencyId" placeholder="请选择" @focus="agencyList" filterable :clearable="true">
                     <el-option label="暂无代理商" :value="0"></el-option>
                     <el-option
                         v-for="item in agencyInfoList"
@@ -22,7 +22,7 @@
                 </el-select>
             </el-form-item>
             <el-form-item label="中介公司名称" prop="companyId" v-if="form.storeType==2" >
-                <el-select v-model="form.companyId" placeholder="请选择" @focus="companyList"  filterable clearable="true">
+                <el-select v-model="form.companyId" placeholder="请选择" @focus="companyList"  filterable :clearable="true">
                     <el-option
                         v-for="item in companyInfoList"
                         :key="item.companyId"
