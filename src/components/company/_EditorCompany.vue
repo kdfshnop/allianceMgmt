@@ -110,6 +110,7 @@
 <script>
 import Region from '@/components/common/Region';
 import Upload from '@/components/common/Upload';
+import {Validator} from '@/components/agent/_Utils';
 export default {
     name:'editorCompany',
     props:['companyId','title'],
@@ -149,7 +150,7 @@ export default {
                 deposit: [{ required: true, message: '请输入保证金', trigger: 'blur' },{ type: 'number', message: '保证金必须为数字值'}],
                 organizationCode: [{ required: true, message: '请输入组织机构代码', trigger: 'blur' }],
                 cooperationTime: [{ required: true, message: '请输入合作时间段', trigger: 'blur' }],
-                corporatePhone:[{ required: false, message: '请输入保证金', trigger: 'blur' },{ type: 'number', message: '必须为数字'}]
+                corporatePhone:[{validator:Validator.mobile,trigger: 'blur'}]
             }
         }
     },
@@ -159,6 +160,7 @@ export default {
         this.bdList();
     },
     methods:{
+        
         open() {
             let self=this;
             if(this.title=='编辑公司'){
