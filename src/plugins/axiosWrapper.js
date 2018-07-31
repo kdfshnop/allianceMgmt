@@ -44,6 +44,12 @@ export default {
                 return Promise.reject(res.data);
             }
             return res;
+        },function(error,arg){
+            if(error.config.loading){
+                error.config.loading.instance.close();
+            }
+            Message.error(res.data.message || "接口失败，请稍后重试");
+            return Promise.reject(error);
         });
         axios.interceptors.request.use(function(config){
             // 有时候后端需要有这个头才认为是异步请求才返回JSON格式，如果不需要可以移除这个拦截器
