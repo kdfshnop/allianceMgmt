@@ -170,6 +170,8 @@ export default {
                         // }else{
                         //     data.data.data.file = [];
                         // }
+                        self.form.bds=[];//先清空;
+                        self.form.cityList=[];
                         self.form.abbreviation=data.data.data.abbreviation;//公司简称;
                         self.form.address=data.data.data.address;//公司地址
                         self.form.agencyId=data.data.data.agencyId;//代理商Id;
