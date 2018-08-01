@@ -79,7 +79,11 @@ export default {
                 pageSize:this.pagination.pageSize,
                 targetState:this.targetState//1待审核,2.已驳回，3通过
             }
-            this.$http.post(this.$apiUrl.agent.firstWaitAuditList,requestInfo)
+            this.$http.post(this.$apiUrl.agent.firstWaitAuditList,requestInfo,{
+                loading: {
+                    fullscreen: true
+                }
+            })
                 .then(function(data){
                     self.pagination.total=data.data.data.total;
                     self.waitAuditList=data.data.data.data;

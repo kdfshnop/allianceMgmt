@@ -4,7 +4,7 @@
             <el-row >
                 <el-col :span="12">
                     <el-form-item label="提交人" prop="submitterId">
-                        <el-select v-model="form.submitterId" placeholder="请选择" @focus="requestSubmitList" filterable clearable="true">
+                        <el-select v-model="form.submitterId" placeholder="请选择" @focus="requestSubmitList" filterable :clearable="true">
                             <el-option
                                 v-for="item in submitPeopleList"
                                 :key="item.id"
@@ -29,7 +29,7 @@
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="审核人" prop="auditorId">
-                        <el-select v-model="form.auditorId" placeholder="请选择" @focus="requestSubmitList" filterable clearable="true">
+                        <el-select v-model="form.auditorId" placeholder="请选择" @focus="requestSubmitList" filterable :clearable="true">
                             <el-option
                                 v-for="item in submitPeopleList"
                                 :key="item.id"

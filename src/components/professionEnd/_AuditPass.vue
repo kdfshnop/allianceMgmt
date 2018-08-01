@@ -4,7 +4,7 @@
             <el-row >
                 <el-col :span="12">
                     <el-form-item label="提交人" prop="submitterId">
-                        <el-select v-model="form.submitterId" placeholder="请选择" @focus="requestSubmitList" filterable clearable="true">
+                        <el-select v-model="form.submitterId" placeholder="请选择" @focus="requestSubmitList" filterable :clearable="true">
                             <el-option
                                 v-for="item in submitPeopleList"
                                 :key="item.id"
@@ -29,7 +29,7 @@
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="审核人" prop="auditorId">
-                        <el-select v-model="form.auditorId" placeholder="请选择" @focus="requestSubmitList" filterable clearable="true">
+                        <el-select v-model="form.auditorId" placeholder="请选择" @focus="requestSubmitList" filterable :clearable="true">
                             <el-option
                                 v-for="item in submitPeopleList"
                                 :key="item.id"
@@ -122,7 +122,11 @@ export default {
         // 请求公共函数
         requestList(){
             let self=this;
-            this.$http.post(this.$apiUrl.professionEnd.list,this.form)
+            this.$http.post(this.$apiUrl.professionEnd.list,this.form,{
+                loading: {
+                    fullscreen: true
+                }
+            })
                 .then(function(data){
                     self.pagination.total=data.data.data.total;
                     self.passAuditList=data.data.data.data;

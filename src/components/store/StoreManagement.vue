@@ -352,7 +352,11 @@ export default {
             let realForm=Object.assign({},this.form);
             delete realForm.cityList;
             // 获取代理商列表信息;
-            this.$http.post(this.$apiUrl.store.list,realForm)
+            this.$http.post(this.$apiUrl.store.list,realForm,{
+                loading: {
+                    fullscreen: true
+                }
+            })
                 .then(function(data){
                     self.storeInfo=data.data.data;
                 })

@@ -95,7 +95,7 @@
                             </el-select>
                         </el-form-item>
                         <el-form-item label="代理商公司名称" prop="agencyId">
-                            <el-select v-model="form.agencyId" placeholder="请选择" @focus="agencyList" filterable clearable="true">
+                            <el-select v-model="form.agencyId" placeholder="请选择" @focus="agencyList" filterable :clearable="true">
                                 <el-option
                                     v-for="item in agencyInfoList"
                                     :key="item.agencyId"
@@ -432,8 +432,10 @@ export default {
             this.$http.post(this.$apiUrl.agent.summary,realForm)
                 .then(function(data){
                     self.summary=data.data.data;
+                    self.fullscreenLoading = false;
                 })
                 .catch(function(err){
+                    self.fullscreenLoading = false;
                     console.log(err);
                 });
         },

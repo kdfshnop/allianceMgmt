@@ -41,8 +41,8 @@
                     </el-form-item>
                 </el-col>
             </el-row>
-            <el-form-item label="bd" prop="bd"  label-width="40px" class="tl">
-                <el-select v-model="form.bd" placeholder="请选择" @focus="bdList" filterable style="width:100%;" clearable="true">
+            <el-form-item label="bd" prop="bds"  label-width="40px" class="tl">
+                <el-select v-model="form.bds" placeholder="请选择" @focus="bdList" filterable multiple style="width:100%;" :clearable="true">
                     <el-option
                         v-for="item in bdInfoList"
                         :key="item.id"
@@ -76,7 +76,7 @@
             <el-row>
                 <el-col :span="12">
                     <el-form-item label="电话" class="tl" prop="corporatePhone">
-                        <el-input v-model="form.corporatePhone" ></el-input>
+                        <el-input v-model.number="form.corporatePhone" ></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
@@ -86,7 +86,7 @@
                 </el-col>
             </el-row>
             <el-form-item label="代理商" class="tl" prop="agencyId">
-                <el-select v-model="form.agencyId" placeholder="请选择" @focus="agencyList" filterable clearable="true">
+                <el-select v-model="form.agencyId" placeholder="请选择" @focus="agencyList" filterable :clearable="true">
                     <el-option label="暂无代理商" :value="0"></el-option>
                     <el-option
                         v-for="item in agencyInfoList"
@@ -97,7 +97,7 @@
                 </el-select>
             </el-form-item>
             <el-form-item  class="tl upload">
-                <upload :fileList.sync='form.file' :limit="1" v-if="dialogVisible" :tipText="tipText" :fileValidator="fileValidator"></upload> 
+                <upload :fileList.sync='form.file' v-if="dialogVisible" :tipText="tipText" :fileValidator="fileValidator"></upload> 
             </el-form-item>
         </el-form>
         <span slot="footer" class="dialog-footer">
@@ -110,6 +110,7 @@
 <script>
 import Region from '@/components/common/Region';
 import Upload from '@/components/common/Upload';
+import {Validator} from '@/components/agent/_Utils';
 export default {
     name:'editorCompany',
     props:['companyId','title'],
@@ -125,25 +126,20 @@ export default {
                 abbreviation:'',//公司简称;
                 address:'',//地址
                 agencyId:'',//代理商Id
-                bd:'',//bdId
+                bds:[],//bdIdlist
                 businessType:'',//房源类型,0为全部，1.新上，2.二手房，3.新房＋二手房
                 cityId:'',//所属城市Id
                 cityList:[],//值必须为number
                 corporate:'',//法人代表
                 corporatePhone:'',//电话
                 cooperationTime:[],//合作时间段
-                comapnyId:'',//公司Id;
+                companyId:'',//公司Id;
                 deposit:'',//保证金
-                file:[],//上传资料
+                files:[],//上传资料
                 name:"",//公司名称;
                 organizationCode:'',//组织机构代码
                 provinceId:'',//省份Id
-                resource:{
-                    fileName:'',//上传文件的名
-                    owner:'',//公司Id
-                    resourceKey:'',//上传文件的key
-                },//上传所需字段
-                resourceKey:'',//上传的资源key 
+                resources:[]//上传所需数组对象，字段fileName:'',//上传文件的名 owner:'',//公司Id resourceKey:'',//上传文件的key
             },
             // 必填设置
             rules: {
@@ -153,9 +149,10 @@ export default {
                 cityList: [{ required: true, message: '请输入城市', trigger: 'blur' }],
                 deposit: [{ required: true, message: '请输入保证金', trigger: 'blur' },{ type: 'number', message: '保证金必须为数字值'}],
                 organizationCode: [{ required: true, message: '请输入组织机构代码', trigger: 'blur' }],
-                cooperationTime: [{ required: true, message: '请输入合作时间段', trigger: 'blur' }]
+                cooperationTime: [{ required: true, message: '请输入合作时间段', trigger: 'blur' }],
+                corporatePhone:[{validator:Validator.mobile,trigger: 'blur'}]
             },
-            tipText: "只能上传图片(jpg/jpeg/gif/png/bmp)和txt,doc,docx,xls,xlsx,ppt,pptx,pdf，且不超过2M"
+            tipText: "只能上传图片(jpg/jpeg/gif/png/bmp)和txt,doc,docx,xls,xlsx,ppt,pptx,pdf，且不超过2M"                            
         }
     },
     created(){
@@ -164,19 +161,36 @@ export default {
         this.bdList();
     },
     methods:{
+        
         open() {
             let self=this;
             if(this.title=='编辑公司'){
                 // 获取公司详情;
                 this.$http.get(this.$apiUrl.company.detail+"?companyId="+this.companyId)
                     .then(function(data){
-                        if(data.data.data.file) {
-                            data.data.data.file = [data.data.data.file];
-                        }else{
-                            data.data.data.file = [];
-                        }
-                        self.form=data.data.data;
-                        self.form.cityList=[self.form.provinceId,self.form.cityId];
+                        // if(data.data.data.files) {
+                        //     data.data.data.file = [data.data.data.file];
+                        // }else{
+                        //     data.data.data.file = [];
+                        // }
+                        self.form.bds=[];//先清空;
+                        self.form.cityList=[];
+                        self.form.abbreviation=data.data.data.abbreviation;//公司简称;
+                        self.form.address=data.data.data.address;//公司地址
+                        self.form.agencyId=data.data.data.agencyId;//代理商Id;
+                        self.form.companyId=data.data.data.companyId;//公司Id;
+                        self.form.name=data.data.data.name;//公司名称;
+                        self.form.deposit=data.data.data.deposit;//保证金;
+                        self.form.organizationCode=data.data.data.organizationCode;//组织机构代码;
+                        self.form.businessType=data.data.data.businessType;//房源类型;
+                        self.form.cooperationTime=data.data.data.cooperationTime;//合作时间段;
+                        self.form.corporate=data.data.data.corporate;//法人代表;
+                        self.form.corporatePhone=data.data.data.corporatePhone;//电话;
+                        self.form.files=data.data.data.files;//上传图片;
+                        for(var i in data.data.data.bdList){
+                            self.form.bds.push(data.data.data.bdList[i].bd);//bd
+                        };
+                        self.form.cityList=[data.data.data.provinceId,data.data.data.cityId];//所属城市;
                         self.dialogVisible = true;
                 })
                 .catch(function(err){
@@ -187,7 +201,7 @@ export default {
                     abbreviation:'',//公司简称;
                     address:'',//地址
                     agencyId:'',//代理商Id;
-                    bd:'',//bdId
+                    bds:[],//bdIdList
                     businessType:'',//房源类型,0为选择，1.新上，2.二手房，3.新房＋二手房
                     cityId:'',//所属城市Id
                     cityList:[],//值必须为number
@@ -196,16 +210,11 @@ export default {
                     cooperationTime:[],//合作时间段
                     companyId:'',//公司id;
                     deposit:'',//保证金
-                    file:[],//上传资料
+                    files:[],//上传资料
                     name:"",//公司名称;
                     organizationCode:'',//组织机构代码
                     provinceId:'',//省份Id
-                    resource:{
-                        fileName:'',//上传文件的名
-                        owner:'',//公司Id
-                        resourceKey:'',//上传文件的key
-                    },//上传所需字段
-                    resourceKey:'',//上传的资源key 
+                    resources:[],//上传所需字段 
                 };
                 this.dialogVisible = true;
             }
@@ -243,12 +252,14 @@ export default {
                         this.form.cooperationEnd=this.form.cooperationTime[1];
                         let realForm=Object.assign({},this.form);
                         realForm.cityId=this.form.cityList[1];
-                        if(this.form.file.length){
-                            realForm.resourceKey=this.form.file[0].resourceKey;
-                            realForm.resource={
-                                fileName:realForm.file[0].fileName,//上传文件的名
-                                owner:realForm.companyId,//公司Id
-                                resourceKey:realForm.file[0].resourceKey,//上传文件的key
+                        realForm.resources=[];//清空;
+                        if(realForm.files.length){
+                            for(var i in realForm.files){
+                                realForm.resources.push({
+                                    fileName:realForm.files[i].fileName,
+                                    owner:realForm.companyId,
+                                    resourceKey:realForm.files[i].resourceKey
+                                });
                             };
                         };
                         this.$http.post(this.$apiUrl.company.add,realForm)
@@ -273,12 +284,13 @@ export default {
                         this.form.cooperationStart=this.form.cooperationTime[0];
                         this.form.cooperationEnd=this.form.cooperationTime[1];
                         let realForm=Object.assign({},this.form);
-                        if(this.form.file.length){
-                            realForm.resourceKey=this.form.file[0].resourceKey;
-                            realForm.resource={
-                                fileName:realForm.file[0].fileName,//上传文件的名
-                                owner:realForm.companyId,//公司Id
-                                resourceKey:realForm.file[0].resourceKey,//上传文件的key
+                        if(realForm.files.length){
+                            for(var i in realForm.files){
+                                realForm.resources.push({
+                                    fileName:realForm.files[i].fileName,
+                                    owner:realForm.companyId,
+                                    resourceKey:realForm.files[i].resourceKey
+                                });
                             };
                         };
                         delete realForm.cityList;
@@ -301,7 +313,7 @@ export default {
                         // this.$refs[formName].resetFields();
                 }else {
                     this.$message({
-                        message:"请填写必填信息",
+                        message:"请填写必填或正确信息",
                         type:"error",
                         dutration:2000
                     });

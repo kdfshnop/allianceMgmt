@@ -80,7 +80,7 @@
                         </el-form-item>
                         <el-form-item label="代理商" prop="agencyId">
                             <!--<el-input v-model="form.agency"></el-input>-->
-                            <el-select v-model="form.agencyId" placeholder="请选择" @focus="agencyList" filterable clearable="true">
+                            <el-select v-model="form.agencyId" placeholder="请选择" @focus="agencyList" filterable :clearable="true">
                                 <el-option label="暂无代理商" :value="0"></el-option>
                                 <el-option
                                     v-for="item in agencyInfoList"
@@ -381,7 +381,11 @@ export default {
             delete realForm.cityList;//删除表单中的cityList选项，因为提交数据时不需要该参数
             delete realForm.searchType;//同上
             // 获取信息列表;
-            this.$http.post(this.$apiUrl.company.list,realForm)
+            this.$http.post(this.$apiUrl.company.list,realForm,{
+                loading: {
+                    fullscreen: true
+                }
+            })
                 .then(function(data){
                     self.companyInfoList=data.data.data.data;
                 })

@@ -69,8 +69,9 @@
             <el-form-item label="代理商:" class="tl" prop="agencyId">
                 <span>{{companyDetail.agencyName}}</span>
             </el-form-item>
-            <el-form-item  class="tl" label="上传文件:" v-if="companyDetail.file">
-                <img :src="companyDetail.file.url" alt="">
+            <el-form-item  class="tl" label="上传文件:">
+                <img :src="item.url" alt="" v-for="(item,index) in companyDetail.files" :key="index">
+                <!--<img :src="companyDetail.file.url" alt="">-->
             </el-form-item>   
         </el-form>
     </el-dialog>
@@ -86,7 +87,7 @@ export default {
             startLevel:1,//二级联动城市传参
             endLevel:2,//二级联动城市传参
             companyDetail:{
-                file:{fileName:''}
+                files:[{fileName:''}]
             },//公司详情页;
         }
     },
