@@ -1,5 +1,5 @@
 <template>
-    <el-dialog :title="title" :visible.sync="dialogVisible" width="50%" :before-close="handleClose">
+    <el-dialog :title="title" :visible.sync="dialogVisible" width="50%">
         <el-form :model="form" :rules="rules" ref="form" label-width="120px">
             <el-form-item label="门店名称" prop="name" >
                 <el-input v-model="form.name"></el-input>
@@ -135,14 +135,6 @@ export default {
                     type: 'warning'
                 });
             }
-        },
-        handleClose(done) {
-            this.$confirm('确认关闭？')
-            .then(_ => { 
-                this.$refs.form.resetFields(); 
-                done();
-            })
-            .catch(_ => {});
         },
         submitForm() {
             let self=this;

@@ -70,14 +70,16 @@
                 <span>{{companyDetail.agencyName}}</span>
             </el-form-item>
             <el-form-item  class="tl" label="上传文件:">
-                <img :src="item.url" alt="" v-for="(item,index) in companyDetail.files" :key="index">
+                <!--<img :src="item.url" alt="" v-for="(item,index) in companyDetail.files" :key="index">-->
                 <!--<img :src="companyDetail.file.url" alt="">-->
+                <file-list :fileList="companyDetail.files"></file-list>
             </el-form-item>   
         </el-form>
     </el-dialog>
 </template>
 
 <script>
+import FileList from '@/components/common/FileList';
 export default {
     name:'CompanyDetail',
     data(){
