@@ -82,6 +82,7 @@
 import FileList from '@/components/common/FileList';
 export default {
     name:'CompanyDetail',
+    components:{FileList},
     data(){
         return {
             agencyInfoList:[],
