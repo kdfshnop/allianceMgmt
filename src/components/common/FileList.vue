@@ -45,7 +45,7 @@ export default {
     },
     methods: {
         isImg(src) {
-            let reg = /jpg|png|jpeg|gif/;
+            let reg = /(jpg|png|jpeg|gif|bmp)$/;
             return reg.test(src);
             // return true;
         }

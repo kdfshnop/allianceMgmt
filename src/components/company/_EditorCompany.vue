@@ -97,7 +97,7 @@
                 </el-select>
             </el-form-item>
             <el-form-item  class="tl upload">
-                <upload :fileList.sync='form.file' v-if="dialogVisible" :tipText="tipText" :fileValidator="fileValidator"></upload> 
+                <upload :fileList.sync='form.files' v-if="dialogVisible" :tipText="tipText" :fileValidator="fileValidator"></upload> 
             </el-form-item>
         </el-form>
         <span slot="footer" class="dialog-footer">
