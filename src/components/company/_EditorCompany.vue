@@ -97,7 +97,7 @@
                 </el-select>
             </el-form-item>
             <el-form-item  class="tl upload">
-                <upload :fileList.sync='form.file' :limit="1" v-if="dialogVisible"></upload> 
+                <upload :fileList.sync='form.file' :limit="1" v-if="dialogVisible" :tipText="tipText" :fileValidator="fileValidator"></upload> 
             </el-form-item>
         </el-form>
         <span slot="footer" class="dialog-footer">
@@ -154,7 +154,8 @@ export default {
                 deposit: [{ required: true, message: '请输入保证金', trigger: 'blur' },{ type: 'number', message: '保证金必须为数字值'}],
                 organizationCode: [{ required: true, message: '请输入组织机构代码', trigger: 'blur' }],
                 cooperationTime: [{ required: true, message: '请输入合作时间段', trigger: 'blur' }]
-            }
+            },
+            tipText: "只能上传图片(jpg/jpeg/gif/png/bmp)和txt,doc,docx,xls,xlsx,ppt,pptx,pdf，且不超过2M"
         }
     },
     created(){
@@ -311,6 +312,38 @@ export default {
         resetForm() {
             this.$refs.form.resetFields();
             this.dialogVisible=false;
+        },
+        fileValidator(file) {
+            let isImg = file.type.indexOf('image') > -1;
+            let isPdf = file.type.indexOf('pdf') > -1;
+            let name = file.name.toLowerCase();
+            let isTxt = name.indexOf('.txt') > -1;
+            let isDoc = name.indexOf('.doc') > -1;
+            let isDocx = name.indexOf('.docx') > -1;
+            let isXls = name.indexOf('.xls') > -1;
+            let isXlsx = name.indexOf('.xlsx') > -1;
+            let ixPpt = name.indexOf('.ppt') > -1;
+            let isPptx = name.indexOf('.pptx') > -1;
+            let isRar = name.indexOf('.rar') > -1;
+            let isZip = name.indexOf('.zip') > -1;            
+
+            let isLt2M = file.size / 1024 / 1024 < 2;
+            if(!isImg && !isPdf && !isTxt && !isDoc && !isDocx && !isXls && !isXlsx && !isPptx && !isPptx && !isRar && !isZip) {
+                return {
+                    status: 0,
+                    message: "只支持图片和txt,doc,docx,xls,xlsx,ppt,pptx,pdf格式的文件"
+                };
+            }
+            if(!isLt2M){
+                return {
+                    status: 0,
+                    message: "文件不能超过2M"
+                };
+            }
+
+            return {
+                status: 1
+            };
         }
     }
 }

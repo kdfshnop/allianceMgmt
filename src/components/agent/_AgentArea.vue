@@ -86,7 +86,7 @@ export default {
             if(this.mode == 'edit') {
                 this.regions.splice(index, 1);
             } else {
-                let tmp = this.regions.splice();
+                let tmp = this.regions.slice();
                 tmp.splice(index, 1);
                 this.updateItem({regions: tmp});
             }
