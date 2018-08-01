@@ -1,4 +1,5 @@
 <template>
+<div>
     <el-upload
         class="upload-demo"
         :action="url"
@@ -12,21 +13,33 @@
         :limit="limit || 10"
         :on-exceed="handleExceed"
         :file-list="fl" 
+        :show-file-list="true"
         list-type="picture"       
         >
         <el-button size="small" type="primary">{{ btnText || '点击上传'}}</el-button>
-        <div slot="tip" class="el-upload__tip">{{ tipText || '只能上传图片文件(jpg/jpeg/gif/png/bmp)，且不超过2M'}}</div>
+        <div slot="tip" class="el-upload__tip">{{ tipText || '只能上传图片文件(jpg/jpeg/gif/png/bmp)，且不超过2M'}}</div>        
     </el-upload>
+    <div style="display: none" :id="id">
+        <div v-for="(item, index) in innerFileList" :key="index">
+            <img :src="item.url" v-if="isImg(item.url)">
+        </div>
+    </div>
+</div>
 </template>
 <script>
 /**
  * 封装上传组件，把一些通用的属性隐藏掉，比如上传接口
  */
 import Vue from 'vue';
+// import FileList from '@/components/common/FileList';
+import Viewer from "viewerjs/dist/viewer"
 export default {
     name: "upload",
     // fileValidator是一个函数，接收的是file对象，跟beforeUpload一样，返回是一个对象，包含status和message,status=1表示成功
     props: ['fileList', 'btnText', 'tipText', 'mode', 'status', 'multiple', 'limit', 'fileValidator'],// mode暂时没用到,status会是editing和空
+    // components: {
+    //     FileList
+    // },
     data() {
         return {
             url: Vue.apiUrl.getFullUrl(Vue.apiUrl.upload),            
@@ -36,12 +49,30 @@ export default {
                 tmp.name = tmp.fileName;
                 return tmp;
             }),
-            name: ""
+            name: "",
+            id: ""
         };
     },
     methods: {
-        handlePreview() {
-
+        handlePreview(file) {
+            if(this.isImg(file.name)){// 图片才会有预览
+                let imgs = this.innerFileList.filter((f)=>{
+                    return this.isImg(f.fileName);
+                });
+                for(let i = 0; i < imgs.length; i++) {
+                    if(imgs[i].fileName == file.name) {
+                        this.viewer.view(i);
+                        break;
+                    }
+                }
+            }else{
+                window.open(file.url);
+            }        
+        },
+        isImg(src) {
+            let reg = /(jpg|png|jpeg|gif|bmp)$/;
+            return reg.test(src);
+            // return true;
         },
         handleRemove(data) {            
             for(let i = this.innerFileList.length - 1; i >= 0; i--){
@@ -93,6 +124,30 @@ export default {
             
             this.name = file.name; 
             return ret;           
+        }
+    },
+    mounted() {
+        this.$nextTick(()=> {
+            this.viewer = new Viewer(document.getElementById(this.id))
+        });
+    },
+    created() {
+        this.id = Math.random().toString().replace('0.','');
+    },
+    watch: {
+        innerFileList() {
+            if(this.viewer) {
+                console.log('fileList changed...');
+                this.viewer.destroy();
+                this.$nextTick(()=>{                    
+                    this.viewer = new Viewer(document.getElementById(this.id));
+                })                
+            }else{
+                console.log('fileList changed');
+                this.$nextTick(()=>{
+                    this.viewer = new Viewer(document.getElementById(this.id));
+                });
+            }
         }
     }
 }
