@@ -54,17 +54,20 @@ export default {
         this.id = Math.random().toString().replace('0.','');
     },
     mounted() {
-        //this.viewer = new Viewer(document.getElementById(this.id));
+        this.$nextTick(()=> {
+            this.viewer = new Viewer(document.getElementById(this.id))
+        });
     },
     watch: {
         fileList() {
             if(this.viewer) {
-                console.log('fileList changed');
+                console.log('fileList changed...');
                 this.viewer.destroy();
                 this.$nextTick(()=>{                    
                     this.viewer = new Viewer(document.getElementById(this.id));
                 })                
             }else{
+                console.log('fileList changed');
                 this.$nextTick(()=>{
                     this.viewer = new Viewer(document.getElementById(this.id));
                 });
@@ -83,6 +86,7 @@ ul {
 }
 a {
     text-decoration: none;
+    color: black;
 }
 </style>
 
